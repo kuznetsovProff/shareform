@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>SHARE FORM | Заявление о возбуждении исполнительного производства</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://kit.fontawesome.com/f4afbaa213.js" crossorigin="anonymous"></script>
+		<script src="../../js/copytoclipboard.js"></script>
+		<script src="https://yastatic.net/share2/share.js" async></script>
+		<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+		<link rel="stylesheet" href="../../css/style.css">
+		<link rel="stylesheet" href="../../css/gutenberg.min.css" media="print">
+		<link rel="stylesheet" href="../../css/print.css" media="print"/>
+	</head>
+	<body>
+		<nav id="topnavbar" class="navbar navbar-expand-sm bg-success navbar-dark fixed-top blockshadow no-print navbar-expand-md">
+			<a class="navbar-brand text-center" href="https://kuznetsovproff.github.io/"><span class="text-dark">SHARE</span> <span class="text-light"><i class="far fa-file-alt"></i> FORM</span></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNav">
+				
+				<ul class="navbar-nav mr-auto text-center">
+					<!--
+					<li class="nav-item active">
+						<a class="nav-link" href="https://kuznetsovproff.github.io/">Образцы заявлений</a>
+					</li>
+					-->
+				</ul>
+				
+				<ul class="navbar-nav text-center">
+					<li class="nav-item">
+						<a id="btnprint" class="nav-link" data-toggle="tooltip" title="Печать" href="#"><i class="fas fa-print"></i></a>
+					</li>
+					<li class="nav-item">
+						<a id="btnlink" class="nav-link" data-toggle="tooltip" title="Копировать ссылку" href="#"><i class="fas fa-link"></i></a>
+					</li>
+					<li class="nav-item">
+						<a id="btnshare" class="nav-link" data-toggle="tooltip" title="Поделиться ссылкой" href="#"><i class="fas fa-share"></i></a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div id="topnavbarback" class="no-print">
+			<div class="undernavbarsection"></div>
+		</div>
+		<div class="container">
+			<div class="row">
+			  <div class="col"></div>
+			  <div class="col">
+				<div class="text-left"><div class="d-inline"><div class="d-inline">В </div><div id="ospname" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(наименование отдела судебных приставов)"></div></div></div>
+				<div class="emptyline"></div>
+				<div class="text-left d-inline"><div class="d-inline">от </div><div id="claimantname" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(ФИО взыскателя)"></div></div>
+				<div class="text-left"><div class="d-inline">адрес: </div><div id="claimantaddress" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(адрес взыскателя)"></div></div>
+				<div class="text-left"><div class="d-inline">телефон: </div><div id="claimantphone" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(телефон взыскателя)"></div></div>
+			  </div>
+			</div>
+			
+			<div class="emptyline"></div>
+			<div class="emptyline"></div>
+			<div class="emptyline"></div>
+			<div class="text-center font-weight-bold">ЗАЯВЛЕНИЕ<br>
+			о возбуждении исполнительного производства</div>
+			<div class="emptyline"></div>
+			<div class="emptyline"></div>
+			<div class="text-justify text-indent"><div id="docdate" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="«___»_________ ____ г. (дата выдачи исполнительного документа)"></div> по делу <div id="casenum" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(указать наименование дела; его можно посмотреть в шапке исполнительного документа)"></div> <div id="courtname" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(наименование суда, выдавшего исполнительный документ)"></div> выдал <select class="selectpicker" change-control="#doctype"><option>исполнительный лист</option><option>судебный приказ</option></select> <div id="doctype" class="divhidden">исполнительный лист</div> <div id="docnum" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(номер исполнительного документа)"></div> в отношении должника <div id="debtor" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="(ФИО должника, дата и место рождения, его место жительства или место пребывания, телефон, место работы / наименование должника, ИНН, ОГРН, адрес регистрации, фактический адрес)"></div>.</div>
+			<div id="p-history" class="text-justify text-indent"><div id="history" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="Ранее по данному исполнительному документу исполнительное производство не возбуждалось (если возбуждалось, указать, когда возбуждалось, когда окончено и почему, какие исполнительные действия выполнены, сколько денег было взыскано, какое имущество передано)."></div><div class="d-inline" close="false" control="#history"><i class="no-print fas fa-chevron-left"></i></div></div>
+			<div id="aboutdebtor" class="text-justify text-indent"><div id="addinfo" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="Дополнительно сообщаю известные мне сведения о должнике и его имуществе: (указать все известные сведения о должнике и его имуществе, которые могут помочь в исполнении судебного постановления)."></div><div class="d-inline" close="false" control="#addinfo"><i class="no-print fas fa-chevron-left"></i></div></div>
+			<div id="aboutproperty" class="text-justify text-indent"><div id="propertylist" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="В целях обеспечения исполнения требований, содержащихся в исполнительном документе, одновременно с возбуждением исполнительного производства необходимо решить вопрос о наложении ареста на имущество должника (при наличии сведений перечислить имущество, на которое должен быть наложен арест), поскольку должник может принять меры для сокрытия своего имущества."></div><div class="d-inline" close="false" control="#propertylist"><i class="no-print fas fa-chevron-left"></i></div></div>
+			<div class="text-justify text-indent">На основании изложенного, руководствуясь статьей 30 Федерального закона «Об исполнительном производстве»,</div>
+			<div class="emptyline"></div>
+			<div class="text-center font-weight-bold">ПРОШУ:</div>
+			<div id="p1" class="text-justify text-indent"><div id="requestforenforcement" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="1. Возбудить исполнительное производство.">1. Возбудить исполнительное производство.</div></div>
+			<div id="p2" class="text-justify text-indent"><div id="seizurerequest" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="2. Наложить арест на имущество должника."></div><div class="d-inline" close="false" control="#seizurerequest"><i class="no-print fas fa-chevron-left"></i></div></div>
+			<div class="emptyline"></div>
+			<div class="text-justify font-weight-bold text-indent">Приложения:</div>
+			<div id="a1" class="text-justify text-indent"><div id="attachment1" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="1. Исполнительный документ.">1. Исполнительный документ.</div></div>
+			<div id="a2" class="text-justify text-indent"><div id="attachment2" class="d-inline bg-warning-opacity-10" contenteditable="true" placeholder="2. Документы, содержащие информацию о должнике, его имущественном положении и иные сведения, которые могут иметь значение для своевременного и полного исполнения требований исполнительного документа."></div><div class="d-inline" close="false" control="#attachment2"><i class="no-print fas fa-chevron-left"></i></div></div>
+			<div class="emptyline"></div>
+			<div class="text-right font-weight-bold">Дата подачи заявления <span id="filingdate">«___»_________ ____ г.</span></div>
+			<div class="emptyline"></div>
+			<div class="text-right font-weight-bold">Подпись ______________</div>
+			<div class="emptyline"></div>
+			
+			<!-- The Modal -->
+			<div class="modal fade" id="modalshare">
+				<div class="modal-dialog modal-dialog-centered">
+					<div class="modal-content">
+				  
+						<!-- Modal Header -->
+						<div class="modal-header">
+							<h4 class="modal-title">Поделиться ссылкой</h4>
+							<button type="button" class="close" data-dismiss="modal">×</button>
+						</div>
+						
+						<!-- Modal body -->
+						<div id="icons" class="modal-body text-center container">
+							<div class="ya-share2" data-curtain data-size="l" data-shape="round" data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo"></div>
+						</div>
+						
+						<!-- Modal footer -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+						</div>
+					
+					</div>
+				</div>
+			</div>
+
+			
+			
+		</div>
+		<div id="footer" class="downjumbo no-print text-center" style="margin-bottom:0">
+			<div class="whatsappme"><a class="text-success" data-toggle="tooltip" data-placement="top" title="Написать автору в WhatsApp" href="http://wa.me/+79858442670"><i class="fab fa-whatsapp"></i> Алексей Кузнецов</a></div>
+		</div>
+		<script>
+	
+			const url = new URL(document.location.href);
+			console.log (url);
+			const paramsString = document.location.search; // ?page=4&limit=10&sortby=desc  
+			const searchParams = new URLSearchParams(paramsString);
+						
+			for(var pair of searchParams.entries()) {
+				console.log (pair[0]+ ', '+ pair[1]);
+				// попробовать простое присваивание
+				if (pair[0]=='ospname') {
+					$('#ospname').text(pair[1]);
+				}
+				
+			}
+
+			$(document).ready(function(){
+				$('#btnlink').on('click', function(){
+					Clipboard.copy(url);
+				});
+			
+				$('#btnprint').on('click', function(){
+					window.print();
+				});
+			
+				$("#btnshare").on('click', function(){
+					$("#modalshare").modal();
+				});
+				
+				$('[data-toggle="tooltip"]').tooltip(); 
+				
+				$('select.selectpicker').on('change', function(){
+				   var selected = $('.selectpicker option:selected').val();
+				   $($(this).attr('change-control')).text(selected);
+				});
+				
+				$('div[close]').on('click', function(){
+					if ($(this).attr('close')=="false") {
+						$(this).attr('close',"true");
+						$(this).html('<i class="no-print fas fa-chevron-right"></i>');
+						$($(this).attr('control')).removeClass('d-inline').addClass('d-none');
+					} else {
+						$(this).attr('close',"false");
+						$(this).html('<i class="no-print fas fa-chevron-left"></i>');
+						$($(this).attr('control')).removeClass('d-none').addClass('d-inline');
+					}
+				});
+
+				
+			});
+		</script>
+
+	</body>
+</html>

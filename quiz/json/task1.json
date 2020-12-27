@@ -1,0 +1,174 @@
+{
+	"ver": "0.0.0 b",
+	"title": "Задание 1. Тестовые задания на присвоение статуса адвоката",
+	"sets": [],
+	"scs": [
+		{"id": "sc1", "cls": "",
+			"cols": [
+				{"id": "sc1_col1", "cls": "",
+					"ps": [
+						{"id": "sc1_col1_p1", "cls": "text-center",
+							"ss": [
+								{
+									"cls": "font-weight-bold",
+									"html": "Задание № 1"
+								}
+							]
+						},
+						{"cls": "emptyline"},
+						{"id": "sc1_col1_p2", "cls": "text-justify text-indent",
+							"ss": [
+								{"id": "question1", "cls": "",
+									"txt": "В соответствии с Федеральным законом «Об адвокатской деятельности и адвокатуре в Российской Федерации» целями оказания квалифицированной юридической помощи являются:"
+								}
+							]
+						},
+						{"cls": "emptyline"},
+						{"id": "sc1_col1_p3", "cls": "text-center text-indent",
+							"ss": [
+								{"id": "task1", "cls": "font-italic",
+									"txt": "Выберите несколько из 4 вариантов ответа:"}
+							]
+						},
+						{"cls": "emptyline"},
+						{
+							"id": "formcheck1_1",
+							"cls": "custom-control custom-checkbox",
+							"ss": [
+								{
+									"type": "input",
+									"cls": "custom-control-input",
+									"itype": "checkbox",
+									"name": "check1",
+									"value": "",
+									"id": "check1_1",
+									"answer": "false"
+								},
+								{
+									"type": "label",
+									"cls": "custom-control-label",
+									"name": "check1",
+									"for": "check1_1",
+									"txt": "Правовое просвещение граждан"
+								}
+							]											
+						},
+						{
+							"id": "formcheck1_2",
+							"cls": "custom-control custom-checkbox",
+							"ss": [
+								{
+									"type": "input",
+									"cls": "custom-control-input",
+									"itype": "checkbox",
+									"name": "check1",
+									"value": "",
+									"id": "check1_2",
+									"answer": "true"
+								},
+								{
+									"type": "label",
+									"cls": "custom-control-label",
+									"name": "check1",
+									"for": "check1_2",
+									"txt": "Защита прав, свобод и интересов доверителей"
+								}
+							]											
+						},
+						{
+							"id": "formcheck1_3",
+							"cls": "custom-control custom-checkbox",
+							"ss": [
+								{
+									"type": "input",
+									"cls": "custom-control-input",
+									"itype": "checkbox",
+									"name": "check1",
+									"value": "",
+									"id": "check1_3",
+									"answer": "false"
+								},
+								{
+									"type": "label",
+									"cls": "custom-control-label",
+									"name": "check1",
+									"for": "check1_3",
+									"txt": "Укрепление законности"
+								}
+							]											
+						},
+						{
+							"id": "formcheck1_4",
+							"cls": "custom-control custom-checkbox",
+							"ss": [
+								{
+									"type": "input",
+									"cls": "custom-control-input",
+									"itype": "checkbox",
+									"name": "check1",
+									"value": "",
+									"id": "check1_4",
+									"answer": "true"
+								},
+								{
+									"type": "label",
+									"cls": "custom-control-label",
+									"name": "check1",
+									"for": "check1_4",
+									"txt": "Обеспечение доступа к правосудию"
+								}
+							]											
+						},
+						{"cls": "emptyline"},
+						{"id": "buttons1", "cls": "text-right",
+							"ss": [
+								{"id": "checkbutton1", "type":"button", "itype":"button", "cls": "btn btn-primary buttoncheck", "disabled": "disabled", "for": "check1",
+									"txt": "Проверить"},
+								{													
+									"txt": " "
+								},
+								{"id": "buttonnext", "type":"button", "itype":"button", "cls": "btn btn-secondary buttonnext", "disabled": "disabled",
+									"txt": "Далее"}
+							]
+						},
+						{"cls": "emptyline"}
+					]
+				}
+			]
+		},
+		{"id": "footer_content", "cls": "container-fluid downjumbo no-print text-center", "parentid": "#footer",
+			"cols": [
+				{"id": "footer_content_col1", "cls": "margin-bottom:0",
+					"ps": [
+						{
+							"id":"wa",
+							"cls":"whatsappme",
+							"ss": [
+								{
+									"type":"a",
+									"id":"whatsapplink",
+									"cls":"text-success",
+									"datatoggle":"tooltip",
+									"dataplacement":"top",
+									"title":"Написать автору в WhatsApp",
+									"href":"http://wa.me/+79265729463",
+									"subs":[
+										{
+											"type":"i",
+											"cls":"fab fa-whatsapp"
+										},
+										{
+											"type":"span",
+											"txt":" Алексей Кузнецов"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+		
+	]
+}

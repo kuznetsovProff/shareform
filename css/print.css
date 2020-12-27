@@ -1,0 +1,45 @@
+
+@media print {
+
+    body {
+		font-family: calibri;
+        font-size: 20px;
+    }
+	.note {
+		display: none;
+	}
+	div.divhidden {
+	  display: inline!important;
+	}
+	select {
+	  display: none;
+	}
+	.tooltip {
+	  display: none;
+	}
+	div[contenteditable=true]:empty {
+	  border: 0px;
+	  padding: 0px;
+	}
+	[close]{
+		display: none !important;
+	}
+	[switch]{
+		display: none !important;
+	}
+	a:link {
+	  text-decoration: none;
+	}
+
+	a:visited {
+	  text-decoration: none;
+	}
+
+	a:hover {
+	  text-decoration: none;
+	}
+
+	a:active {
+	  text-decoration: none;
+	}
+}

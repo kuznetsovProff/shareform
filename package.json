@@ -1,0 +1,23 @@
+{
+	"name": "shareform",
+	"version": "0.1.0",
+	"description": "shareform",
+	"keywords": [
+		"javascript"
+	],
+	"homepage": "<project home page>",
+	"author": {
+		"name": "<your name>",
+		"url": "<your url>"
+	},
+	"repository": {
+		"type": "git",
+		"url": "<source repo url>"
+	},
+	"dependencies": {
+		"node-static": "^0.7.11"
+	},
+	"devDependencies": {
+		"uglify-js": "2.x"
+	}
+}

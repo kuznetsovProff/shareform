@@ -1,0 +1,27 @@
+//favicon
+https://realfavicongenerator.net/favicon_result?file_id=p1em1jsheo1rso1ohefs7bt02396#.X56-bFgzYdV
+
+//запрос к файловой системе
+https://habr.com/ru/company/ruvds/blog/415505/
+
+//url shorteners
+q32.link - ll977
+shorte.st - ll977
+catcut.net - kuznetsov.proff@gmail.com, есть скрипт, изучить подробнее, есть возможность принудительного показа рекламы, продажи электронных товаров +++
+bc.vc
+ouo.io - ll977
+al.ly
+binbox.io
+
+авто
+
+https://clck.ru/--?url=shareform.ru - https://clck.ru/SNnJC/
+потом с https надо
+
+is.gd - есть api смотрю почту
+
+проверить
+
+отбросы
+exe.io - очень медленно
+adf.ly - яндекс ругается
