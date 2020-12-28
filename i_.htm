@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>SHARE FORM | Форма документа</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <meta name='msapplication-TileColor' content='#603cba'>
+    <meta name='theme-color' content='#ffffff'>
+
+    <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
+    <link rel='manifest' href='/site.webmanifest'>
+    <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
+
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script src="/js/jquery.inputmask.min.js"></script>
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+    <script src='/js/copytoclipboard.js'></script>
+    <script src='/js/share.js'></script>
+    <script src="/js/bootstrap4-toggle.min.js"></script>
+    <script src='/js/jquery.history.min.js'></script>
+
+
+    <script src='/js/math.min.js'></script>
+    <script src="/js/plotly-latest.min.js"></script>
+
+    <link rel="stylesheet" href="/css/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/yashare2.css' />
+    <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
+    <link rel='stylesheet' href='/css/print.css' media='print' />
+
+    <!--
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.6.0/umd/popper.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js"></script>
+
+    <script src='https://kit.fontawesome.com/f4afbaa213.js' crossorigin='anonymous'></script>
+    <script src='/js/copytoclipboard.js'></script>
+    <script src='https://yastatic.net/share2/share.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.js"></script>
+    <script src='/js/jquery.history.min.js'></script>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/8.1.0/math.min.js'></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/yashare2.css' />
+    <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
+	<link rel='stylesheet' href='/css/print.css' media='print' />
+-->
+    <!--			
+			https://plotly.com/javascript/
+		-->
+
+
+    <script type='module'>
+        import * as _ from '/js/main.js'; 
+        $(document).ready( 
+            function(){ 
+                _.menu('/json/menu.json'); 
+                _.form('/main.json'); 
+            }
+        );
+    </script>
+</head>
+
+<body>
+    <div id="header"></div>
+    <div id="container"></div>
+    <div id="footer"></div>
+    <!-- The Modals -->
+    <!-- 1 -->
+    <div class="modal fade" id="modallink">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Копировать ссылку</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="link" class="modal-body text-center container">
+                    <div class="form-group">
+                        <label for="link">Ссылка:</label>
+                        <textarea class="form-control" rows="5" id="link" disabled="disabled"></textarea>
+                    </div>
+                    <button id="btncopylink" type="button" class="btn btn-primary">Копировать</button>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- 2 -->
+    <div class="modal fade" id="modalshare">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Поделиться ссылкой</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="icons" class="modal-body text-center container">
+                    <div class="ya-share2" data-bare data-curtain data-size="l" data-shape="round" data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo"></div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
