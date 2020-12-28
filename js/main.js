@@ -311,6 +311,15 @@ export function form(json_form) {
                                 if (!!s.formula) elt.attr('formula', s.formula);
                                 if (!!s.ops) elt.attr('ops', s.ops);
                                 if (!!s.datainputmask) elt.attr('data-inputmask', s.datainputmask);
+                                if (!!s.datatoggle) elt.attr('data-toggle', s.datatoggle);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                //data-width
+                                //data-height
+                                //data-style
+                                //data-onstyle
+                                //data-offstyle
+                                //data-on
+                                //data-off
 
 
                                 $.each(s.subs, function(key, sub) {
