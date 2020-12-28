@@ -7,6 +7,8 @@
 			"cols": [
 				{"id": "sc1_col1", "cls": "",
 					"ps": [
+					  {"cls": "emptyline"},
+					  {"cls": "emptyline"},
 						{"cls": "emptyline"},
 						{"id": "sc1_col1_p1", "cls": "text-justify",
 							"ss": [
