@@ -147,25 +147,8 @@
             "class": "navbar-nav text-center",
         }).appendTo('#navbarNav');
 
-        // Здесь должен начинаться разбор JSON
+        
 
-        /*				
-        try {
-        	// test getJSON
-        	$.getJSON( "test.json", function( data ) {
-        		let items = [];
-        		$.each( data, function( key, val ) {
-        			items.push( "<li id='" + key + "'>" + val + "</li>" );
-        		});
-        	 
-        		$( "<ul/>", {
-        			"class": "my-new-list",
-        			html: items.join( "" )
-        		}).appendTo( "body" );
-        	});
-        } catch(e) {
-        }
-        */
 
         // Кнопки с иконками
         let btns = $.parseJSON(json_menu);
