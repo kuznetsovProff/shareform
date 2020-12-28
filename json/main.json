@@ -23,6 +23,8 @@
             {"id":"sc1_col1_p3","cls":"text-justify","ss":[{
               "txt":"Может быть позже здесь появится подробное описание работы сайта."
             }]},
+						{"cls": "emptyline"},
+						{"cls": "emptyline"},
 						{"cls": "emptyline"}
 					]
 				}
