@@ -28,6 +28,28 @@
             ]
         },
         {
+          "id":"scDataFormPreamb",
+          "cls":"",
+          "cols":[
+              {
+                "id":"scDataFormPreambCol",
+                "cls":"",
+                "ps":[
+                  
+                    {
+                        "id": "scDataFormPreambCol_p0",
+                        "cls": "text-center",
+                        "ss": [{
+                            "cls": "",
+                            "txt": "Исходные данные:"
+                        }]
+                    }
+                  
+                ]
+              }
+            ]
+        },
+        {
             "id": "sc1",
             "cls": "",
             "cols": [{
