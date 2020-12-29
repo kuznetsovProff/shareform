@@ -17,7 +17,7 @@ export function promisify(f, manyArgs = false) {
                 }
             }
 
-            args.push(collback);
+            args.push(callback);
 
             f.call(this, ...args);
         });
