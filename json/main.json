@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
 	"ver": "0.0.0 b",
 	"title": "SAREFORM | Поделись формой",
 	"sets": [],
@@ -78,3 +79,92 @@
 		
 	]
 }
+=======
+    "ver": "0.0.0 b",
+    "title": "SHAREFORM | Поделись формой",
+    "sets": [],
+    "scs": [{
+            "id": "sc1",
+            "cls": "",
+            "cols": [{
+                "id": "sc1_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc1_col1_p1",
+                        "cls": "text-justify",
+                        "ss": [{
+                            "txt": "Если вы зашли на сайт по ссылке https://shareform.ru/, то ничего здесь не увидите, кроме этой страницы."
+                        }]
+                    },
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc1_col1_p2",
+                        "cls": "text-justify",
+                        "ss": [{
+                            "txt": "Чтобы увидеть больше попробуйте поискать другие пути. "
+                        }]
+                    },
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc1_col1_p3",
+                        "cls": "text-justify",
+                        "ss": [{
+                            "txt": "Может быть позже здесь появится подробное описание работы сайта."
+                        }]
+                    },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "footer_content",
+            "cls": "container-fluid downjumbo no-print text-center",
+            "parentid": "#footer",
+            "cols": [{
+                "id": "footer_content_col1",
+                "cls": "margin-bottom:0",
+                "ps": [{
+                    "id": "wa",
+                    "cls": "whatsappme",
+                    "ss": [{
+                        "type": "a",
+                        "id": "whatsapplink",
+                        "cls": "text-success",
+                        "datatoggle": "tooltip",
+                        "dataplacement": "top",
+                        "title": "Написать автору в WhatsApp",
+                        "href": "http://wa.me/+79265729463",
+                        "subs": [{
+                                "type": "i",
+                                "cls": "fab fa-whatsapp"
+                            },
+                            {
+                                "type": "span",
+                                "txt": " Алексей Кузнецов"
+                            }
+                        ]
+                    }]
+                }]
+            }]
+        }
+
+    ]
+}
+>>>>>>> 6caf1db3cfed254a0e457156571543d83af18b26

@@ -2,22 +2,21 @@
 <html>
 
 <head>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <meta name='msapplication-TileColor' content='#603cba'>
-    <meta name='theme-color' content='#ffffff'>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>SHARE FORM | Поделись формой</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#603cba">
+    <meta name="theme-color" content="#ffffff">
 
-    <title>SHARE FORM | Форма документа</title>
-
-    <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
-    <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
-    <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
-    <link rel='manifest' href='/site.webmanifest'>
-    <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
-
-    <script src='/js/jquery.min.js'></script>
+    <!-- scripts -->
+    <script src="/js/jquery.min.js"></script>
     <script src='/js/popper.min.js'></script>
-    <script src='/js/bootstrap.min.js'></script>
+    <script src="/js/bootstrap.min.js"></script>
 
     <script src="/js/jquery.inputmask.min.js"></script>
 
@@ -27,24 +26,52 @@
     <script src='/js/bootstrap4-toggle.min.js'></script>
     <script src='/js/jquery.history.js'></script>
 
-
     <script src='/js/math.min.js'></script>
-    <script src="/js/plotly-latest.min.js"></script>
-    <!--	
-		https://mathjs.org/index.html
-		https://plotly.com/javascript/
-    -->
 
-    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
-    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <script src="/js/plotly-latest.min.js"></script>
+    <!-- /scripts -->
+
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel='stylesheet' href='/css/style.css' />
     <link rel='stylesheet' href='/css/yashare2.css' />
     <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
     <link rel='stylesheet' href='/css/print.css' media='print' />
+    <!-- styles -->
 
-    <script type='module'>
-        import * as m from '/js/main.js'; $(document).ready(function(){ m.menu('/json/menu.json'); m.form('/json/main.json'); });
+    <!-- with CDN-->
+
+    <!--
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/js/bootstrap.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.5/jquery.inputmask.min.js"></script>
+
+    <script src='https://kit.fontawesome.com/f4afbaa213.js' crossorigin='anonymous'></script>
+    <script src='/js/copytoclipboard.js'></script>
+    <script src='https://yastatic.net/share2/share.js'></script>
+    <script src='https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js'></script>
+    <script src='/js/jquery.history.js'></script>
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjs/8.1.0/math.min.js'></script>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap4-toggle/3.6.1/bootstrap4-toggle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" />
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/yashare2.css' />
+    <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
+    <link rel='stylesheet' href='/css/print.css' media='print' />
+    -->
+
+    <!-- /with CDN -->
+    <script type="module">
+        import * as _ from "/js/main.js"; $(document).ready( function(){ });
     </script>
+
 </head>
 
 <body>
