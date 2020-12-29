@@ -320,13 +320,6 @@ export function form(json_form) {
                                 if (!!s.dataoffstyle) elt.attr('data-offstyle', s.dataoffstyle);
                                 if (!!s.dataon) elt.attr('data-on', s.dataon);
                                 if (!!s.dataoff) elt.attr('data-off', s.dataoff);
-                                //data-width
-                                //data-height
-                                //data-style
-                                //data-onstyle
-                                //data-offstyle
-                                //data-on
-                                //data-off
 
 
                                 $.each(s.subs, function(key, sub) {
@@ -353,6 +346,15 @@ export function form(json_form) {
                                     if (!!sub.close) subelt.attr('close', sub.close);
                                     if (!!sub.switch) subelt.attr('switch', sub.switch);
                                     if (!!sub.control) subelt.attr('control', sub.control);
+                                    if (!!sub.datatoggle) subelt.attr('data-toggle', sub.datatoggle);
+                                    if (!!sub.datawidth) subelt.attr('data-width', sub.datawidth);
+                                    if (!!sub.datasize) subelt.attr('data-size', sub.datasize);
+                                    if (!!sub.dataheight) subelt.attr('data-height', sub.dataheight);
+                                    if (!!sub.datastyle) subelt.attr('data-style', sub.datastyle);
+                                    if (!!sub.dataonstyle) subelt.attr('data-onstyle', sub.dataonstyle);
+                                    if (!!sub.dataoffstyle) subelt.attr('data-offstyle', sub.dataoffstyle);
+                                    if (!!sub.dataon) subelt.attr('data-on', sub.dataon);
+                                    if (!!sub.dataoff) subelt.attr('data-off', sub.dataoff);
 
                                 });
                                 //console.log('s:' + sid);
