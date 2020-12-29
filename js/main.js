@@ -313,6 +313,13 @@ export function form(json_form) {
                                 if (!!s.datainputmask) elt.attr('data-inputmask', s.datainputmask);
                                 if (!!s.datatoggle) elt.attr('data-toggle', s.datatoggle);
                                 if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datasize) elt.attr('data-size', s.datasize);
                                 //data-width
                                 //data-height
                                 //data-style
