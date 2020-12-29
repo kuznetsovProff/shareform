@@ -194,7 +194,7 @@
                                         "control": "#history",
                                         "checked": "true",
                                         "datatoggle": "toggle",
-                                        "datasize": "xs"
+                                        "datasize": "lg"
                                     },
                                     { "type": "label", "cls": "custom-control-label", "for": "historyswitchinput" }
                                 ]
