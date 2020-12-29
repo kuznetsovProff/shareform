@@ -189,7 +189,7 @@
                                         "id": "historyswitchinput",
                                         "type": "input",
                                         "itype": "checkbox",
-                                        "cls": "custom-control-input",
+                                        "cls": "",
                                         "switch": "true",
                                         "control": "#history",
                                         "checked": "true",
