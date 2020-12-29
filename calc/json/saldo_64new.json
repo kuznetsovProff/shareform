@@ -2,17 +2,19 @@
     "ver": "0.0.0 b",
     "title": "Расчет сальдо встречных обязательств по договору лизинга",
     "sets": [],
-    "scs": [{
-            "id": "sc1",
-            "cls": "",
-            "cols": [{
-                "id": "sc1_col1",
-                "cls": "",
-                "ps": [
+    "scs": [
+        {
+          "id": "scHead",
+          "cls": "",
+          "cols": [
+              {
+                "id":"scHeadCol",
+                "cls":"",
+                "ps":[
                     { "cls": "emptyline" },
                     { "cls": "emptyline" },
                     {
-                        "id": "sc1_col1_p0",
+                        "id": "scHeadCol_p0",
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
@@ -20,7 +22,18 @@
                         }]
                     },
                     { "cls": "emptyline" },
-                    { "cls": "emptyline" },
+                    { "cls": "emptyline" }
+                  ]
+              }
+            ]
+        },
+        {
+            "id": "sc1",
+            "cls": "",
+            "cols": [{
+                "id": "sc1_col1",
+                "cls": "",
+                "ps": [
                     {
                         "id": "sc1_col1_p1",
                         "cls": "text-justify text-indent",
