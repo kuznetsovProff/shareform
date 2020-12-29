@@ -777,8 +777,7 @@
                                 ]
                             },
                             { "id": "svo_txt", "type": "input", "name": "svo_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
-                            { "id": "svo", "formula": "(#splf_txt + #spf_txt + #u_txt + #s_txt) - (#plp_txt - #ap_txt + #svpl_txt)", "ops": "splf_txt,spf_txt,u_txt,s_txt,plp_txt,ap_txt,svpl_txt", "for": "#svo_txt" },
-                            { "txt": "( #splf_txt + #spf_txt + #u_txt + #s_txt ) – ( #plp_txt – #ap_txt + #svpl_txt )" }
+                            { "id": "svo", "formula": "(#splf_txt + #spf_txt + #u_txt + #s_txt) - (#plp_txt - #ap_txt + #svpl_txt)", "ops": "splf_txt,spf_txt,u_txt,s_txt,plp_txt,ap_txt,svpl_txt", "for": "#svo_txt" }
                         ]
                     },
                     { "cls": "emptyline" }
