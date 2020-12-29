@@ -313,13 +313,13 @@ export function form(json_form) {
                                 if (!!s.datainputmask) elt.attr('data-inputmask', s.datainputmask);
                                 if (!!s.datatoggle) elt.attr('data-toggle', s.datatoggle);
                                 if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
-                                if (!!s.datasize) elt.attr('data-size', s.datasize);
+                                if (!!s.datawidth) elt.attr('data-width', s.datawidth);
+                                if (!!s.dataheight) elt.attr('data-height', s.dataheight);
+                                if (!!s.datastyle) elt.attr('data-style', s.datastyle);
+                                if (!!s.dataonstyle) elt.attr('data-onstyle', s.dataonstyle);
+                                if (!!s.dataoffstyle) elt.attr('data-offstyle', s.dataoffstyle);
+                                if (!!s.dataon) elt.attr('data-on', s.dataon);
+                                if (!!s.dataoff) elt.attr('data-off', s.dataoff);
                                 //data-width
                                 //data-height
                                 //data-style
