@@ -35,7 +35,6 @@
                 "id":"scDataFormPreambCol",
                 "cls":"",
                 "ps":[
-                  
                     {
                         "id": "scDataFormPreambCol_p0",
                         "cls": "text-center",
@@ -43,7 +42,8 @@
                             "cls": "",
                             "txt": "Исходные данные:"
                         }]
-                    }
+                    },
+                    {"cls":"emptyline"}
                   
                 ]
               }
