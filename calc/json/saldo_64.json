@@ -199,7 +199,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "ЗЦ", "for": "zc_txt" }
                                 ]
                             },
-                            { "id": "zc_txt", "type": "input", "name": "zc_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "zc_txt", "type": "input", "name": "zc_txt", "itype": "text", "cls": "form-control text-center", "val": "8 997 551,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -213,7 +213,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "АП", "for": "ap_txt" }
                                 ]
                             },
-                            { "id": "ap_txt", "type": "input", "name": "ap_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "ap_txt", "type": "input", "name": "ap_txt", "itype": "text", "cls": "form-control text-center", "val": "1 829 567,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -227,7 +227,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "РППЛ", "for": "rppl_txt" }
                                 ]
                             },
-                            { "id": "rppl_txt", "type": "input", "name": "rppl_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "rppl_txt", "type": "input", "name": "rppl_txt", "itype": "text", "cls": "form-control text-center", "val": "98973,05", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -377,7 +377,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "П", "for": "p_txt" }
                                 ]
                             },
-                            { "id": "p_txt", "type": "input", "name": "p_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "p_txt", "type": "input", "name": "p_txt", "itype": "text", "cls": "form-control text-center", "val": "9868554,16", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -391,7 +391,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "Сдн", "for": "sdn_txt" }
                                 ]
                             },
-                            { "id": "sdn_txt", "type": "input", "name": "sdn_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "sdn_txt", "type": "input", "name": "sdn_txt", "itype": "text", "cls": "form-control text-center", "val": "1825", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -512,7 +512,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "СПдн", "for": "spdn_txt" }
                                 ]
                             },
-                            { "id": "spdn_txt", "type": "input", "name": "spdn_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "spdn_txt", "type": "input", "name": "spdn_txt", "itype": "text", "cls": "form-control text-center", "val": "1808", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -631,7 +631,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "РУ", "for": "ru_txt" }
                                 ]
                             },
-                            { "id": "ru_txt", "type": "input", "name": "ru_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "ru_txt", "type": "input", "name": "ru_txt", "itype": "text", "cls": "form-control text-center", "val": "185102,85", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -645,7 +645,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "УВ", "for": "uv_txt" }
                                 ]
                             },
-                            { "id": "uv_txt", "type": "input", "name": "uv_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "uv_txt", "type": "input", "name": "uv_txt", "itype": "text", "cls": "form-control text-center", "val": "0,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -734,7 +734,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "С", "for": "s_txt" }
                                 ]
                             },
-                            { "id": "s_txt", "type": "input", "name": "s_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "s_txt", "type": "input", "name": "s_txt", "itype": "text", "cls": "form-control text-center", "val": "231676,38", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -748,7 +748,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "ПЛП", "for": "plp_txt" }
                                 ]
                             },
-                            { "id": "plp_txt", "type": "input", "name": "plp_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "plp_txt", "type": "input", "name": "plp_txt", "itype": "text", "cls": "form-control text-center", "val": "9052876,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -762,7 +762,7 @@
                                     { "type": "span", "cls": "input-group-text justify-content-center", "txt": "СВПЛ", "for": "svpl_txt" }
                                 ]
                             },
-                            { "id": "svpl_txt", "type": "input", "name": "svpl_txt", "itype": "text", "cls": "form-control text-center", "val": "0", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                            { "id": "svpl_txt", "type": "input", "name": "svpl_txt", "itype": "text", "cls": "form-control text-center", "val": "1062159,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
                         ]
                     },
                     { "cls": "emptyline" },
@@ -777,7 +777,8 @@
                                 ]
                             },
                             { "id": "svo_txt", "type": "input", "name": "svo_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
-                            { "id": "svo", "formula": "(#splf_txt + #pf_txt + #u_txt + #s_txt) – (#plp_txt – #ap_txt + #svpl_txt)", "ops": "splf_txt,pf_txt,u_txt,s_txt,plp_txt,ap_txt,svpl_txt", "for": "#svo_txt" }
+                            { "id": "svo", "formula": "(#splf_txt + #pf_txt + #u_txt + #s_txt) - (#plp_txt - #ap_txt + #svpl_txt)", "ops": "splf_txt,pf_txt,u_txt,s_txt,plp_txt,ap_txt,svpl_txt", "for": "#svo_txt" },
+                            { "txt": "( #splf_txt + #pf_txt + #u_txt + #s_txt ) – ( #plp_txt – #ap_txt + #svpl_txt )" }
                         ]
                     },
                     { "cls": "emptyline" }

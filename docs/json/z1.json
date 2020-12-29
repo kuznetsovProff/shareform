@@ -189,12 +189,10 @@
                                         "id": "historyswitchinput",
                                         "type": "input",
                                         "itype": "checkbox",
-                                        "cls": "",
+                                        "cls": "custom-control-input",
                                         "switch": "true",
                                         "control": "#history",
-                                        "checked": "true",
-                                        "datatoggle": "toggle",
-                                        "datasize": "lg"
+                                        "checked": "true"
                                     },
                                     { "type": "label", "cls": "custom-control-label", "for": "historyswitchinput" }
                                 ]

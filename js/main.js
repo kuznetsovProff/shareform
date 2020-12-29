@@ -461,6 +461,10 @@ export function form(json_form) {
 
 
                 // buttons
+                $.each($('[data-toggle=toggle]'), function(key, toggle) {
+                    $(this).bootstrapToggle();
+                });
+
                 $('.buttoncheck').on('click', function() {
                     let name = $(this).attr('for');
                     let checks = $('input[name="' + name + '"]');
