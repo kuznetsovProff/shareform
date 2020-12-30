@@ -226,9 +226,10 @@ export function form(json_form) {
 
             // разбор json
 
-
-
             if (frm.ver == "0.0.0 b") {
+                // заголовок
+                $('title').txt(frm.title);
+                
                 // проход по разделу с настройками
                 $.each(frm.sets, function(key, val) {
                     console.log('settings: ' + key + ':' + val);
