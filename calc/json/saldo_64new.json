@@ -57,7 +57,7 @@
               "id":"scDataFormCol1", "cls":"",
               "ps":[
                 {
-                  "id":"scDataForm_p0",
+                  "id":"scDataForm_p_zc_lbl",
                   "cls": "text-justify text-indent",
                   "ss": [
                     {
@@ -75,7 +75,7 @@
                   ]
                 },
                 {
-                  "id": "scDataForm_p1",
+                  "id": "scDataForm_p_zc_inp",
                   "cls": "input-group mb-3",
                   "ss": [
                     {
@@ -87,11 +87,11 @@
                     },
                     { 
                       "id": "zc_txt", "type": "input", "name": "zc_txt", "itype": "text", "cls": "form-control text-center", 
-                      "val": "8997551,00", 
-                      "datainputmask": "'alias': 'decimalWithSpaces'"
+                      "val": "8997551,00", "datainputmask": "'alias': 'decimalWithSpaces'"
                     }
                   ]
-                }
+                },
+                { "cls": "emptyline" }
               ]
             },
             {
