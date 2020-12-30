@@ -22,11 +22,20 @@ export function promisify(f, manyArgs = false) {
             f.call(this, ...args);
         });
     };
-};
+}
 
 export function url() {
-    /* let url = new URL(document.location.href); let paramsString = document.location.search; let searchParams = new URLSearchParams(paramsString); for (let pair of searchParams.entries())
-        { console.log(pair[0] + ', ' + pair[1]); if (pair[0] == 'ospname') { $('#ospname').text(pair[1]); }; };*/
+    /* let url = new URL(document.location.href); 
+    let paramsString = document.location.search; 
+    let searchParams = new URLSearchParams(paramsString); 
+    for (let pair of searchParams.entries()) { 
+      console.log(pair[0] + ', ' + pair[1]); 
+      if (pair[0] == 'ospname') { 
+        $('#ospname').text(pair[1]); 
+        
+      }; 
+      
+    };*/
 }
 
 export function list(json_list) {

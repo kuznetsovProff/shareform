@@ -50,6 +50,39 @@
             ]
         },
         {
+          "id":"scDataForm",
+          "cls":"",
+          "cols":[
+              {
+                "id":"scDataFormCol1", "cls":"",
+                "ps":[
+                  {
+                    "id": "scDataForm_p1",
+                    "cls": "input-group mb-3",
+                    "ss": [
+                      {
+                        "id": "zclbl",
+                        "cls": "input-group-prepend min-w-20",
+                        "subs": [
+                          { "type": "span", "cls": "input-group-text justify-content-center", "txt": "ЗЦ", "for": "zc_txt" }
+                        ]
+                    },
+                    { 
+                      "id": "zc_txt", "type": "input", "name": "zc_txt", "itype": "text", "cls": "form-control text-center", 
+                      "val": "8997551,00", 
+                      "datainputmask": "'alias': 'decimalWithSpaces'"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id":"scDataFormCol2", "cls":"",
+              "ps":[]
+            }
+          ]
+        },
+        {
             "id": "sc1",
             "cls": "",
             "cols": [{
@@ -224,19 +257,7 @@
                 "cls": "",
                 "ps": [
                     { "cls": "emptyline" },
-                    {
-                        "id": "formspfl_col1_p1",
-                        "cls": "input-group mb-3",
-                        "ss": [{
-                                "id": "zclbl",
-                                "cls": "input-group-prepend min-w-20",
-                                "subs": [
-                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "ЗЦ", "for": "zc_txt" }
-                                ]
-                            },
-                            { "id": "zc_txt", "type": "input", "name": "zc_txt", "itype": "text", "cls": "form-control text-center", "val": "8 997 551,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
-                        ]
-                    },
+                    
                     { "cls": "emptyline" },
                     {
                         "id": "formspfl_col1_p3",
