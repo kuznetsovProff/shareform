@@ -202,7 +202,7 @@ function addElt(parentid, eltid = '', eltcls = '', elttype = 'div') {
     let elt = $(elthtml).appendTo(parentid);
 
     return elt;
-};
+}
 
 export function form(json_form) {
     // создание формы
@@ -261,7 +261,7 @@ export function form(json_form) {
                         let colcls = col.cls;
 
                         if (colcls != '') colcls = ' ' + colcls;
-                        addElt('#' + sectionid, colid, 'col' + colcls);
+                        addElt('#' + sectionid, colid, 'col-sm' + colcls);
 
                         // проход по абзацам
                         $.each(col.ps, function(key, p) {
