@@ -91,6 +91,39 @@
                     }
                   ]
                 },
+                { "cls": "emptyline" },
+                {
+                  "id":"scDataForm_p_ap_lbl",
+                  "cls": "text-justify text-indent",
+                  "ss": [
+                    {
+                      "txt": "Авансовый платеж (",
+                      "cls": ""
+                    },
+                    {
+                      "txt": "АП",
+                      "cls": "font-weight-bold"
+                    },
+                    {
+                      "txt": ") по договору лизинга.",
+                      "cls": ""
+                    }
+                  ]
+                },
+                {
+                  "id": "scDataForm_p_ap_inp",
+                  "cls": "text-justify input-group mb-3",
+                  "ss": [
+                    {
+                      "id": "aplbl",
+                      "cls": "input-group-prepend min-w-20",
+                      "subs": [
+                        { "type": "span", "cls": "input-group-text justify-content-center", "txt": "АП", "for": "ap_txt" }
+                      ]
+                    },
+                    { "id": "ap_txt", "type": "input", "name": "ap_txt", "itype": "text", "cls": "form-control text-center", "val": "1 829 567,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
+                  ]
+                },
                 { "cls": "emptyline" }
               ]
             },
@@ -277,19 +310,7 @@
                     { "cls": "emptyline" },
                     
                     { "cls": "emptyline" },
-                    {
-                        "id": "formspfl_col1_p3",
-                        "cls": "text-justify input-group mb-3",
-                        "ss": [{
-                                "id": "aplbl",
-                                "cls": "input-group-prepend min-w-20",
-                                "subs": [
-                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "АП", "for": "ap_txt" }
-                                ]
-                            },
-                            { "id": "ap_txt", "type": "input", "name": "ap_txt", "itype": "text", "cls": "form-control text-center", "val": "1 829 567,00", "datainputmask": "'alias': 'decimalWithSpaces'" }
-                        ]
-                    },
+                    
                     { "cls": "emptyline" },
                     {
                         "id": "formspfl_col1_p5",
