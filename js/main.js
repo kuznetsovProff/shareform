@@ -228,7 +228,7 @@ export function form(json_form) {
 
             if (frm.ver == "0.0.0 b") {
                 // заголовок
-                $('title').txt(frm.title);
+                $('title').text(frm.title);
                 
                 // проход по разделу с настройками
                 $.each(frm.sets, function(key, val) {
