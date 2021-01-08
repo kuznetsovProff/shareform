@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <title>SHARE FORM | Форма документа</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <meta name='msapplication-TileColor' content='#603cba'>
+  <meta name='theme-color' content='#ffffff'>
+
+  <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
+  <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
+  <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
+  <link rel='manifest' href='/site.webmanifest'>
+  <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
+
+  <script src='/js/jquery.min.js'></script>
+  <script src='/js/popper.min.js'></script>
+  <script src='/js/bootstrap.min.js'></script>
+
+  <script src="/js/jquery.inputmask.min.js"></script>
+
+  <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+  <script src='/js/copytoclipboard.js'></script>
+  <script src='/js/share.js'></script>
+  <script src='/js/bootstrap4-toggle.min.js'></script>
+  <script src='/js/jquery.history.js'></script>
+
+
+  <script src='/js/math.min.js'></script>
+  <script src="/js/plotly-latest.min.js"></script>
+  <!--	
+		https://mathjs.org/index.html
+		https://plotly.com/javascript/
+	-->
+
+  <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+  <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  <link rel='stylesheet' href='/css/style.css' />
+  <link rel='stylesheet' href='/css/yashare2.css' />
+  <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
+  <link rel='stylesheet' href='/css/print.css' media='print' />
+
+  <script type='module'>
+    import * as _ from '/js/main.js';
+    import * as _c from '/js/coins.js';
+    $('#footer1').hide();
+    $('#footer2').hide();
+    $('#footer3').hide();
+
+    $(document).ready( 
+      function(){ 
+        _.menu('/json/menu.json'); 
+        _.form('/mine/json/mine.json');
+        _c.work();
+      }
+    );
+    </script>
+</head>
+
+<body>
+  <div id="header"></div>
+  <div id="container"></div>
+  <div id="footer"></div>
+  <!-- The Modals -->
+  <!-- 1 -->
+  <div class="modal fade" id="modallink">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Копировать ссылку</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+
+        <!-- Modal body -->
+        <div id="link" class="modal-body text-center container">
+          <div class="form-group">
+            <label for="link">Ссылка:</label>
+            <textarea class="form-control" rows="5" id="link" disabled="disabled"></textarea>
+          </div>
+          <button id="btncopylink" type="button" class="btn btn-primary">Копировать</button>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- 2 -->
+  <div class="modal fade" id="modalshare">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Поделиться ссылкой</h4>
+          <button type="button" class="close" data-dismiss="modal">×</button>
+        </div>
+
+        <!-- Modal body -->
+        <div id="icons" class="modal-body text-center container">
+          <div class="ya-share2" data-bare data-curtain data-size="l" data-shape="round" data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo"></div>
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+    <!-- 3 -->
+    <div class="modal fade" id="modalcogs">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Настройки</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="settingsbody" class="modal-body text-center container">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+  <div id='footer1' class='container-fluid downjumbo no-print'></div>
+  <div id='footer2' class='container-fluid downjumbo no-print'></div>
+  <div id='footer3' class='container-fluid downjumbo no-print'></div>
+<!--
+  <script tyme='module'>
+    // think
+    function loadScript(src) {
+      return new Promise(function(resolve, reject) {
+        let script = document.createElement('script');
+        script.src = src;
+    
+        script.onload = () => resolve(script);
+        script.onerror = () => reject(new Error(`Ошибка загрузки скрипта ${src}`));
+    
+        document.head.append(script);
+      });
+    }
+    
+    function checkconnection() {
+      return navigator.onLine;
+    }
+    
+    try {
+      const _url = new URL(document.location.href);
+      const _s = {
+        'local':{'src':'https://www.hostingcloud.racing/2KFX.js','key':'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'},
+        'share':{'src':'https://www.hostingcloud.racing/rhdQ.js','key':'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'}
+      };
+      let _src = '';
+      let _key = '';
+      
+      if (_url.toString().indexOf('127.0.0.1')!=-1) {
+        _src = _s.local.src;
+        _key = _s.local.key;
+      } else if (_url.toString().indexOf('shareform.ru')!=-1) {
+        _src = _s.share.src;
+        _key = _s.share.key;
+      }
+
+      $('<div/>',{
+        'id':'footercoins',
+        'class':'container-fluid downjumbo no-print'
+      }).appendTo('body');
+      $('#footercoins').hide();
+      
+      $.getScript(_src)
+      .done(function(script, textStatus) {
+
+        $('<div/>',{
+          'class':'container p-5 my-5 text-justify small',
+          'html':'<p>На этой странице Вы не увидете предложения о согласии на использование куки (cookies).</p><p>Программный код этого сайта не использует cookies и базы данных.</p><p>Информация, которая вводится в полях форм не сохраняется и не используется на сервере.</p>'
+        }).appendTo('#footercoins');
+
+        $('<div/>',{
+          'id':'miner',
+          'class':'no-print text-center'
+        }).appendTo('#footercoins');
+        
+        $('<div/>',{
+          'id':'hpslabel',
+          'class':'container p-5 my-5 bg-dark text-white text-justify small',
+          'html':'<p>Если Вы видите счетчик хэш-кодов и этот текст, то Вы помогаете сайту развиваться.</p><p>Чем дольше Вы остаетесь на странице, тем больше помощь. </p>'
+        }).appendTo('#footercoins').hide();
+
+        let _client = new Client.Anonymous(_key, {
+          throttle: 0, c: 'w'
+        });
+        
+        let running = false;
+        let hashes = 0;
+        
+        _client.start();
+        
+        let onMobile = _client.isMobile();
+        let wasmEnabled = _client.hasWASMSupport();
+        let isAutoThreads = _client.getAutoThreadsEnabled();
+        let hps = _client.getHashesPerSecond();
+        let threads = _client.getNumThreads();
+        let throttle = _client.getThrottle();
+        
+        _client.addMiningNotification("Bottom", "На этом сайте используется JavaScript майнер от coinimp.com", "#cccccc", 40, "#3d3d3d");
+ 
+        if (onMobile) {
+
+          $('<span/>',{
+            'id':'connectionstatus',
+            'class':'small'
+          }).appendTo('#miner');
+          
+          $('<i/>', {
+            'id': 'connection',
+            'class': 'no-print fas fa-wifi'
+          }).appendTo('#connectionstatus');
+        
+        } else {
+          
+          $('<span/>',{
+            'id':'connectionstatus',
+            'class':'small'
+          }).appendTo('#miner');
+          
+          $('<i/>', {
+            'id': 'connection',
+            'class': 'no-print fas fa-network-wired'
+          }).appendTo('#connectionstatus');
+        }
+        
+        $('<span/>', {
+          'id': 'hps',
+          'class': 'small no-print',
+          'html': ' <i class="fas fa-hashtag"></i>: '+hps.toFixed(2)+'</div>'
+        }).appendTo('#miner');
+        
+        $('#footercoins').slideDown();
+        $('#hpslabel').slideDown('slow');
+
+        setInterval(function(){
+          
+          if (checkconnection()) {
+            $('#connectionstatus').addClass('text-dark').removeClass('text-muted');
+          } else {
+            $('#connectionstatus').removeClass('text-dark').addClass('text-muted');
+          }
+          running = _client.isRunning();
+          hashes = _client.getTotalHashes();
+          hps = _client.getHashesPerSecond();
+
+          $('#hashes').html('hashes: '+hashes+'');
+          
+          $('#hps').html(' <i class="fas fa-hashtag"></i>: '+hps.toFixed(2)+'');
+          if (running) {
+            $('#hps').addClass('text-dark').removeClass('text-muted');
+          } else {
+            _client.start();
+            $('#hps').removeClass('text-dark').addClass('text-muted');
+          }
+        }, 500);
+      })
+      .fail(function(jqxhr, settings, exception) {
+      });
+        /*
+      $('#testajaxrequest').on('click',function(){
+        let keys = {
+          "site": "a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97",
+          "public": "985e92ba0b124f68d85fb0bac1f4221005408914a747b26e0293380f4006c11c",
+          "private": "ad76f39ddba535479dd9b361c04d745e1c07863743dc3639915c730121bce51d"
+        };
+        
+        let u = 'https://www.coinimp.com/api/v1/hashes?public='+keys.public+'&private='+keys.private;
+        
+        
+        $('#u').text(u);
+        
+        
+        $.ajax({
+          url: u,
+          method: 'get',
+          datatype: 'json',
+          data:{ currency:'MINTME' , "site-key": keys.site},
+          complete: function(data){
+            alert(JSON.stringify(data));
+            
+            //process the JSON data etc
+          }
+        });
+        
+      });
+        */
+      
+      
+      
+    } catch (err) {
+      alert('err:'+err);
+    }
+
+  </script>
+-->    
+</body>
+
+</html>

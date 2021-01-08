@@ -1,0 +1,1554 @@
+{
+  "ver": "0.0.0 b",
+  "title": "Расчет сальдо встречных обязательств по договору лизинга",
+  "settings": [],
+  "properties":[
+    {"id":"zc_txt","lbl":"Закупочная цена","on":"true","attr":"val"},
+    {"id":"p_txt","lbl":"Общий размер платежей по договору","on":"true","attr":"val"},
+    {"id":"ap_txt","lbl":"Авансовый платеж","on":"true","attr":"val"}
+  ],
+  "scs": [
+    {
+      "id": "scHead",
+      "cls": "",
+      "cols": [
+        {
+          "id":"scHeadCol",
+          "cls":"",
+          "ps":[
+            { "cls": "emptyline" },
+            { "cls": "emptyline" },
+            {
+              "id": "scHeadCol_p0",
+              "cls": "text-center",
+              "ss": [{
+                  "cls": "font-weight-bold",
+                  "html": "РАСЧЁТ<br>сальдо встречных обязательств по договору лизинга"
+              }]
+            },
+            { "cls": "emptyline" },
+            { "cls": "emptyline" }
+          ]
+        }
+      ]
+    },
+    {
+      "id":"scDataFormPreamb",
+      "cls":"",
+      "cols":[
+        {
+          "id":"scDataFormPreambCol",
+          "cls":"",
+          "ps":[
+            {
+              "id":"scDataFormPreambCol_p0",
+              "cls":"text-center",
+              "ss":[{
+                  "cls": "",
+                  "txt": "Исходные данные:"
+              }]
+            },
+            {"cls":"emptyline"}
+          ]
+        }
+      ]
+    },
+    {
+      "id":"scDataForm",
+      "cls":"",
+      "cols":[
+        {
+          "id":"scDataFormCol1", "cls":"",
+          "ps":[
+            {
+              "id":"scDataForm_p_zc_lbl",
+              "cls":"text-justify",
+              "ss":[
+                {
+                  "txt":"Закупочная цена (",
+                  "cls":""
+                },
+                {
+                  "txt":"ЗЦ",
+                  "cls":"font-weight-bold"
+                },
+                {
+                  "txt":") предмета лизинга.",
+                  "cls":""
+                }
+              ]
+            },
+            {
+              "id":"scDataForm_p_zc_inp",
+              "cls":"input-group mb-3",
+              "ss":[
+                {
+                  "id":"zclbl",
+                  "cls":"input-group-prepend min-w-20",
+                  "subs":[
+                    {
+                      "type":"span", "cls":"input-group-text justify-content-center", "txt":"ЗЦ", "for":"zc_txt" }
+                    ]
+                    },
+                    { 
+                      "id":"zc_txt", "type":"input", "name":"zc_txt", "itype":"text", "cls":"form-control text-center", 
+                      "val":"8997551,00", "datainputmask": "'alias':'decimalWithSpaces'"
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_p_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Общий размер платежей по договору лизинга (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"П",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_p_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"plbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { "type":"span", "cls":"input-group-text justify-content-center", "txt": "П", "for": "p_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"p_txt", "type":"input", "name":"p_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"9868554,16", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_ap_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Авансовый платеж (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"АП",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":") по договору лизинга.",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_ap_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"aplbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { "type":"span", "cls":"input-group-text justify-content-center", "txt":"АП", "for":"ap_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"ap_txt", "type":"input", "name":"ap_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"1829567,00", "datainputmask":"'alias':'decimalWithSpaces'" }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_rppl_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Расходы по доставке, ремонту, страхованию, государственной регистрации и передаче предмета лизинга лизингополучателю и т.п. (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛ",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":"):",
+                      "cls":""
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_rpld_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-расходы по доставке (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛд",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rpld_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rpldlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛд", "for":"rpld_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rpld_txt", "type":"input", "name":"rpld_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rplr_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-расходы по ремонту (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛр",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rplr_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rplrlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛр", "for":"rplr_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rplr_txt", "type":"input", "name":"rplr_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rpls_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-расходы по страхованию (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛс",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rpls_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rplslbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛс", "for":"rpls_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rpls_txt", "type":"input", "name":"rpls_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"98973,05", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rplg_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-расходы по государственной регистрации (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛг",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rplg_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rplglbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛг", "for":"rplg_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rplg_txt", "type":"input", "name":"rplg_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rpli_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-иные расходы по передаче (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РПЛи",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rpli_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rplilbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛи", "for":"rpli_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rpli_txt", "type":"input", "name":"rpli_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_rppl_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rppllbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РПЛ", "for":"rppl_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rppl_txt", "type":"input", "name":"rppl_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "disabled": "true", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    },
+                    {
+                      "id":"rppl", "formula":"#rpld_txt + #rplr_txt + #rpls_txt + #rplg_txt + #rpli_txt", 
+                      "ops": "rpld_txt,rplr_txt,rpls_txt,rplg_txt,rpli_txt", "for": "#rppl_txt" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"}
+                
+
+              ]
+            },
+            {
+              "id":"scDataFormCol2", "cls":"",
+              "ps":[
+
+                {
+                  "id":"scDataForm_p_sdn_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Срок договора лизинга в днях (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"Сдн",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_sdn_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"sdnlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center", "txt":"Сдн", "for":"sdn_txt" 
+                        }
+                      ]
+                    },
+                    { 
+                      "id":"sdn_txt", "type":"input", "name":"sdn_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"1825", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_spdn_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Срок пользованния предметом лизинга в днях (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"СПдн",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_spdn_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"spdnlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center", "txt":"СПдн", "for":"spdn_txt" 
+                        }
+                      ]
+                    },
+                    { 
+                      "id":"spdn_txt", "type":"input", "name":"spdn_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"1808", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_plp_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Поступившие лизинговые платежи (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"ПЛП",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_plp_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[{
+                      "id":"plplbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { "type":"span", "cls":"input-group-text justify-content-center", "txt":"ПЛП", "for":"plp_txt" }
+                      ]
+                    },
+                    {
+                      "id":"plp_txt", "type":"input", "name":"plp_txt",
+                      "itype": "text", "cls":"form-control text-center",
+                      "val":"9052876,00", "datainputmask":"'alias':'decimalWithSpaces'"
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_ru_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Реальный ущерб: затраты на демонтаж, транспортировку, хранение, ремонт, реализацию предмета лизинга (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУ",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":"):",
+                      "cls":""
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                
+                {
+                  "id":"scDataForm_p_rud_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-затраты на демонтаж (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУд",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rud_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rudlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РУд", "for":"rud_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rud_txt", "type":"input", "name":"rud_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rut_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-затраты на транспортировку (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУт",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rut_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rutlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РУт", "for":"rut_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rut_txt", "type":"input", "name":"rut_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"180600,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_ruh_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-затраты на хранение (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУх",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_ruh_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"ruhlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РУх", "for":"ruh_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"ruh_txt", "type":"input", "name":"ruh_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"600,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rur_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-затраты на ремонт (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУр",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":");",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rur_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"rurlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РУр", "for":"rur_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rur_txt", "type":"input", "name":"rur_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {
+                  "id":"scDataForm_p_rup_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"-затраты на реализацию предмета лизинга (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"РУп",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_rup_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[
+                    {
+                      "id":"ruplbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center",
+                          "txt":"РУп", "for":"rup_txt" }
+                      ]
+                    },
+                    { 
+                      "id":"rup_txt", "type":"input", "name":"rup_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "val":"3902,85", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_ru_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[{
+                      "id":"rulbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                          { 
+                            "type":"span", "cls":"input-group-text justify-content-center", 
+                            "txt":"РУ", "for":"ru_txt" 
+                          }
+                      ]
+                    },
+                    { 
+                      "id":"ru_txt", "type":"input", "name":"ru_txt", 
+                      "itype":"text", "cls":"form-control text-center", 
+                      "disabled":"true", "datainputmask":"'alias':'decimalWithSpaces'"
+                    },
+                    {
+                      "id":"ru", "formula":"#rud_txt + #rut_txt + #ruh_txt + #rur_txt + #rup_txt", 
+                      "ops": "rud_txt,rut_txt,ruh_txt,rur_txt,rup_txt", "for": "#ru_txt" 
+                    }
+                  ]
+                },
+                
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_uv_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Упущенная выгода (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"УВ",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_uv_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[{
+                      "id":"uvlbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        {
+                          "type":"span", "cls":"input-group-text justify-content-center", "txt":"УВ", "for":"uv_txt" 
+                        }
+                      ]
+                    },
+                    {
+                      "id":"uv_txt", "type":"input", "name":"uv_txt",
+                      "itype":"text", "cls":"form-control text-center",
+                      "val":"0,00", "datainputmask":"'alias':'decimalWithSpaces'" }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_s_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Санкции (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"С",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_s_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[{
+                      "id":"slbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center", "txt":"С", "for":"s_txt" 
+                        }
+                      ]
+                    },
+                    {
+                      "id":"s_txt", "type":"input", "name":"s_txt",
+                      "itype": "text", "cls":"form-control text-center",
+                      "val":"231676,38", "datainputmask":"'alias':'decimalWithSpaces'" 
+                    }
+                  ]
+                },
+                {"cls":"emptyline"},
+                {
+                  "id":"scDataForm_p_svpl_lbl",
+                  "cls":"text-justify",
+                  "ss":[
+                    {
+                      "txt":"Стоимость возвращенного предмета лизинга (",
+                      "cls":""
+                    },
+                    {
+                      "txt":"СВПЛ",
+                      "cls":"font-weight-bold"
+                    },
+                    {
+                      "txt":").",
+                      "cls":""
+                    }
+                  ]
+                },
+                {
+                  "id":"scDataForm_p_svpl_inp",
+                  "cls":"text-justify input-group mb-3",
+                  "ss":[{
+                      "id":"svpllbl",
+                      "cls":"input-group-prepend min-w-20",
+                      "subs":[
+                        { 
+                          "type":"span", "cls":"input-group-text justify-content-center", "txt":"СВПЛ", "for":"svpl_txt"
+                        }
+                      ]
+                    },
+                    {
+                      "id":"svpl_txt", "type":"input", "name":"svpl_txt", 
+                      "itype":"text", "cls":"form-control text-center",
+                      "val":"1062159,00", "datainputmask":"'alias':'decimalWithSpaces'"
+                    }
+                  ]
+                },
+                {"cls":"emptyline"}
+              ]
+            }
+          ]
+        },
+        
+        {
+            "id": "sc1",
+            "cls": "",
+            "cols": [{
+                "id": "sc1_col1",
+                "cls": "",
+                "ps": [
+                    {
+                        "id": "sc1_col1_p1",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "В целях расчета сальдо встречных обязательств ("
+                            },
+                            {
+                                "txt": "СВО",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": ") использована следующая формула:"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc1_col1_p2",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СВО",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " = ("
+                            },
+                            {
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "ПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "У",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "С",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": ") – ("
+                            },
+                            {
+                                "txt": "ПЛП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – "
+                            },
+                            {
+                                "txt": "АП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "СВПЛ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": ")"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc1_col1_p3",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – сумма предоставленного лизингополучателю финансирования (Согласно п. 3.4 постановления Пленума ВАС № 17 размер финансирования, предоставленного лизингодателем лизингополучателю, определяется как закупочная цена предмета лизинга (за вычетом авансового платежа лизингополучателя) в совокупности с расходами по его доставке, ремонту, передаче лизингополучателю и т.п.)."
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc1_col1_p4",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " = "
+                            },
+                            {
+                                "txt": "ЗЦ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " - "
+                            },
+                            {
+                                "txt": "АП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "РПЛ",
+                                "cls": "font-weight-bold"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc1_col1_p5",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "ЗЦ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – закупочная цена предмета лизинга."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc1_col1_p6",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "АП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – авансовый платеж лизингополучателя."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc1_col1_p7",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "РПЛ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – расходы по доставке, ремонту, и передаче предмета лизинга лизингополучателю и т.п."
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+
+                ]
+            }]
+        },
+        {
+            "id": "formspfl",
+            "cls": "",
+            "cols": [{
+                "id": "formspfl_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "formspfl_col1_p7",
+                        "cls": "text-justify input-group mb-3",
+                        "ss": [{
+                                "id": "splflbl",
+                                "cls": "input-group-prepend min-w-20",
+                                "subs": [
+                                    { 
+                                      "type": "span", "cls": "input-group-text justify-content-center",
+                                      "txt": "СПЛФ", "for": "splf_txt"
+                                    }
+                                ]
+                            },
+                            { 
+                              "id": "splf_txt", 
+                              "type": "input", "name": "splf_txt", 
+                              "itype": "text", "cls": "form-control text-center",
+                              "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'"
+                            },
+                            {
+                              "id": "spfl", "formula": "#zc_txt - #ap_txt + #rppl_txt", 
+                              "ops": "zc_txt,ap_txt,rppl_txt", "for": "#splf_txt" 
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "sc2",
+            "cls": "",
+            "cols": [{
+                "id": "sc2_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc2_col1_p1",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "ПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – плата за предоставленное лизингополучателю финансирование за время до фактического возврата этого финансирования (Согласно п. 3.5 постановления Пленума ВАС № 17 плата за размер финансирования определяется в процентах годовых на размер финансирования. При этом если соответствующая процентная ставка не предусмотрена договором лизинга, она устанавливается судом расчетным путем на основе разницы между размером всех платежей по договору лизинга (за исключением авансового) и размером финансирования, а также срока договора по следующей формуле: "
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc2_col1_p2",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "ПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " = "
+                            },
+                            {
+                                "txt": "(("
+                            },
+                            {
+                                "txt": "П",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " - "
+                            },
+                            {
+                                "txt": "АП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " - "
+                            },
+                            {
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": ") / ("
+                            },
+                            {
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " x "
+                            },
+                            {
+                                "txt": "Cдн",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": ")) x "
+                            },
+                            {
+                                "txt": "365",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " x "
+                            },
+                            {
+                                "txt": "100",
+                                "cls": "font-weight-bold"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc2_col1_p3",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "П",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – общий размер платежей по договору лизинга."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc2_col1_p4",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "Сдн",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – срок договора лизинга в днях."
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+
+                ]
+            }]
+        },
+        {
+            "id": "formpf",
+            "cls": "",
+            "cols": [{
+                "id": "formpf_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "formpf_col1_p3",
+                        "cls": "text-justify input-group mb-3",
+                        "ss": [{
+                                "id": "pflbl",
+                                "cls": "input-group-prepend min-w-20",
+                                "subs": [
+                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "ПФ,%", "for": "pf_txt" }
+                                ]
+                            },
+                            { "id": "pf_txt", "type": "input", "name": "pf_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
+                            { "id": "pf", "formula": "( ( #p_txt - #ap_txt - #splf_txt ) / ( #splf_txt * #sdn_txt ) ) * 365 * 100", "ops": "p_txt,ap_txt,splf_txt,splf_txt,sdn_txt", "for": "#pf_txt" }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "sc3",
+            "cls": "",
+            "cols": [{
+                "id": "sc3_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc3_col1_p1",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – сумма платы за предоставленное финансирование определяется по следующей формуле: "
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc3_col1_p2",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " = "
+                            },
+                            {
+                                "txt": "СПЛФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " x "
+                            },
+                            {
+                                "txt": "ПФ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " / "
+                            },
+                            {
+                                "txt": "100",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " / "
+                            },
+                            {
+                                "txt": "365",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " x "
+                            },
+                            {
+                                "txt": "CПдн",
+                                "cls": "font-weight-bold"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc3_col1_p3",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СПдн",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – срок пользования предметом лизинга до момента возврата в днях."
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+
+                ]
+            }]
+        },
+        {
+            "id": "formspf",
+            "cls": "",
+            "cols": [{
+                "id": "formspf_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "formspf_col1_p3",
+                        "cls": "text-justify input-group mb-3",
+                        "ss": [{
+                                "id": "spflbl",
+                                "cls": "input-group-prepend min-w-20",
+                                "subs": [
+                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "CПФ", "for": "spf_txt" }
+                                ]
+                            },
+                            { "id": "spf_txt", "type": "input", "name": "spf_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
+                            { "id": "pf", "formula": "#splf_txt * #pf_txt / 100  / 365 * #spdn_txt", "ops": "splf_txt,pf_txt,spdn_txt", "for": "#spf_txt" }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "sc4",
+            "cls": "",
+            "cols": [{
+                "id": "sc4_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc4_col1_p1",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "У",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – убытки Лизингодателя. Согласно п. 3.6 Постановления Пленума ВАС № 17 убытки лизингодателя определяются по общим правилам, предусмотренным гражданским законодательством. Размер убытков определяется как сумма реального ущерба (РУ) + упущенная выгода (УВ), где "
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc4_col1_p5",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "РУ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – реальный ущерб: затраты на демонтаж, транспортировку, хранение, ремонт, реализацию предмета лизинга."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc4_col1_p6",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "УВ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – упущенная выгода."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc4_col1_p7",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                            "txt": "Соответственно сумма убытков рассчитана по следующей формуле:"
+                        }]
+                    },
+                    {
+                        "id": "sc4_col1_p8",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "У",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " = "
+                            },
+                            {
+                                "txt": "УВ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " + "
+                            },
+                            {
+                                "txt": "РУ",
+                                "cls": "font-weight-bold"
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "formu",
+            "cls": "",
+            "cols": [{
+                "id": "formu_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "formu_col1_p3",
+                        "cls": "text-justify input-group mb-3",
+                        "ss": [{
+                                "id": "ulbl",
+                                "cls": "input-group-prepend min-w-20",
+                                "subs": [
+                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "У", "for": "u_txt" }
+                                ]
+                            },
+                            { "id": "u_txt", "type": "input", "name": "u_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
+                            { "id": "u", "formula": "#ru_txt + #uv_txt", "ops": "ru_txt,uv_txt", "for": "#u_txt" }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "sc5",
+            "cls": "",
+            "cols": [{
+                "id": "sc5_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "sc5_col1_p1",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "C",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – cанкции, которые лизингодатель вправе взыскать с лизингополучателя в соответствии с законом или договором. В соответствии с условиями договора лизинга за нарушение сроков внесения лизинговых платежей начисляются штрафные санкции в виде пени в размере 1/365 ставки рефинансирования ЦБ РФ на сумму неисполненного обязательства за каждый день просрочки."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc5_col1_p2",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "ПЛП",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – полученные от лизингополучателя платежи."
+                            }
+                        ]
+                    },
+                    {
+                        "id": "sc5_col1_p3",
+                        "cls": "text-justify text-indent",
+                        "ss": [{
+                                "txt": "СВПЛ",
+                                "cls": "font-weight-bold"
+                            },
+                            {
+                                "txt": " – стоимость возвращенного предмета лизинга."
+                            }
+                        ]
+                    },
+                    { "cls": "emptyline" },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "formsvo",
+            "cls": "",
+            "cols": [{
+                "id": "formsvo_col1",
+                "cls": "",
+                "ps": [
+                    { "cls": "emptyline" },
+                    {
+                        "id": "formsvo_col1_p4",
+                        "cls": "text-justify input-group mb-3",
+                        "ss": [{
+                                "id": "svolbl",
+                                "cls": "input-group-prepend min-w-20",
+                                "subs": [
+                                    { "type": "span", "cls": "input-group-text justify-content-center", "txt": "СВО", "for": "svo_txt" }
+                                ]
+                            },
+                            { "id": "svo_txt", "type": "input", "name": "svo_txt", "itype": "text", "cls": "form-control text-center", "disabled": "true", "datainputmask": "'alias': 'decimalWithSpaces'" },
+                            { "id": "svo", "formula": "(#splf_txt + #spf_txt + #u_txt + #s_txt) - (#plp_txt - #ap_txt + #svpl_txt)", "ops": "splf_txt,spf_txt,u_txt,s_txt,plp_txt,ap_txt,svpl_txt", "for": "#svo_txt" }
+                        ]
+                    },
+                    { "cls": "emptyline" }
+                ]
+            }]
+        },
+        {
+            "id": "footer_content",
+            "cls": "container-fluid downjumbo no-print text-center",
+            "parentid": "#footer",
+            "cols": [{
+                "id": "footer_content_col1",
+                "cls": "margin-bottom:0",
+                "ps": [{
+                    "id": "wa",
+                    "cls": "whatsappme",
+                    "ss": [{
+                        "type": "a",
+                        "id": "whatsapplink",
+                        "cls": "text-success",
+                        "datatoggle": "tooltip",
+                        "dataplacement": "top",
+                        "title": "Написать автору в WhatsApp",
+                        "href": "http://wa.me/+79265729463",
+                        "subs": [{
+                                "type": "i",
+                                "cls": "fab fa-whatsapp"
+                            },
+                            {
+                                "type": "span",
+                                "txt": " Обратная связь"
+                            }
+                        ]
+                    }]
+                }]
+            }]
+        }
+
+    ]
+}

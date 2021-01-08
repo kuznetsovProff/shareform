@@ -1,0 +1,52 @@
+{
+	"ver":"0.0.0 b",
+	"title":"Сворачиваемый блок",
+	"settings":[],
+	"properties":[],
+	"scs":[
+		{"id":"sc1", "cls":"",
+			"cols":[
+				{"id":"sc1_col1", "cls":"",
+					"ps":[
+						{"cls":"emptyline"},
+						{"cls":"emptyline"},
+						{"cls":"emptyline"}
+					]
+				}
+			]
+		},
+		{"id":"footer_content", "cls":"container-fluid downjumbo no-print text-center", "parentid":"#footer",
+			"cols":[
+				{"id":"footer_content_col1", "cls":"margin-bottom:0",
+					"ps":[
+						{
+							"id":"wa",
+							"cls":"whatsappme",
+							"ss":[
+								{
+									"type":"a",
+									"id":"whatsapplink",
+									"cls":"text-success",
+									"datatoggle":"tooltip",
+									"dataplacement":"top",
+									"title":"Написать автору в WhatsApp",
+									"href":"http://wa.me/+79265729463",
+									"subs":[
+										{
+											"type":"i",
+											"cls":"fab fa-whatsapp"
+										},
+										{
+											"type":"span",
+											"txt":" Обратная связь"
+										}
+									]
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}

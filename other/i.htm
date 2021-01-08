@@ -26,19 +26,21 @@
     <script src='/js/bootstrap4-toggle.min.js'></script>
     <script src='/js/jquery.history.js'></script>
 
+
     <script src='/js/math.min.js'></script>
     <script src="/js/plotly-latest.min.js"></script>
-    <!--
+    <!--	
 			https://mathjs.org/index.html
 			https://plotly.com/javascript/
 		-->
 
-    <link href='/css/bootstrap4-toggle.min.css' rel='stylesheet' />
-    <link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous" />
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel='stylesheet' href='/css/style.css' />
     <link rel='stylesheet' href='/css/yashare2.css' />
     <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
     <link rel='stylesheet' href='/css/print.css' media='print' />
+
 
     <script type='module'>
         import * as _ from '/js/main.js';
@@ -46,68 +48,68 @@
         $('#footer1').hide();
         $('#footer2').hide();
         $('#footer3').hide();
-        
-        $(document).ready(function() { 
-          _.list('/quiz/json/tasks.json'); 
-          _.menu('/json/menu.json'); 
-          _.form('/quiz/json/task1.json'); 
-          _c.work();
-        });
+
+        $(document).ready( 
+          function(){ 
+            _.menu('/json/menu.json'); 
+            _.form('/other/json/collapse.json');
+            _c.work();
+          });
     </script>
 </head>
 
 <body>
-    <div id='header'></div>
-    <div id='container'></div>
-    <div id='footer'></div>
+    <div id="header"></div>
+    <div id="container"></div>
+    <div id="footer"></div>
     <!-- The Modals -->
     <!-- 1 -->
-    <div class='modal fade' id='modallink'>
-        <div class='modal-dialog modal-dialog-centered'>
-            <div class='modal-content'>
+    <div class="modal fade" id="modallink">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
 
                 <!-- Modal Header -->
-                <div class='modal-header'>
-                    <h4 class='modal-title'>Копировать ссылку</h4>
-                    <button type='button' class='close' data-dismiss='modal'>×</button>
+                <div class="modal-header">
+                    <h4 class="modal-title">Копировать ссылку</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
 
                 <!-- Modal body -->
-                <div id='link' class='modal-body text-center container'>
-                    <div class='form-group'>
-                        <label for='link'>Ссылка:</label>
-                        <textarea class='form-control' rows='5' id='link' disabled='disabled'></textarea>
+                <div id="link" class="modal-body text-center container">
+                    <div class="form-group">
+                        <label for="link">Ссылка:</label>
+                        <textarea class="form-control" rows="5" id="link" disabled="disabled"></textarea>
                     </div>
-                    <button id='btncopylink' type='button' class='btn btn-primary'>Копировать</button>
+                    <button id="btncopylink" type="button" class="btn btn-primary">Копировать</button>
                 </div>
 
                 <!-- Modal footer -->
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-danger' data-dismiss='modal'>Отмена</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                 </div>
 
             </div>
         </div>
     </div>
     <!-- 2 -->
-    <div class='modal fade' id='modalshare'>
-        <div class='modal-dialog modal-dialog-centered'>
-            <div class='modal-content'>
+    <div class="modal fade" id="modalshare">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
 
                 <!-- Modal Header -->
-                <div class='modal-header'>
-                    <h4 class='modal-title'>Поделиться ссылкой</h4>
-                    <button type='button' class='close' data-dismiss='modal'>×</button>
+                <div class="modal-header">
+                    <h4 class="modal-title">Поделиться ссылкой</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
 
                 <!-- Modal body -->
-                <div id='icons' class='modal-body text-center container'>
-                    <div class='ya-share2' data-bare data-curtain data-size='l' data-shape='round' data-services='vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo'></div>
+                <div id="icons" class="modal-body text-center container">
+                    <div class="ya-share2" data-bare data-curtain data-size="l" data-shape="round" data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo"></div>
                 </div>
 
                 <!-- Modal footer -->
-                <div class='modal-footer'>
-                    <button type='button' class='btn btn-danger' data-dismiss='modal'>Отмена</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                 </div>
 
             </div>
@@ -142,6 +144,5 @@
   <div id='footer3' class='container-fluid downjumbo no-print'></div>
 
 </body>
-
 
 </html>

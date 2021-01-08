@@ -1,12 +1,14 @@
 {
 	"ver": "0.0.0 b",
-	"title": "SAREFORM | Поделись формой",
+	"title": "SHAREFORM | Поделись формой",
 	"sets": [],
 	"scs": [
 		{"id": "sc1", "cls": "",
 			"cols": [
 				{"id": "sc1_col1", "cls": "",
 					"ps": [
+					  {"cls": "emptyline"},
+					  {"cls": "emptyline"},
 					  {"cls": "emptyline"},
 					  {"cls": "emptyline"},
 						{"cls": "emptyline"},
@@ -18,22 +20,19 @@
 							]
 						},
 						{"cls": "emptyline"},
-                                                {"id": "sc1_col1_p2", "cls": "text-justify",
-                                                        "ss": [
-                                                                {
-                                                                        "txt": "Чтобы увидеть больше попробуйте поискать другие пути. "
-                                                                }
-                                                        ]
-                                                },
-                                                {"cls": "emptyline"},
-                                                {"id": "sc1_col1_p3","cls":"text-justify",
-                                                        "ss": [
-                                                               {
-                                                                    "txt":"Может быть позже здесь появится подробное описание работы сайта."
-                                                               }
-                                                         ]
-                                                },
+						{"id": "sc1_col1_p2", "cls": "text-justify",
+							"ss": [
+								{
+									"txt": "Попробуйте поискать другие пути для просмотра информации."
+								}
+							]
+						},
+ 						{"cls": "emptyline"},
 						{"cls": "emptyline"},
+ 						{"cls": "emptyline"},
+						{"cls": "emptyline"},
+						{"cls": "emptyline"},
+ 						{"cls": "emptyline"},
 						{"cls": "emptyline"},
 						{"cls": "emptyline"},
 						{"cls": "emptyline"},
@@ -65,7 +64,7 @@
 										},
 										{
 											"type":"span",
-											"txt":" Алексей Кузнецов"
+											"txt":" Обратная связь"
 										}
 									]
 								}

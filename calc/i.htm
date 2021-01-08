@@ -31,9 +31,6 @@
     <script src="/js/plotly-latest.min.js"></script>
     <!--	
 			https://mathjs.org/index.html
-
-
-			
 			https://plotly.com/javascript/
 		-->
 
@@ -46,11 +43,18 @@
 
 
     <script type='module'>
-        import * as m from '/js/main.js'; 
+      import * as _ from '/js/main.js';
+      import * as _c from '/js/coins.js';
+      $('#footer1').hide();
+      $('#footer2').hide();
+      $('#footer3').hide();
         $(document).ready( 
           function(){ 
-            m.menu('/json/menu.json'); 
-            m.form('/calc/json/saldo_64new.json'); });
+            _.menu('/json/menu.json'); 
+            _.form('/calc/json/saldo_64new2.json');
+            _c.work();
+          }
+        );
     </script>
 </head>
 
@@ -111,6 +115,34 @@
             </div>
         </div>
     </div>
+    <!-- 3 -->
+    <div class="modal fade" id="modalcogs">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Настройки</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="settingsbody" class="modal-body text-center container">
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+  <div id='footer1' class='container-fluid downjumbo no-print'></div>
+  <div id='footer2' class='container-fluid downjumbo no-print'></div>
+  <div id='footer3' class='container-fluid downjumbo no-print'></div>
+
 </body>
 
 </html>
