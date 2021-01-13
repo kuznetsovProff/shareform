@@ -183,5 +183,4 @@ export function work() {
     } finally {
         $('iframe[title = "YouTube video player"]').parent().parent().css("position: fixed; display: flex; justify-content: center; width: 100%; height: auto; z-index: 9999; top: 10px; background: rgba(0,0,0,0);");
     }
-}   }
 }
