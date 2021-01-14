@@ -1,6 +1,6 @@
 {
     "ver": "0.0.0 b",
-    "title": "Задание 1. Тестовые задания на присвоение статуса адвоката",
+    "title": "Задание 2. Тестовые задания на присвоение статуса адвоката",
     "settings": [],
     "scs": [{
             "id": "sc1",
@@ -13,7 +13,7 @@
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
-                            "html": "Задание № 1"
+                            "html": "Задание № 2"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -21,9 +21,9 @@
                         "id": "sc1_col1_p2",
                         "cls": "text-justify text-indent",
                         "ss": [{
-                            "id": "question1",
+                            "id": "question2",
                             "cls": "",
-                            "txt": "В соответствии с Федеральным законом «Об адвокатской деятельности и адвокатуре в Российской Федерации» целями оказания квалифицированной юридической помощи являются:"
+                            "txt": "Вставьте пропущенное слово в соответствии с п. 1 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации»: «Адвокат является независимым профессиональным [...] по правовым вопросам»."
                         }]
                     },
                     { "cls": "emptyline" },
@@ -31,93 +31,93 @@
                         "id": "sc1_col1_p3",
                         "cls": "text-center text-indent",
                         "ss": [{
-                            "id": "task1",
+                            "id": "task2",
                             "cls": "font-italic",
-                            "txt": "Выберите несколько из 4 вариантов ответа:"
+                            "txt": "Выберите один из 4 вариантов ответа:"
                         }]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "formcheck1_1",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio2_1",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check1",
+                                "itype": "radio",
+                                "name": "radio2",
                                 "value": "",
-                                "id": "check1_1",
+                                "id": "radio2_1",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_1",
-                                "txt": "Правовое просвещение граждан"
+                                "name": "radio2",
+                                "for": "radio2_1",
+                                "txt": "Помощником"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_2",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio2_2",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check1",
+                                "itype": "radio",
+                                "name": "radio2",
                                 "value": "",
-                                "id": "check1_2",
+                                "id": "radio2_2",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_2",
-                                "txt": "Защита прав, свобод и интересов доверителей"
+                                "name": "radio2",
+                                "for": "radio2_2",
+                                "txt": "Советником"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_3",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio2_3",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check1",
+                                "itype": "radio",
+                                "name": "radio2",
                                 "value": "",
-                                "id": "check1_3",
+                                "id": "radio2_3",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_3",
-                                "txt": "Укрепление законности"
+                                "name": "radio2",
+                                "for": "radio2_3",
+                                "txt": "Защитником"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_4",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio2_4",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check1",
+                                "itype": "radio",
+                                "name": "radio2",
                                 "value": "",
-                                "id": "check1_4",
-                                "answer": "true"
+                                "id": "radio2_4",
+                                "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_4",
-                                "txt": "Обеспечение доступа к правосудию"
+                                "name": "radio2",
+                                "for": "radio2_4",
+                                "txt": "Представителем"
                             }
                         ]
                     },
@@ -131,7 +131,7 @@
                                 "itype": "button",
                                 "cls": "btn btn-primary buttoncheck",
                                 "disabled": "disabled",
-                                "for": "check1",
+                                "for": "radio2",
                                 "txt": "Проверить"
                             },
                             {

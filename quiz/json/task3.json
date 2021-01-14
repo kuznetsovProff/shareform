@@ -1,6 +1,6 @@
 {
     "ver": "0.0.0 b",
-    "title": "Задание 1. Тестовые задания на присвоение статуса адвоката",
+    "title": "Задание 3. Тестовые задания на присвоение статуса адвоката",
     "settings": [],
     "scs": [{
             "id": "sc1",
@@ -13,7 +13,7 @@
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
-                            "html": "Задание № 1"
+                            "html": "Задание № 3"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -21,9 +21,9 @@
                         "id": "sc1_col1_p2",
                         "cls": "text-justify text-indent",
                         "ss": [{
-                            "id": "question1",
+                            "id": "question3",
                             "cls": "",
-                            "txt": "В соответствии с Федеральным законом «Об адвокатской деятельности и адвокатуре в Российской Федерации» целями оказания квалифицированной юридической помощи являются:"
+                            "txt": "В отношении такого вида юридической помощи, как составление документов правового характера, в п. 2 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации» конкретно указаны следующие документы:"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -31,93 +31,156 @@
                         "id": "sc1_col1_p3",
                         "cls": "text-center text-indent",
                         "ss": [{
-                            "id": "task1",
+                            "id": "task3",
                             "cls": "font-italic",
-                            "txt": "Выберите несколько из 4 вариантов ответа:"
+                            "txt": "Выберите несколько из 7 вариантов ответа:"
                         }]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "formcheck1_1",
+                        "id": "formcheck3_1",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check1",
+                                "name": "check3",
                                 "value": "",
-                                "id": "check1_1",
+                                "id": "check3_1",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_1",
-                                "txt": "Правовое просвещение граждан"
+                                "name": "check3",
+                                "for": "check3_1",
+                                "txt": "Меморандумы"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_2",
+                        "id": "formcheck3_2",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check1",
+                                "name": "check3",
                                 "value": "",
-                                "id": "check1_2",
+                                "id": "check3_2",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_2",
-                                "txt": "Защита прав, свобод и интересов доверителей"
+                                "name": "check3",
+                                "for": "check3_2",
+                                "txt": "Заявления"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_3",
+                        "id": "formcheck3_3",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check1",
+                                "name": "check3",
                                 "value": "",
-                                "id": "check1_3",
+                                "id": "check3_3",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_3",
-                                "txt": "Укрепление законности"
+                                "name": "check3",
+                                "for": "check3_3",
+                                "txt": "Служебные записки"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck1_4",
+                        "id": "formcheck3_4",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check1",
+                                "name": "check3",
                                 "value": "",
-                                "id": "check1_4",
+                                "id": "check3_4",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check1",
-                                "for": "check1_4",
-                                "txt": "Обеспечение доступа к правосудию"
+                                "name": "check3",
+                                "for": "check3_4",
+                                "txt": "Жалобы"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "formcheck3_5",
+                        "cls": "custom-control custom-checkbox",
+                        "ss": [{
+                                "type": "input",
+                                "cls": "custom-control-input",
+                                "itype": "checkbox",
+                                "name": "check3",
+                                "value": "",
+                                "id": "check3_5",
+                                "answer": "true"
+                            },
+                            {
+                                "type": "label",
+                                "cls": "custom-control-label",
+                                "name": "check3",
+                                "for": "check3_5",
+                                "txt": "Ходатайства"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "formcheck3_6",
+                        "cls": "custom-control custom-checkbox",
+                        "ss": [{
+                                "type": "input",
+                                "cls": "custom-control-input",
+                                "itype": "checkbox",
+                                "name": "check3",
+                                "value": "",
+                                "id": "check3_6",
+                                "answer": "false"
+                            },
+                            {
+                                "type": "label",
+                                "cls": "custom-control-label",
+                                "name": "check3",
+                                "for": "check3_6",
+                                "txt": "Обращения"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "formcheck3_7",
+                        "cls": "custom-control custom-checkbox",
+                        "ss": [{
+                                "type": "input",
+                                "cls": "custom-control-input",
+                                "itype": "checkbox",
+                                "name": "check3",
+                                "value": "",
+                                "id": "check3_7",
+                                "answer": "false"
+                            },
+                            {
+                                "type": "label",
+                                "cls": "custom-control-label",
+                                "name": "check3",
+                                "for": "check3_7",
+                                "txt": "Прошения"
                             }
                         ]
                     },
@@ -131,7 +194,7 @@
                                 "itype": "button",
                                 "cls": "btn btn-primary buttoncheck",
                                 "disabled": "disabled",
-                                "for": "check1",
+                                "for": "check3",
                                 "txt": "Проверить"
                             },
                             {
