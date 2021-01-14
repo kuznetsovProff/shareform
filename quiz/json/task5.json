@@ -1,6 +1,6 @@
 {
     "ver": "0.0.0 b",
-    "title": "Задание 2. Тестовые задания на присвоение статуса адвоката",
+    "title": "Задание 5. Тестовые задания на присвоение статуса адвоката",
     "settings": [],
     "scs": [{
             "id": "sc1",
@@ -13,7 +13,7 @@
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
-                            "html": "Задание № 2"
+                            "html": "Задание № 5"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -21,9 +21,9 @@
                         "id": "sc1_col1_p2",
                         "cls": "text-justify text-indent",
                         "ss": [{
-                            "id": "question2",
+                            "id": "question5",
                             "cls": "",
-                            "txt": "Вставьте пропущенное слово в соответствии с п. 1 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации»: «Адвокат является независимым профессиональным [...] по правовым вопросам»."
+                            "txt": "Отраслевыми правоотношениями, прямо упоминаемыми в перечне видов юридической помощи, приведенном в п. 2 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации», являются:"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -31,107 +31,107 @@
                         "id": "sc1_col1_p3",
                         "cls": "text-center text-indent",
                         "ss": [{
-                            "id": "task2",
+                            "id": "task5",
                             "cls": "font-italic",
                             "txt": "Выберите один из 4 вариантов ответа:"
                         }]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "formradio2_1",
+                        "id": "formradio5_1",
                         "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "radio",
-                                "name": "radio2",
+                                "name": "radio5",
                                 "value": "",
-                                "id": "radio2_1",
+                                "id": "radio5_1",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "radio2",
-                                "for": "radio2_1",
-                                "txt": "Помощником"
+                                "name": "radio5",
+                                "for": "radio5_1",
+                                "txt": "Таможенные правоотношения"
                             }
                         ]
                     },
                     {
-                        "id": "formradio2_2",
+                        "id": "formradio5_2",
                         "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "radio",
-                                "name": "radio2",
+                                "name": "radio5",
                                 "value": "",
-                                "id": "radio2_2",
+                                "id": "radio5_2",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "radio2",
-                                "for": "radio2_2",
-                                "txt": "Советником"
+                                "name": "radio5",
+                                "for": "radio5_2",
+                                "txt": "Налоговые правоотношения"
                             }
                         ]
                     },
                     {
-                        "id": "formradio2_3",
+                        "id": "formradio5_3",
                         "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "radio",
-                                "name": "radio2",
+                                "name": "radio5",
                                 "value": "",
-                                "id": "radiod2_3",
+                                "id": "radio5_3",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "radio2",
-                                "for": "radio2_3",
-                                "txt": "Защитником"
+                                "name": "radio5",
+                                "for": "radio5_3",
+                                "txt": "Правоотношения по банкротству"
                             }
                         ]
                     },
                     {
-                        "id": "formradio2_4",
+                        "id": "formradio5_4",
                         "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "radio",
-                                "name": "radio2",
+                                "name": "radio5",
                                 "value": "",
-                                "id": "radio2_4",
+                                "id": "radio5_4",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "radio2",
-                                "for": "radio2_4",
-                                "txt": "Представителем"
+                                "name": "radio5",
+                                "for": "radio5_4",
+                                "txt": "Строительные правоотношения"
                             }
                         ]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "buttons2",
+                        "id": "buttons5",
                         "cls": "text-right",
                         "ss": [{
-                                "id": "checkbutton2",
+                                "id": "checkbutton5",
                                 "type": "button",
                                 "itype": "button",
                                 "cls": "btn btn-primary buttoncheck",
                                 "disabled": "disabled",
-                                "for": "radio2",
+                                "for": "radio5",
                                 "txt": "Проверить"
                             },
                             {

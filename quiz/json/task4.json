@@ -1,6 +1,6 @@
 {
     "ver": "0.0.0 b",
-    "title": "Задание 3. Тестовые задания на присвоение статуса адвоката",
+    "title": "Задание 4. Тестовые задания на присвоение статуса адвоката",
     "settings": [],
     "scs": [{
             "id": "sc1",
@@ -13,7 +13,7 @@
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
-                            "html": "Задание № 3"
+                            "html": "Задание № 4"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -21,9 +21,9 @@
                         "id": "sc1_col1_p2",
                         "cls": "text-justify text-indent",
                         "ss": [{
-                            "id": "question3",
+                            "id": "question4",
                             "cls": "",
-                            "txt": "В отношении такого вида юридической помощи, как составление документов правового характера, в п. 2 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации» конкретно указаны следующие документы:"
+                            "txt": "В перечне видов юридической помощи, приведенном в п. 2 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации», НЕ упоминается следующий вид судопроизводства:"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -31,170 +31,149 @@
                         "id": "sc1_col1_p3",
                         "cls": "text-center text-indent",
                         "ss": [{
-                            "id": "task3",
+                            "id": "task4",
                             "cls": "font-italic",
-                            "txt": "Выберите несколько из 7 вариантов ответа:"
+                            "txt": "Выберите один из 6 вариантов ответа:"
                         }]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "formcheck3_1",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio4_1",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
+                                "itype": "radio",
+                                "name": "radio4",
                                 "value": "",
-                                "id": "check3_1",
+                                "id": "radio4_1",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_1",
-                                "txt": "Меморандумы"
+                                "name": "radio4",
+                                "for": "radio4_1",
+                                "txt": "Конституционное судопроизводство"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_2",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio4_2",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
+                                "itype": "radio",
+                                "name": "radio4",
                                 "value": "",
-                                "id": "check3_2",
+                                "id": "radio4_2",
+                                "answer": "false"
+                            },
+                            {
+                                "type": "label",
+                                "cls": "custom-control-label",
+                                "name": "radio4",
+                                "for": "radio4_2",
+                                "txt": "Гражданское судопроизводство"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "formradio4_3",
+                        "cls": "custom-control custom-radio",
+                        "ss": [{
+                                "type": "input",
+                                "cls": "custom-control-input",
+                                "itype": "radio",
+                                "name": "radio4",
+                                "value": "",
+                                "id": "radio4_3",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_2",
-                                "txt": "Заявления"
+                                "name": "radio4",
+                                "for": "radio4_3",
+                                "txt": "Арбитражное судопроизводство"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_3",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio4_4",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
+                                "itype": "radio",
+                                "name": "radio4",
                                 "value": "",
-                                "id": "check3_3",
+                                "id": "radio4_4",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_3",
-                                "txt": "Служебные записки"
+                                "name": "radio4",
+                                "for": "radio4_4",
+                                "txt": "Административное судопроизводство"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_4",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio4_5",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
+                                "itype": "radio",
+                                "name": "radio4",
                                 "value": "",
-                                "id": "check3_4",
-                                "answer": "true"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_4",
-                                "txt": "Жалобы"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_5",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_5",
-                                "answer": "true"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_5",
-                                "txt": "Ходатайства"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_6",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_6",
+                                "id": "radio4_5",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_6",
-                                "txt": "Обращения"
+                                "name": "radio4",
+                                "for": "radio4_5",
+                                "txt": "Уголовное судопроизводство"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_7",
-                        "cls": "custom-control custom-checkbox",
+                        "id": "formradio4_6",
+                        "cls": "custom-control custom-radio",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
+                                "itype": "radio",
+                                "name": "radio4",
                                 "value": "",
-                                "id": "check3_7",
+                                "id": "radio4_6",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_7",
-                                "txt": "Прошения"
+                                "name": "radio4",
+                                "for": "radio4_6",
+                                "txt": "Производство по делам об административных правонарушениях"
                             }
                         ]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "buttons3",
+                        "id": "buttons4",
                         "cls": "text-right",
                         "ss": [{
-                                "id": "checkbutton3",
+                                "id": "checkbutton4",
                                 "type": "button",
                                 "itype": "button",
                                 "cls": "btn btn-primary buttoncheck",
                                 "disabled": "disabled",
-                                "for": "check3",
+                                "for": "radio4",
                                 "txt": "Проверить"
                             },
                             {

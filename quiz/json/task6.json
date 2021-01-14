@@ -1,6 +1,6 @@
 {
     "ver": "0.0.0 b",
-    "title": "Задание 3. Тестовые задания на присвоение статуса адвоката",
+    "title": "Задание 6. Тестовые задания на присвоение статуса адвоката",
     "settings": [],
     "scs": [{
             "id": "sc1",
@@ -13,7 +13,7 @@
                         "cls": "text-center",
                         "ss": [{
                             "cls": "font-weight-bold",
-                            "html": "Задание № 3"
+                            "html": "Задание № 6"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -21,9 +21,9 @@
                         "id": "sc1_col1_p2",
                         "cls": "text-justify text-indent",
                         "ss": [{
-                            "id": "question3",
+                            "id": "question6",
                             "cls": "",
-                            "txt": "В отношении такого вида юридической помощи, как составление документов правового характера, в п. 2 ст. 2 Федерального закона «Об адвокатской деятельности и адвокатуре в Российской Федерации» конкретно указаны следующие документы:"
+                            "txt": "К условиям допустимости оказания юридической помощи на территории России адвокатом иностранного государства относятся:"
                         }]
                     },
                     { "cls": "emptyline" },
@@ -31,162 +31,99 @@
                         "id": "sc1_col1_p3",
                         "cls": "text-center text-indent",
                         "ss": [{
-                            "id": "task3",
+                            "id": "task6",
                             "cls": "font-italic",
-                            "txt": "Выберите несколько из 7 вариантов ответа:"
+                            "txt": "Выберите несколько из 4 вариантов ответа:"
                         }]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "formcheck3_1",
+                        "id": "formcheck6_1",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check3",
+                                "name": "check6",
                                 "value": "",
-                                "id": "check3_1",
-                                "answer": "false"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_1",
-                                "txt": "Меморандумы"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_2",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_2",
+                                "id": "check6_1",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_2",
-                                "txt": "Заявления"
+                                "name": "check6",
+                                "for": "check6_1",
+                                "txt": "Оказание помощи по вопросам права данного иностранного государства"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_3",
+                        "id": "formcheck6_2",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check3",
+                                "name": "check6",
                                 "value": "",
-                                "id": "check3_3",
+                                "id": "check6_2",
                                 "answer": "false"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_3",
-                                "txt": "Служебные записки"
+                                "name": "check6",
+                                "for": "check6_2",
+                                "txt": "Обязательное сотрудничество с российским адвокатом"
                             }
                         ]
                     },
                     {
-                        "id": "formcheck3_4",
+                        "id": "formcheck6_3",
                         "cls": "custom-control custom-checkbox",
                         "ss": [{
                                 "type": "input",
                                 "cls": "custom-control-input",
                                 "itype": "checkbox",
-                                "name": "check3",
+                                "name": "check6",
                                 "value": "",
-                                "id": "check3_4",
+                                "id": "check6_3",
+                                "answer": "false"
+                            },
+                            {
+                                "type": "label",
+                                "cls": "custom-control-label",
+                                "name": "check6",
+                                "for": "check6_3",
+                                "txt": "Недопустимость оказания помощи по вопросам, связанным с государственной тайной Российской Федерации"
+                            }
+                        ]
+                    },
+                    {
+                        "id": "formcheck6_4",
+                        "cls": "custom-control custom-checkbox",
+                        "ss": [{
+                                "type": "input",
+                                "cls": "custom-control-input",
+                                "itype": "checkbox",
+                                "name": "check6",
+                                "value": "",
+                                "id": "check6_4",
                                 "answer": "true"
                             },
                             {
                                 "type": "label",
                                 "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_4",
-                                "txt": "Жалобы"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_5",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_5",
-                                "answer": "true"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_5",
-                                "txt": "Ходатайства"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_6",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_6",
-                                "answer": "false"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_6",
-                                "txt": "Обращения"
-                            }
-                        ]
-                    },
-                    {
-                        "id": "formcheck3_7",
-                        "cls": "custom-control custom-checkbox",
-                        "ss": [{
-                                "type": "input",
-                                "cls": "custom-control-input",
-                                "itype": "checkbox",
-                                "name": "check3",
-                                "value": "",
-                                "id": "check3_7",
-                                "answer": "false"
-                            },
-                            {
-                                "type": "label",
-                                "cls": "custom-control-label",
-                                "name": "check3",
-                                "for": "check3_7",
-                                "txt": "Прошения"
+                                "name": "check6",
+                                "for": "check6_4",
+                                "txt": "Внесение адвоката иностранного государства в специальный реестр"
                             }
                         ]
                     },
                     { "cls": "emptyline" },
                     {
-                        "id": "buttons3",
+                        "id": "buttons6",
                         "cls": "text-right",
                         "ss": [{
                                 "id": "checkbutton3",
@@ -194,7 +131,7 @@
                                 "itype": "button",
                                 "cls": "btn btn-primary buttoncheck",
                                 "disabled": "disabled",
-                                "for": "check3",
+                                "for": "check6",
                                 "txt": "Проверить"
                             },
                             {
