@@ -4,6 +4,87 @@
 <head>
     <meta charset='utf-8'>
     <title>PIXI's Hello World</title>
+    <style>
+        /* Box sizing rules */
+        
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+        /* Remove default padding */
+        
+        ul[class],
+        ol[class] {
+            padding: 0;
+        }
+        /* Remove default margin */
+        
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        p,
+        ul[class],
+        ol[class],
+        li,
+        figure,
+        figcaption,
+        blockquote,
+        dl,
+        dd {
+            margin: 0;
+        }
+        /* Set core body defaults */
+        
+        body {
+            min-height: 100vh;
+            scroll-behavior: smooth;
+            text-rendering: optimizeSpeed;
+            line-height: 1.5;
+        }
+        /* Remove list styles on ul, ol elements with a class attribute */
+        
+        ul[class],
+        ol[class] {
+            list-style: none;
+        }
+        /* A elements that don't have a class get default styles */
+        
+        a:not([class]) {
+            text-decoration-skip-ink: auto;
+        }
+        /* Make images easier to work with */
+        
+        img {
+            max-width: 100%;
+            display: block;
+        }
+        /* Natural flow and rhythm in articles by default */
+        
+        article>*+* {
+            margin-top: 1em;
+        }
+        /* Inherit fonts for inputs and buttons */
+        
+        input,
+        button,
+        textarea,
+        select {
+            font: inherit;
+        }
+        /* Remove all animations and transitions for people that prefer not to see them */
+        
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -15,21 +96,35 @@
         //Test that Pixi is working
         //testObject(PIXI);
 
-        //Create the renderer
-        let renderer = PIXI.autoDetectRenderer(256, 256, {
-            antialias: false,
-            transparent: false,
-            resolution: 1
-        });
 
-        //Add the canvas to the HTML document
-        document.body.appendChild(renderer.view);
+        try {
+            //Create a Pixi Application
+            let app = new PIXI.Application({
+                width: 512,
+                height: 512,
+                antialias: true,
+                transparent: false,
+                resolution: 1
 
-        //Create a container object called the 'stage'
-        let stage = new PIXI.Container();
+            });
 
-        //Tell the 'renderer' to 'render' the 'stage'
-        renderer.render(stage);
+            let w = window;
+            let d = document;
+            let r = app.renderer;
+            //Add the canvas that Pixi automatically created for you to the HTML document
+            d.body.appendChild(app.view);
+
+            r.backgroundColor = 0x061639;
+
+            r.view.style.position = "absolute";
+            r.view.style.display = "block";
+            r.autoResize = true;
+            r.resize(w.innerWidth, w.innerHeight);
+
+        } catch (e) {
+            alert(e);
+            // изучить scaleToWindow изучить из первого туториала
+        }
     </script>
 </body>
 
