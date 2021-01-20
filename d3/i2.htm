@@ -25,10 +25,19 @@
         .bar {
             /*stroke: none;*/
         }
+        
+	      svg {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        
+
     </style>
 </head>
 
 <body style='background-color: #01040a'>
+  
     <script>
         const win = window;
 
@@ -66,6 +75,132 @@
         let margin = 0,
             padding = 0,
             data = [{
+              x: 1,
+              y: 10
+            }];
+        let data2 = [{
+                x: 1,
+                y: 35
+            }, {
+                x: 2,
+                y: 37
+            }, {
+                x: 3,
+                y: 24
+            }, {
+                x: 4,
+                y: 33
+            }, {
+                x: 5,
+                y: 26
+            }, {
+                x: 6,
+                y: 24
+            }, {
+                x: 7,
+                y: 26
+            }, {
+                x: 8,
+                y: 19
+            }, {
+                x: 9,
+                y: 22
+            }, {
+                x: 10,
+                y: 38
+            }, {
+                x: 11,
+                y: 50
+            }, {
+                x: 12,
+                y: 47
+            }];
+            
+            data3 = [{
+                x: 1,
+                y: 35
+            }, {
+                x: 2,
+                y: 47
+            }, {
+                x: 3,
+                y: 54
+            }, {
+                x: 4,
+                y: 43
+            }, {
+                x: 5,
+                y: 36
+            }, {
+                x: 6,
+                y: 24
+            }, {
+                x: 7,
+                y: 26
+            }, {
+                x: 8,
+                y: 29
+            }, {
+                x: 9,
+                y: 32
+            }, {
+                x: 10,
+                y: 48
+            }, {
+                x: 11,
+                y: 60
+            }, {
+                x: 12,
+                y: 57
+            }, {
+                x: 13,
+                y: 50
+            }];
+
+            data4 = [{
+                x: 1,
+                y: 45
+            }, {
+                x: 2,
+                y: 57
+            }, {
+                x: 3,
+                y: 64
+            }, {
+                x: 4,
+                y: 53
+            }, {
+                x: 5,
+                y: 46
+            }, {
+                x: 6,
+                y: 24
+            }, {
+                x: 7,
+                y: 26
+            }, {
+                x: 8,
+                y: 29
+            }, {
+                x: 9,
+                y: 32
+            }, {
+                x: 10,
+                y: 78
+            }, {
+                x: 11,
+                y: 70
+            }, {
+                x: 12,
+                y: 67
+            }, {
+                x: 13,
+                y: 60
+            }, {
+                x: 14,
+                y: 56
+            }];
+            data5 = [{
                 x: 1,
                 y: 55
             }, {
@@ -88,7 +223,7 @@
                 y: 26
             }, {
                 x: 8,
-                y: 19
+                y: 29
             }, {
                 x: 9,
                 y: 42
@@ -101,24 +236,88 @@
             }, {
                 x: 12,
                 y: 77
+            }, {
+                x: 13,
+                y: 70
+            }, {
+                x: 14,
+                y: 66
+            },{
+                x: 15,
+                y: 47
+            },{
+                x: 16,
+                y: 68
             }];
+            /*
+            //gradient
+<svg height="150" width="400">
+  <defs>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:rgb(255,0,0);stop-opacity:1" />
+      <stop offset="100%" style="stop-color:rgb(255,255,0);stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <ellipse cx="200" cy="70" rx="85" ry="55" fill="url(#grad2)" />
+</svg>
+//gradient mask
+<svg width="660" height="220" style="outline: 1px solid red">  
+ <defs>  
+   <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">  
+     <stop offset="0" stop-color="white" stop-opacity="0.25" />  
+     <stop offset="1" stop-color="white" stop-opacity="1" />  
+   </linearGradient>
 
+   <mask id="gradient-mask">  
+     <rect x="0" y="0" width="210" height="210" fill="url(#gradient)"  />  
+   </mask>  
+  </defs>
+
+  <circle cx="110" cy="110" r="100" fill="#9c6" mask="url(#gradient-mask)" />  
+</svg>
+
+
+
+*/
         let svg = d3.select("body").append("svg")
             .attr("class", "axis")
+            .attr("viewBox","0 0 "+width+" "+height)
             .attr("width", width)
             .attr("height", height);
 
+        win.onresize = () => {
+            svg.attr("width", win.innerWidth);
+            svg.attr("height", win.innerHeight);
+        };
+        
         // длина оси X= ширина контейнера svg - отступ слева и справа
         let xAxisLength = width - 2 * margin;
 
         // длина оси Y = высота контейнера svg - отступ сверху и снизу
         let yAxisLength = height - 2 * margin;
-
+        
+        
         // функция интерполяции значений на ось Х  
-        let scaleX = d3.scaleLinear()
-            .domain([1, 13])
+        let scaleXAxisFromData = (data) => {
+          return d3.scaleLinear()
+            .domain([1, data.length+1])
             .range([0, xAxisLength]);
+        };
+        let scaleX = scaleXAxisFromData(data);//d3.scaleLinear()
+            //.domain([1, data.length+1])
+            //.range([0, xAxisLength]);
 
+        let scaleX2 = scaleXAxisFromData(data2);//d3.scaleLinear()
+            //.domain([1, data2.length+1])
+            //.range([0, xAxisLength]);
+            
+        let scaleX3 = scaleXAxisFromData(data3);
+        
+        let scaleX4 = scaleXAxisFromData(data4);
+        
+        let scaleX5 = scaleXAxisFromData(data5);
+        
+        
         // функция интерполяции значений на ось Y
         let scaleY = d3.scaleLinear()
             .domain([100, 0])
@@ -127,6 +326,16 @@
         // создаем ось X   
         let xAxis = d3.axisBottom()
             .scale(scaleX);
+            
+        let xAxis2 = d3.axisBottom()
+            .scale(scaleX2);
+            
+        let xAxis3 = d3.axisBottom()
+            .scale(scaleX3);
+            
+        let xAxis4 = d3.axisBottom()
+            .scale(scaleX4);
+            
         // создаем ось Y             
         let yAxis = d3.axisLeft()
             .scale(scaleY);
@@ -159,6 +368,7 @@
             .attr("x2", xAxisLength)
             .attr("y2", 0);
         */
+        function createLayer(data,fill,stroke,scaleX,scaleY) {
         // создаем объект g для прямоугольников
         let g = svg.append("g")
             .attr("class", "body")
@@ -166,15 +376,15 @@
                 "translate(" + margin + ", 0 )");
         // связываем данные с прямоугольниками
 
-        let colorindex = 16;
+        
 
         g.selectAll("rect.bar")
             .data(data)
             .enter()
             .append("rect")
             .attr("class", "bar")
-            .attr("fill", colors[colorindex])
-            .attr("stroke", colors[colorindex]);
+            .attr("fill", fill)
+            .attr("stroke", stroke);
         // устанавливаем параметры прямоугольников
         g.selectAll("rect.bar")
             .data(data)
@@ -191,6 +401,17 @@
 
                 return Math.floor(xAxisLength / data.length) - padding;
             });
+        }
+        let colorindex = 4;
+        createLayer(data5,colors[colorindex+16],colors[colorindex+16],scaleX5,scaleY);
+        
+        createLayer(data4,colors[colorindex+12],colors[colorindex+12],scaleX4,scaleY);
+        
+        createLayer(data3,colors[colorindex+8],colors[colorindex+8],scaleX3,scaleY);
+        
+        createLayer(data2,colors[colorindex+4],colors[colorindex+4],scaleX2,scaleY);
+        
+        createLayer(data,colors[colorindex],colors[colorindex],scaleX,scaleY);
     </script>
 </body>
 
