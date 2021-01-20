@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>D3's Hello World</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <link rel='stylesheet' href='/css/null.css' />
+</head>
+
+<body style='background-color: #061639'>
+    <script>
+        const win = window;
+
+        let width = win.innerWidth;
+        let height = win.innerHeight;
+
+        let svg = d3.select('body')
+            .append('svg')
+            .attr('width', width)
+            .attr('heigh', height);
+
+        svg.append('line')
+            .attr('x1', 100)
+            .attr('x2', 500)
+            .attr('y1', 50)
+            .attr('y2', 50)
+            .attr('stroke', 'white');
+
+        svg.append('rect')
+            .attr('x', 0)
+            .attr('y', 0)
+            .attr('width', 200)
+            .attr('height', 100)
+            .attr('stroke', 'darkgrey')
+            .attr('fill', 'lightgrey');
+
+        svg.append('circle')
+            .attr('cx', 250)
+            .attr('cy', 50)
+            .attr('r', 50)
+            .attr('stroke', 'darkgrey')
+            .attr('fill', 'lightgrey');
+
+        let g = svg.append('g')
+            .attr('transform', function(d, i) {
+                return 'translate(0,0)';
+            });
+        g.append('text')
+            .attr('x', 150)
+            .attr('y', 50)
+            .attr('stroke', '#000')
+            .attr('font-family', 'verdana')
+            .attr('font-size', '24px')
+            .text('This is a text!');
+    </script>
+</body>
+
+</html>
