@@ -275,6 +275,25 @@
                     .style("stroke", "steelblue")
                     .style("stroke-width", 2);
 
+                // функция, создающая область
+                var area = d3.area()
+                    .x(function(d) {
+                        return d.x;
+                    })
+                    .y0(height - margin)
+                    .y1(function(d) {
+                        return d.y;
+                    });
+
+                var g = svg.append("g");
+                g.append("path")
+                    .attr("d", area(linedots))
+                    .style("fill", "lightblue");
+                g.append("path")
+                    .attr("d", line(linedots))
+                    .style("stroke", "steelblue")
+                    .style("stroke-width", 2);
+
                 // добавляем отметки к точкам
                 svg.selectAll(".dot")
                     .data(rawData)
