@@ -8,6 +8,10 @@
     <script src='/js/chroma.min.js'></script>
     <link rel='stylesheet' href='/css/null.css' />
     <style>
+        body {
+            font-family: 'Courier New', Courier, monospace
+        }
+        
         .axis path,
         .axis line {
             fill: none;
@@ -267,53 +271,57 @@
                 createLayer(4, data2, "#fff", "#fff", scaleX2, scaleY);
 
                 createLayer(5, data, "#fff", "#fff", scaleX, scaleY);
+                /*
+                                // функция, создающая по массиву точек линии
+                                var line = d3.line()
+                                    .x(function(d) {
+                                        return d.x;
+                                    })
+                                    .y(function(d) {
+                                        return d.y;
+                                    });
+                                // добавляем путь
+                                svg.append("g").append("path")
+                                    .attr("d", line(linedots))
+                                    .style("stroke", "steelblue")
+                                    .style("stroke-width", 2);
 
-                // функция, создающая по массиву точек линии
-                var line = d3.line()
-                    .x(function(d) {
-                        return d.x;
-                    })
-                    .y(function(d) {
-                        return d.y;
-                    });
-                // добавляем путь
-                svg.append("g").append("path")
-                    .attr("d", line(linedots))
-                    .style("stroke", "steelblue")
-                    .style("stroke-width", 2);
+                                // функция, создающая область
+                                var area = d3.area()
+                                    .x(function(d) {
+                                        return d.x;
+                                    })
+                                    .y0(height - margin)
+                                    .y1(function(d) {
+                                        return d.y;
+                                    });
 
-                // функция, создающая область
-                var area = d3.area()
-                    .x(function(d) {
-                        return d.x;
-                    })
-                    .y0(height - margin)
-                    .y1(function(d) {
-                        return d.y;
-                    });
+                                var g = svg.append("g");
+                                g.append("path")
+                                    .attr("d", area(linedots))
+                                    .style("fill", "lightblue");
+                                g.append("path")
+                                    .attr("d", line(linedots))
+                                    .style("stroke", "steelblue")
+                                    .style("stroke-width", 2);
 
-                var g = svg.append("g");
-                g.append("path")
-                    .attr("d", area(linedots))
-                    .style("fill", "lightblue");
-                g.append("path")
-                    .attr("d", line(linedots))
-                    .style("stroke", "steelblue")
-                    .style("stroke-width", 2);
+                                // добавляем отметки к точкам
+                                svg.selectAll(".dot")
+                                    .data(rawData)
+                                    .enter().append("circle")
+                                    .attr("class", "dot")
+                                    .attr("r", 3.5)
+                                    .attr("cx", function(d) {
+                                        return scaleXline(d.x) + margin;
+                                    })
+                                    .attr("cy", function(d) {
+                                        return scaleY(d.y) + margin;
+                                    });
 
-                // добавляем отметки к точкам
-                svg.selectAll(".dot")
-                    .data(rawData)
-                    .enter().append("circle")
-                    .attr("class", "dot")
-                    .attr("r", 3.5)
-                    .attr("cx", function(d) {
-                        return scaleXline(d.x) + margin;
-                    })
-                    .attr("cy", function(d) {
-                        return scaleY(d.y) + margin;
-                    });
-
+                */
+                //#061639
+                //let pallete = chroma.scale(['#061639', 'black']).colors(24);
+                let palletejson = JSON.stringify(colors);
 
                 function Canvas(spec) {
                     let instance = {};
@@ -322,7 +330,7 @@
                         let div = d3.select('body').append('div');
                         div.append('h3').text(headline);
                         div.attr('class', 'box')
-                            .attr('style', "color:" + spec.color)
+                            .attr('style', 'width: ' + width + '; word-wrap: break-word;color:' + spec.color)
                             .append('p')
                             .text(description);
                         return instance;
@@ -346,8 +354,8 @@
                 let canvas = Canvas({
                         color: '#6495ed'
                     })
-                    .headline('Canvas')
-                    .description('This is a first canvas...');
+                    .headline('Pallete')
+                    .description(palletejson);
 
                 canvas.render();
 
