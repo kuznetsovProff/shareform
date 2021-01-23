@@ -1,5 +1,8 @@
 //let colors = chroma.scale(['#f5f8fe', '#01040a']).colors(24);
-let colors = chroma.scale(['orange', 'red']).colors(24);
+//let colors = chroma.scale(['orange', 'red']).colors(24);
+//let colors = chroma.scale(['yellow', 'navy']).mode('hsl').colors(24);
+//let colors = chroma.scale(['white', 'yellow', 'red', 'black']).colors(24);
+let colors = chroma.scale(['yellow', 'lightgreen', '008ae5']).domain([0, 0.25, 1]).colors(24);
 let data = [{
     x: 1,
     y: 10
