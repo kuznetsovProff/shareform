@@ -327,7 +327,11 @@
                     let instance = {};
                     let headline, description;
                     let svg, width, height;
-
+                    let data = {};
+                    data.pallete = [];
+                    data.gradients = [];
+                    data.layers = [];
+      
                     // создаем SVG
                     instance.createSvg = (width, height) => {
                         svg = d3.select("body").append("svg")
@@ -374,16 +378,71 @@
                             .text(description);
                         return instance;
                     };
-
+                    
+                    // присваиваем и получаем заголовок виджета
                     instance.headline = (h) => {
                         if (!arguments.length) return headline;
                         headline = h;
                         return instance;
                     };
 
+                    // присваиваем и получаем описание виджета
                     instance.description = (d) => {
                         if (!arguments.length) return description;
                         description = d;
+                        return instance;
+                    };
+                    
+                    // присваиваем и получаем объект с данными
+                    instance.data = (d) => {
+                        if (!arguments.length) return data;
+                        data = d;
+                        return instance;
+                    };
+                    
+                    // присваиваем и получаем цветовую палитру
+                    instance.data.pallete = (p) => {
+                        if (!arguments.length) return data.pallete;
+                        data.pallete = p;
+                        return instance;
+                    };
+                    
+                    // присваиваем и получаем градиенты
+                    instance.data.gradients = (g) => {
+                        if (!arguments.length) return data.gradients;
+                        data.gradients = g;
+                        return instance;
+                    };
+                    
+                    // присваиваем и получаем слои
+                    instance.data.layers = (l) => {
+                        if (!arguments.length) return data.layers;
+                        data.layers = l;
+                        return instance;
+                    };
+                    
+                    // создаем палитру
+                    instance.createPallete = (obj) => {
+                        // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
+                        // obj.domain is an array of stops. Example ['0,0.5,1']
+                        let _colors;
+                        if (obj.colors.length) {
+                            _colors = chroma.scale(obj.colors);
+                        } else {
+                            _colors = chroma.scale(['white','black']);
+                        }
+                        if (obj.domain.length) {
+                            _colors = _colors.domain(obj.domain);
+                        }
+                        
+                        if (obj.count.length) {
+                            _colors = _colors.colors(count);
+                        } else {
+                            _colors = _colors.colors(24);
+                        }
+                        
+                        data.pallete = _colors;
+
                         return instance;
                     };
 
