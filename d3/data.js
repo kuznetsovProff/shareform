@@ -3,7 +3,7 @@
 //let colors = chroma.scale(['yellow', 'navy']).mode('hsl').colors(24);
 //let colors = chroma.scale(['white', 'yellow', 'red', 'black']).colors(24);
 let colors = chroma.scale(['yellow', 'lightgreen', '008ae5']).domain([0, 0.25, 1]).colors(24);
-let data = [{
+let data1 = [{
     x: 1,
     y: 10
 }];
@@ -180,6 +180,8 @@ let data5 = [{
     y: 68
 }];
 
+let datas = [data1, data2, data3, data4, data5];
+
 let gradientData1 = {
     id: "Gradient1",
     x1: "0",
@@ -280,3 +282,5 @@ let gradientData5 = {
         "stop-opacity": "1"
     }]
 };
+
+let gradients = [gradientData1, gradientData2, gradientData3, gradientData4, gradientData5];
