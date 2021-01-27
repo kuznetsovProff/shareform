@@ -42,6 +42,11 @@
             stroke: steelblue;
             fill: lightblue;
         }
+        
+        .dot-2 {
+            stroke: lightblue;
+            fill: lightblue;
+        }
     </style>
     <script src="data.js"></script>
 </head>
@@ -434,7 +439,7 @@
                     svg.selectAll(".dot")
                         .data(rawData)
                         .enter().append("circle")
-                        .attr("class", "dot")
+                        .attr("class", "dot-2")
                         .attr("r", 3.5)
                         .attr("cx", function(d) {
                             return scaleXline(d.x) + margin;
