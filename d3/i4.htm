@@ -99,7 +99,6 @@
                 }],
                 linedots = [];
 
-
             let svg = d3.select("body").append("svg")
                 .attr("class", "axis")
                 .attr("viewBox", "0 0 " + width + " " + height)
@@ -116,6 +115,8 @@
 
             // длина оси Y = высота контейнера svg - отступ сверху и снизу
             let yAxisLength = height - 2 * margin;
+
+function oldVersion() {
 
             // функция интерполяции значений на ось Х  
             let scaleXAxisFromData = (data) => {
@@ -273,8 +274,6 @@
                 createLayer(i, datas[datas.length - i - 1], "#fff", "#fff", scaleX[scaleX.length - i - 1], scaleY);
             });
 
-
-
             // функция, создающая по массиву точек линии
             var line = d3.line()
                 .x(function(d) {
@@ -321,6 +320,9 @@
                     return scaleY(d.y) + margin;
                 });
 
+}
+
+//oldVersion();
 
             //#061639
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
@@ -329,7 +331,7 @@
             function Canvas(spec) {
                 let instance = {};
                 let headline, description;
-                let svg, width, height;
+                let svg, defs, width, height;
                 let data = {};
                 data.pallete = [];
                 data.gradients = [];
@@ -342,6 +344,12 @@
                         .attr("viewBox", "0 0 " + width + " " + height)
                         .attr("width", width)
                         .attr("height", height);
+                    return instance;
+                };
+                
+                // создаем defs
+                instance.createDefs = () => {
+                    defs = svg.append("defs");
                     return instance;
                 };
 
@@ -447,6 +455,52 @@
 
                     return instance;
                 };
+                
+           instance.createBackgroundGradient = (mainColor, gradientColor) => {
+try{
+                let whiteGradient = defs.append("linearGradient")
+                    .attr("id", "whiteGradient")
+                    .attr("x1", "0%")
+                    .attr("y1", "0%")
+                    .attr("x2", "0%")
+                    .attr("y2", "100%");
+
+                whiteGradient.append("stop")
+                    .attr("offset", "0")
+                    .attr("stop-color", gradientColor)
+                    .attr("stop-opacity", "0.25");
+
+                whiteGradient.append("stop")
+                    .attr("offset", "1")
+                    .attr("stop-color", gradientColor)
+                    .attr("stop-opacity", "1");
+
+                let gradientMask = defs.append("mask")
+                    .attr("id", "gradientMask");
+
+                let rectMask = gradientMask.append("rect")
+                    .attr("x", "0")
+                    .attr("y", "0")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("fill", "url(#whiteGradient)");
+
+                svg.append("rect")
+                    .attr("x", "0")
+                    .attr("y", "0")
+                    .attr("width", width)
+                    .attr("height", height)
+                    .attr("fill", mainColor)
+                    .attr("mask", "url(#gradientMask)");
+} catch (err) {
+  
+let div = d3.select('body').append('div');
+                    div.append('h3').text(err);
+  
+  //alert(err);
+}                
+                return instance;
+            }
 
                 return instance;
             }
@@ -456,7 +510,11 @@
                     width: width
                 })
                 .headline('Pallete')
-                .description(palletejson);
+                .description(palletejson)
+                .createSvg(width,height)
+                .createDefs()
+                .createBackgroundGradient("green", "white");
+
 
             canvas.showTextWidget();
             /*
