@@ -6,6 +6,7 @@
     <title>D3's Hello World</title>
     <script src='/js/d3.v6.min.js'></script>
     <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
     <script src='c.js'></script>
     <link rel='stylesheet' href='/css/null.css' />
     <style>
@@ -332,7 +333,64 @@
             //#061639
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
             let palletejson = JSON.stringify(colors);
+            
+            // объект Градиент
+            function Gradient(spec) {
+                let instance = {};
+                let id, svg, defs, x1, y1, x2, y2;
+                
+                // присваивание значений при создании
+                if (_.isEmpty(spec.id)){
+                    id = 'id' + Date();  
+                } else {
+                    id = spec.id;
+                }
+                
+                if (_.isEmpty(spec.x1)){
+                    x1 = '0%';  
+                } else {
+                    x1 = spec.x1;
+                }
+                
+                if (_.isEmpty(spec.y1)){
+                    y1 = '0%';  
+                } else {
+                    y1 = spec.y1;
+                }
+                
+                if (_.isEmpty(spec.x2)){
+                    x2 = '0%';  
+                } else {
+                    x2 = spec.x2;
+                }
+                
+                if (_.isEmpty(spec.y2)){
+                    y2 = '100%';  
+                } else {
+                    y2 = spec.y2;
+                }
+                
+                if (!_.isEmpty(spec.svg)){
+                    svg = spec.svg;
+                }
+                
+                if (!_.isEmpty(spec.defs)){
+                    defs = spec.defs;
+                }
+                
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (!arguments.length) return id;
+                    id = i;
+                    return instance;
+                };
 
+              
+              
+                return instance;
+            }
+            
+            // объект Холст
             function Canvas(spec) {
                 let instance = {};
                 let headline, description;
