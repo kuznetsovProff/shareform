@@ -641,6 +641,94 @@
                 return instance;
             }
 
+            // вспомогательные функции для отрисовки точек, линий и областей
+            let Dots = (r, x, y, m) => {
+                // r - rawData
+                // x - scaleX
+                // y - scaleY
+                // m - margin
+                let dots = [];
+                for (i = 0; i < r.length; i++)
+                    dots.push({
+                        x: x(r[i].x) + m,
+                        y: y(r[i].y) + m
+                    });
+                return dots;
+            };
+
+            let Line = (d) => {
+                let l = d3.line()
+                    .x(function(d) {
+                        return d.x;
+                    })
+                    .y(function(d) {
+                        return d.y;
+                    });
+                return l(d);
+            };
+
+            let Area = (d, h, m) => {
+                let a = d3.area()
+                    .x(function(d) {
+                        return d.x;
+                    })
+                    .y0(h - m)
+                    .y1(function(d) {
+                        return d.y;
+                    });
+                return a(d);
+            };
+
+            // объект - путь
+            let Path = (spec) => {
+                let instance = {};
+                let id, d, pathLength, cls, style;
+                let fill, fillopacity, mask, stroke, strokeopacity, strokewidth;
+                let parent;
+
+                if (_.isEmpty(spec.id)) {
+                    id = 'id_p_' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+
+                if (!_.isEmpty(spec.parent)) {
+                    parent = spec.parent;
+                }
+
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
+                    id = i;
+                    return instance;
+                };
+
+                // присваиваем или получаем parent
+                instance.parent = (p) => {
+                    if (_.isEmpty(p)) {
+                        return parent;
+                    }
+                    parent = p;
+                    return instance;
+                };
+
+                instance.append = (p) => {
+
+                    if (!_.isEmpty(p)) {
+                        parent = p;
+                    }
+
+                    let path = parent.append('path')
+                        .attr('id', id)
+                        .attr('d', d);
+
+                    return instance;
+                }
+                return instance;
+            };
+
             // объект Холст
             function Canvas(spec) {
                 let instance = {};
@@ -689,19 +777,6 @@
                     }],
                     linedots = [];
 
-                let Dots = (r, x, y, m) => {
-                    // r - rawData
-                    // x - scaleX
-                    // y - scaleY
-                    // m - margin
-                    let dots = [];
-                    for (i = 0; i < r.length; i++)
-                        dots.push({
-                            x: x(r[i].x) + m,
-                            y: y(r[i].y) + m
-                        });
-                    return dots;
-                };
 
                 instance.testLayer = () => {
                     // длина оси X= ширина контейнера svg - отступ слева и справа
@@ -713,47 +788,32 @@
                     let scaleX = AxisScale(xAxisLength, [0, 100]);
                     // функция интерполяции значений на ось Y
                     let scaleY = AxisScale(yAxisLength, [100, 0]);
-                    // точки линии с интерполяцией и отступом
+                    // расположение точек линии с учетом интерполяции
                     linedots = Dots(rawData, scaleX, scaleY, margin);
 
-                    // функция, создающая по массиву точек линии
-                    let line = d3.line()
-                        .x(function(d) {
-                            return d.x;
-                        })
-                        .y(function(d) {
-                            return d.y;
-                        });
+                    let g = svg.append("g");
                     // добавляем путь
-                    svg.append("g").append("path")
-                        .attr("d", line(linedots))
+                    /*g.append("path")
+                        .attr("d", Line(linedots))
                         .style("stroke", "steelblue")
-                        .style("stroke-width", 2);
+                        .style("stroke-width", 2);*/
 
-                    // функция, создающая область
-                    var area = d3.area()
-                        .x(function(d) {
-                            return d.x;
-                        })
-                        .y0(height - margin)
-                        .y1(function(d) {
-                            return d.y;
-                        });
+                    /////// доделать объект путь
 
-                    var g = svg.append("g");
-                    // область
+                    // добавляем область
                     g.append("path")
-                        .attr("d", area(linedots))
+                        .attr("d", Area(linedots, height, margin))
                         .style("fill", 'lightblue'); //"lightblue");
 
                     // путь
                     g.append("path")
-                        .attr("d", line(linedots))
+                        .attr("d", Line(linedots))
+                        .style("fill", 'none')
                         .style("stroke", 'lightblue') //"steelblue")
                         .style("stroke-width", 2);
 
                     // добавляем отметки к точкам
-                    svg.selectAll(".dot")
+                    svg.selectAll(".dot-2")
                         .data(rawData)
                         .enter().append("circle")
                         .attr("class", "dot-2")
