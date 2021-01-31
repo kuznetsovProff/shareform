@@ -344,8 +344,7 @@
 
                 // присваивание значений при создании
                 if (_.isEmpty(spec.id)) {
-                    let d = new Date();
-                    id = 'id' + Date.now();
+                    id = 'id_g_' + Date.now();
                 } else {
                     id = spec.id;
                 }
@@ -435,8 +434,7 @@
 
                 // присваивание значений при создании
                 if (_.isEmpty(spec.id)) {
-                    let d = new Date();
-                    id = 'id' + Date.now();
+                    id = 'id_m_' + Date.now();
                 } else {
                     id = spec.id;
                 }
@@ -497,8 +495,7 @@
                 let parent;
 
                 if (_.isEmpty(spec.id)) {
-                    let d = new Date();
-                    id = 'id' + Date.now();
+                    id = 'id_r_' + Date.now();
                 } else {
                     id = spec.id;
                 }
@@ -582,6 +579,68 @@
                 return instance;
             };
 
+
+            let AxisLength = (a, m) => {
+                // a - axis width or height
+                // m - margin
+                return a - 2 * m;
+            };
+            let AxisScale = (l, d) => {
+                // l - axis length
+                // d - domain array
+                // реализовать обратное направление
+                return d3.scaleLinear()
+                    .domain(d)
+                    .range([0, l]);
+            };
+
+            let Layer = (spec) => {
+                let instance = {};
+                let id;
+                let parent;
+
+                if (_.isEmpty(spec.id)) {
+                    id = 'id_l_' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+
+                if (!_.isEmpty(spec.parent)) {
+                    parent = spec.parent;
+                }
+
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
+                    id = i;
+                    return instance;
+                };
+
+                // присваиваем или получаем parent
+                instance.parent = (p) => {
+                    if (_.isEmpty(p)) {
+                        return parent;
+                    }
+                    parent = p;
+                    return instance;
+                };
+
+                instance.append = (p) => {
+
+                    if (!_.isEmpty(p)) {
+                        parent = p;
+                    }
+
+                    let g = parent.append('g')
+                        .attr('id', id);
+
+                    return instance;
+                }
+                return instance;
+            }
+
             // объект Холст
             function Canvas(spec) {
                 let instance = {};
@@ -630,27 +689,32 @@
                     }],
                     linedots = [];
 
+                let Dots = (r, x, y, m) => {
+                    // r - rawData
+                    // x - scaleX
+                    // y - scaleY
+                    // m - margin
+                    let dots = [];
+                    for (i = 0; i < r.length; i++)
+                        dots.push({
+                            x: x(r[i].x) + m,
+                            y: y(r[i].y) + m
+                        });
+                    return dots;
+                };
+
                 instance.testLayer = () => {
                     // длина оси X= ширина контейнера svg - отступ слева и справа
-                    let xAxisLength = width - 2 * margin;
+                    let xAxisLength = AxisLength(width, margin);
 
                     // длина оси Y = высота контейнера svg - отступ сверху и снизу
-                    let yAxisLength = height - 2 * margin;
-
-                    let scaleXline = d3.scaleLinear()
-                        .domain([0, 100])
-                        .range([0, xAxisLength]);
-
+                    let yAxisLength = AxisLength(height, margin);
+                    // функция интерполяции значений на ось X
+                    let scaleX = AxisScale(xAxisLength, [0, 100]);
                     // функция интерполяции значений на ось Y
-                    let scaleY = d3.scaleLinear()
-                        .domain([100, 0])
-                        .range([0, yAxisLength]);
-
-                    for (i = 0; i < rawData.length; i++)
-                        linedots.push({
-                            x: scaleXline(rawData[i].x) + margin,
-                            y: scaleY(rawData[i].y) + margin
-                        });
+                    let scaleY = AxisScale(yAxisLength, [100, 0]);
+                    // точки линии с интерполяцией и отступом
+                    linedots = Dots(rawData, scaleX, scaleY, margin);
 
                     // функция, создающая по массиву точек линии
                     let line = d3.line()
@@ -695,7 +759,7 @@
                         .attr("class", "dot-2")
                         .attr("r", 3.5)
                         .attr("cx", function(d) {
-                            return scaleXline(d.x) + margin;
+                            return scaleX(d.x) + margin;
                         })
                         .attr("cy", function(d) {
                             return scaleY(d.y) + margin;
@@ -783,7 +847,7 @@
 
                 // присваиваем и получаем объект с данными
                 instance.data = (d) => {
-                    if (!arguments.length) return data;
+                    if (_.isEmpty(d)) return data;
                     data = d;
                     return instance;
                 };
@@ -797,20 +861,20 @@
 
                 // присваиваем и получаем градиенты
                 instance.data.gradients = (g) => {
-                    if (!arguments.length) return data.gradients;
+                    if (_.isEmpty(g)) return data.gradients;
                     data.gradients = g;
                     return instance;
                 };
 
                 // присваиваем и получаем слои
                 instance.data.layers = (l) => {
-                    if (!arguments.length) return data.layers;
+                    if (_.isEmpty(l)) return data.layers;
                     data.layers = l;
                     return instance;
                 };
 
                 // создаем палитру
-                instance.createPallete = (obj) => {
+                instance.generatePallete = (obj) => {
                     // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
                     // obj.domain is an array of stops. Example ['0,0.5,1']
                     let _colors;
@@ -841,27 +905,23 @@
                     // градиент
                     let BG = Gradient({
                             'defs': defs
-                        })
-                        .append()
+                        }).append()
                         .stop('0', gradientColor, '0.25')
                         .stop('1', gradientColor, '1');
 
                     // маска
                     let M = Mask({
-                        'defs': defs
-                    });
-                    M.append();
-
-                    M.rect(0, 0, width, height, 'url(#' + BG.id() + ')');
+                            'defs': defs
+                        }).append()
+                        .rect(0, 0, width, height, 'url(#' + BG.id() + ')');
 
                     // прямоугольник с маской градиентом
                     let R = Rect({
-                            'width': width,
-                            'height': height,
-                            'fill': mainColor,
-                            'mask': 'url(#' + M.id() + ')'
-                        })
-                        .append(svg);
+                        'width': width,
+                        'height': height,
+                        'fill': mainColor,
+                        'mask': 'url(#' + M.id() + ')'
+                    }).append(svg);
 
                     return instance;
                 }
@@ -870,11 +930,10 @@
             }
 
             let canvas = Canvas({
-                color: 'white', //'#6495ed',
-                width: width
-            });
-            canvas
-                .createPallete({
+                    color: 'white', //'#6495ed',
+                    width: width
+                })
+                .generatePallete({
                     'colors': ['yellow', 'lightgreen']
                 });
             let p = canvas.data.pallete();
@@ -910,5 +969,7 @@
         }
     </script>
 </body>
+
+</html>
 
 </html>
