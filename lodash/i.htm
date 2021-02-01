@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <title>lodash</title>
+    <script src='/js/lodash.min.js'></script>
+
+    <link rel='stylesheet' href='/css/null.css' />
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace
+        }
+    </style>
+    <script src=""></script>
+</head>
+
+<body>
+    <script>
+    try {
+      // вспомогательная функция для вывода текста нк странице
+      let log=(m)=>{
+          var div = document.createElement('div');
+          div.innerHTML = "<span>"+m.toString()+"</span>";
+          document.body.appendChild(div);
+      };
+    
+      let f=_.matches('hello');
+      
+      log('world:'+f('world'));
+      log('hello:'+f('hello'));
+    } catch (e) alert(e);
+      
+    </script>
+</body>
+
+</html>
