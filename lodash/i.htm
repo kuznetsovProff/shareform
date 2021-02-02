@@ -6,7 +6,21 @@
     <title>lodash</title>
     <script src='/js/lodash.min.js'></script>
 
-    <link rel='stylesheet' href='/css/null.css' />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+    <!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>-->
+    
+    <script src="//cdn.jsdelivr.net/ace/1.1.01/min/ace.js"></script>
+    <script src="//cdn.jsdelivr.net/ace/1.1.01/min/ext-emmet.js"></script>
+    <script src="/lodash/editr/libs/ext.emmet.js"></script>
+    <script src="/lodash/editr/editr.js"></script>
+
+    <script src="/lodash/editr/libs/parser.coffeescript.js"></script>
+    <script src="/lodash/editr/libs/parser.less.js"></script>
+
+
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css">
+    <link rel="stylesheet" href="/lodash/editr/editr.css">
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -15,26 +29,25 @@
             height: 100%;
         }
     </style>
-    <script src=""></script>
+    
 </head>
 
 <body>
+  <div id="editr" data-item="PROJECT-NAME" data-files-html="index.html" data-files-css="style.css" data-files-js="listing_1_1.js">
+  </div>
+  
+  
     <script>
-    
 window.onload = () => {
-      // вспомогательная функция для вывода текста нк странице
-      let log=(m)=>{
-          var msg = m.toString();
-          var div = document.createElement('div');
-          div.innerHTML = "<span>"+msg+"</span>";
-          document.body.appendChild(div);
-      };
-    
-      let f=_.matches('hello');
-      
-      log('world:'+f('world'));
-      log('hello:'+f('hello'));
-}
+      $('#editr').each(function() {
+        new Editr({
+            el: this,
+            path: 'listings',
+            view: 'vertical'
+        });
+      });
+
+}};     
     </script>
 </body>
 
