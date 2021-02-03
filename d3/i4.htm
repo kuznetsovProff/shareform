@@ -682,8 +682,15 @@
             // объект - путь
             let Path = (spec) => {
                 let instance = {};
-                let id, d, pathLength, cls, style;
+                let id, d, pathLength, cls;
+
+                let opacity; //--
+
                 let fill, fillopacity, mask, stroke, strokeopacity, strokewidth;
+
+                let strokedasharray, strokelinecap, strokelinejoin; //--
+                let writingmode; //--
+
                 let parent;
 
                 if (_.isEmpty(spec.id)) {
@@ -693,33 +700,35 @@
                 }
 
                 if (!_.isEmpty(spec.d)) d = spec.d;
-                
+
                 if (!_.isEmpty(spec.pathLength)) pathLength = spec.pathLength;
-              
+
                 if (!_.isEmpty(spec.cls)) cls = spec.cls;
-                
-                if (!_.isEmpty(spec.style)) style = spec.style;
-              
+
+                if (!_.isEmpty(spec.opacity)) {
+                    opacity = spec.opacity;
+                }
+
                 if (_.isEmpty(spec.fill)) {
                     fill = 'none';
                 } else {
                     fill = spec.fill;
                 }
-              
+
                 if (!_.isEmpty(spec.fillopacity)) fillopacity = spec.fillopacity;
-              
+
                 if (_.isEmpty(spec.mask)) {
                     mask = 'white';
                 } else {
                     mask = spec.mask;
                 }
-                
+
                 if (!_.isEmpty(spec.stroke)) stroke = spec.stroke;
-              
+
                 if (!_.isEmpty(spec.strokeopacity)) strokeopacity = spec.strokeopacity;
-              
+
                 if (!_.isEmpty(spec.strokewidth)) strokewidth = spec.strokewidth;
-                
+
                 if (!_.isEmpty(spec.parent)) parent = spec.parent;
 
                 // присваиваем или получаем Id
@@ -739,7 +748,7 @@
                     d = v;
                     return instance;
                 };
-                
+
                 // присваиваем или получаем pathLength
                 instance.pathLength = (p) => {
                     if (_.isEmpty(p)) {
@@ -748,7 +757,7 @@
                     pathLength = p;
                     return instance;
                 };
-                
+
                 // присваиваем или получаем cls
                 instance.cls = (c) => {
                     if (_.isEmpty(c)) {
@@ -758,15 +767,6 @@
                     return instance;
                 };
 
-                // присваиваем или получаем style
-                instance.style = (s) => {
-                    if (_.isEmpty(s)) {
-                        return style;
-                    }
-                    style = s;
-                    return instance;
-                };
-                
                 // присваиваем или получаем fill
                 instance.fill = (f) => {
                     if (_.isEmpty(f)) {
@@ -831,7 +831,37 @@
                         .attr('id', id)
                         .attr('d', d);
 
-// добавить проверку наличия аттрибутов
+                    if (!_.isEmpty(pathLength)) {
+                        path.style('path-length', pathLength);
+                    }
+
+                    if (!_.isEmpty(cls)) {
+                        path.attr('class', cls);
+                    }
+
+                    if (!_.isEmpty(fill)) {
+                        path.style('fill', fill);
+                    }
+
+                    if (!_.isEmpty(fillopacity)) {
+                        path.style('fill-opacity', fillopacity);
+                    }
+
+                    if (!_.isEmpty(mask)) {
+                        path.attr('mask', mask);
+                    }
+
+                    if (!_.isEmpty(stroke)) {
+                        path.style('stroke', stroke);
+                    }
+
+                    if (!_.isEmpty(strokeopacity)) {
+                        path.style('stroke-opacity', strokeopacity);
+                    }
+
+                    if (!_.isEmpty(strokewidth)) {
+                        path.style('stroke-width', strokewidth);
+                    }
 
                     return instance;
                 }
