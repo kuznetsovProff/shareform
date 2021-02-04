@@ -684,9 +684,7 @@
                 let instance = {};
                 let id, d, pathLength, cls;
 
-                let opacity; //--
-
-                let fill, fillopacity, mask, stroke, strokeopacity, strokewidth;
+                let opacity, fill, fillopacity, mask, stroke, strokeopacity, strokewidth;
 
                 let strokedasharray, strokelinecap, strokelinejoin; //--
                 let writingmode; //--
@@ -705,9 +703,7 @@
 
                 if (!_.isEmpty(spec.cls)) cls = spec.cls;
 
-                if (!_.isEmpty(spec.opacity)) {
-                    opacity = spec.opacity;
-                }
+                if (!_.isEmpty(spec.opacity)) opacity = spec.opacity;
 
                 if (_.isEmpty(spec.fill)) {
                     fill = 'none';
@@ -728,6 +724,12 @@
                 if (!_.isEmpty(spec.strokeopacity)) strokeopacity = spec.strokeopacity;
 
                 if (!_.isEmpty(spec.strokewidth)) strokewidth = spec.strokewidth;
+
+                if (!_.isEmpty(spec.strokedasharray)) strokedasharray = spec.strokedasharray;
+
+                if (!_.isEmpty(spec.strokelinecap)) strokelinecap = spec.strokelinecap;
+
+                if (!_.isEmpty(spec.strokelinejoin)) strokelinejoin = spec.strokelinejoin;
 
                 if (!_.isEmpty(spec.parent)) parent = spec.parent;
 
@@ -764,6 +766,15 @@
                         return cls;
                     }
                     cls = c;
+                    return instance;
+                };
+
+                // присваиваем или получаем opacity
+                instance.opacity = (o) => {
+                    if (_.isEmpty(o)) {
+                        return opacity;
+                    }
+                    opacity = o;
                     return instance;
                 };
 
@@ -812,6 +823,34 @@
                     return instance;
                 };
 
+                // присваиваем или получаем strokedasharray
+                instance.strokedasharray = (s) => {
+                    if (_.isEmpty(s)) {
+                        return strokedasharray;
+                    }
+                    strokedasharray = s;
+                    return instance;
+                };
+
+                // присваиваем или получаем strokelinecap
+                instance.strokelinecap = (s) => {
+                    if (_.isEmpty(s)) {
+                        return strokelinecap;
+                    }
+                    strokelinecap = s;
+                    return instance;
+                };
+
+                // присваиваем или получаем strokelinejoin
+                instance.strokelinejoin = (s) => {
+                    if (_.isEmpty(s)) {
+                        return strokelinejoin;
+                    }
+                    strokelinejoin = s;
+                    return instance;
+                };
+
+
                 // присваиваем или получаем parent
                 instance.parent = (p) => {
                     if (_.isEmpty(p)) {
@@ -839,6 +878,10 @@
                         path.attr('class', cls);
                     }
 
+                    if (!_.isEmpty(opacity)) {
+                        path.style('opacity', opacity);
+                    }
+
                     if (!_.isEmpty(fill)) {
                         path.style('fill', fill);
                     }
@@ -861,6 +904,18 @@
 
                     if (!_.isEmpty(strokewidth)) {
                         path.style('stroke-width', strokewidth);
+                    }
+
+                    if (!_.isEmpty(strokedasharray)) {
+                        path.style('stroke-dasharray', strokedasharray);
+                    }
+
+                    if (!_.isEmpty(strokelinecap)) {
+                        path.style('stroke-linecap', strokelinecap);
+                    }
+
+                    if (!_.isEmpty(strokeolinejoin)) {
+                        path.style('stroke-linejoin', strokelinejoin);
                     }
 
                     return instance;
