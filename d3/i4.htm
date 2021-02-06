@@ -992,12 +992,20 @@
                         .style("stroke-width", 2);*/
 
                     /////// доделать объект путь
-
+                    /**/let area = Path({
+                      id: 'area1'
+                    })
+                        .d(Area(linedots,height,margin))
+                        .fill('lightblue')
+                        .append(g);
+                    /**/ 
                     // добавляем область
+                    /*
                     g.append("path")
                         .attr("d", Area(linedots, height, margin))
                         .style("fill", 'lightblue'); //"lightblue");
-
+                    */
+                    
                     // путь
                     g.append("path")
                         .attr("d", Line(linedots))
