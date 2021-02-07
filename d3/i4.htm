@@ -594,55 +594,8 @@
                     .range([0, l]);
             };
 
-            let Layer = (spec) => {
-                let instance = {};
-                let id;
-                let parent;
-
-                if (_.isEmpty(spec.id)) {
-                    id = 'id_l_' + Date.now();
-                } else {
-                    id = spec.id;
-                }
-
-                if (!_.isEmpty(spec.parent)) {
-                    parent = spec.parent;
-                }
-
-                // присваиваем или получаем Id
-                instance.id = (i) => {
-                    if (_.isEmpty(i)) {
-                        return id.toString();
-                    }
-                    id = i;
-                    return instance;
-                };
-
-                // присваиваем или получаем parent
-                instance.parent = (p) => {
-                    if (_.isEmpty(p)) {
-                        return parent;
-                    }
-                    parent = p;
-                    return instance;
-                };
-
-                instance.append = (p) => {
-
-                    if (!_.isEmpty(p)) {
-                        parent = p;
-                    }
-
-                    let g = parent.append('g')
-                        .attr('id', id);
-
-                    return instance;
-                }
-                return instance;
-            }
-
             // вспомогательные функции для отрисовки точек, линий и областей
-            let Dots = (r, x, y, m) => {
+            let LineDots = (r, x, y, m) => {
                 // r - rawData
                 // x - scaleX
                 // y - scaleY
@@ -656,6 +609,7 @@
                 return dots;
             };
 
+            // объект - линия
             let Line = (d) => {
                 let l = d3.line()
                     .x(function(d) {
@@ -667,6 +621,7 @@
                 return l(d);
             };
 
+            // объект - область
             let Area = (d, h, m) => {
                 let a = d3.area()
                     .x(function(d) {
@@ -690,48 +645,54 @@
 
                 let parent;
 
-                if (_.isEmpty(spec.id)) {
+                if (_.isEmpty(spec)) {
                     id = 'id_p_' + Date.now();
-                } else {
-                    id = spec.id;
-                }
-
-                if (!_.isEmpty(spec.d)) d = spec.d;
-
-                if (!_.isEmpty(spec.pathLength)) pathLength = spec.pathLength;
-
-                if (!_.isEmpty(spec.cls)) cls = spec.cls;
-
-                if (!_.isEmpty(spec.opacity)) opacity = spec.opacity;
-
-                if (_.isEmpty(spec.fill)) {
                     fill = 'none';
-                } else {
-                    fill = spec.fill;
-                }
-
-                if (!_.isEmpty(spec.fillopacity)) fillopacity = spec.fillopacity;
-
-                if (_.isEmpty(spec.mask)) {
                     mask = 'white';
                 } else {
-                    mask = spec.mask;
+
+                    if (_.isEmpty(spec.id)) {
+                        id = 'id_p_' + Date.now();
+                    } else {
+                        id = spec.id;
+                    }
+
+                    if (!_.isEmpty(spec.d)) d = spec.d;
+
+                    if (!_.isEmpty(spec.pathLength)) pathLength = spec.pathLength;
+
+                    if (!_.isEmpty(spec.cls)) cls = spec.cls;
+
+                    if (!_.isEmpty(spec.opacity)) opacity = spec.opacity;
+
+                    if (_.isEmpty(spec.fill)) {
+                        fill = 'none';
+                    } else {
+                        fill = spec.fill;
+                    }
+
+                    if (!_.isEmpty(spec.fillopacity)) fillopacity = spec.fillopacity;
+
+                    if (_.isEmpty(spec.mask)) {
+                        mask = 'white';
+                    } else {
+                        mask = spec.mask;
+                    }
+
+                    if (!_.isEmpty(spec.stroke)) stroke = spec.stroke;
+
+                    if (!_.isEmpty(spec.strokeopacity)) strokeopacity = spec.strokeopacity;
+
+                    if (!_.isEmpty(spec.strokewidth)) strokewidth = spec.strokewidth;
+
+                    if (!_.isEmpty(spec.strokedasharray)) strokedasharray = spec.strokedasharray;
+
+                    if (!_.isEmpty(spec.strokelinecap)) strokelinecap = spec.strokelinecap;
+
+                    if (!_.isEmpty(spec.strokelinejoin)) strokelinejoin = spec.strokelinejoin;
+
+                    if (!_.isEmpty(spec.parent)) parent = spec.parent;
                 }
-
-                if (!_.isEmpty(spec.stroke)) stroke = spec.stroke;
-
-                if (!_.isEmpty(spec.strokeopacity)) strokeopacity = spec.strokeopacity;
-
-                if (!_.isEmpty(spec.strokewidth)) strokewidth = spec.strokewidth;
-
-                if (!_.isEmpty(spec.strokedasharray)) strokedasharray = spec.strokedasharray;
-
-                if (!_.isEmpty(spec.strokelinecap)) strokelinecap = spec.strokelinecap;
-
-                if (!_.isEmpty(spec.strokelinejoin)) strokelinejoin = spec.strokelinejoin;
-
-                if (!_.isEmpty(spec.parent)) parent = spec.parent;
-
                 // присваиваем или получаем Id
                 instance.id = (i) => {
                     if (_.isEmpty(i)) {
@@ -804,21 +765,24 @@
                     return instance;
                 };
 
+                // присваиваем или получаем strokewidth
+                instance.strokewidth = (s) => {
+                    if (typeof(s) == 'number') {
+                        s = s.toString();
+                    }
+                    if (_.isEmpty(s)) {
+                        return strokewidth;
+                    }
+                    strokewidth = s;
+                    return instance;
+                };
+
                 // присваиваем или получаем strokeopacity
                 instance.strokeopacity = (s) => {
                     if (_.isEmpty(s)) {
                         return strokeopacity;
                     }
                     strokeopacity = s;
-                    return instance;
-                };
-
-                // присваиваем или получаем strokewidth
-                instance.strokewidth = (s) => {
-                    if (_.isEmpty(s)) {
-                        return strokewidth;
-                    }
-                    strokewidth = s;
                     return instance;
                 };
 
@@ -913,7 +877,7 @@
                         path.style('stroke-linecap', strokelinecap);
                     }
 
-                    if (!_.isEmpty(strokeolinejoin)) {
+                    if (!_.isEmpty(strokelinejoin)) {
                         path.style('stroke-linejoin', strokelinejoin);
                     }
 
@@ -921,6 +885,190 @@
                 }
                 return instance;
             };
+
+            // объект - точки
+            let Dots = (spec) => {
+                let instance = {};
+                let data, type, cls, r, scalex, scaley, margin;
+                let parent;
+
+                if (_.isEmpty(spec)) {
+                    type = 'circle';
+                    cls = 'dot';
+                    r = '3.5';
+                    margin = 0;
+                } else {
+                    if (!_.isEmpty(spec.data)) data = spec.data;
+                    if (_.isEmpty(spec.type)) {
+                        type = 'circle';
+                    } else {
+                        type = spec.type;
+                    }
+                    if (_.isEmpty(spec.cls)) {
+                        cls = 'dot';
+                    } else {
+                        cls = spec.cls;
+                    }
+                    if (_.isEmpty(spec.r)) {
+                        r = '3.5';
+                    } else {
+                        r = spec.r;
+                    }
+                    if (!_.isEmpty(spec.scaleX)) scalex = spec.scaleX;
+                    if (!_.isEmpty(spec.scaleY)) scalex = spec.scaleY;
+                    if (!_.isEmpty(spec.margin)) margin = spec.margin;
+                    if (!_.isEmpty(spec.parent)) parent = spec.parent;
+                }
+
+                instance.data = (d) => {
+                    if (_.isEmpty(d)) {
+                        return data;
+                    }
+                    data = d;
+                    return instance;
+                };
+
+                instance.type = (t) => {
+                    if (_.isEmpty(t)) {
+                        return type;
+                    }
+                    type = t;
+                    return instance;
+                };
+
+                instance.cls = (c) => {
+                    if (_.isEmpty(c)) {
+                        return cls;
+                    }
+                    cls = c;
+                    return instance;
+                };
+
+                instance.r = (v) => {
+                    if (typeof(v) == 'number') {
+                        v = v.toString();
+                    }
+                    if (_.isEmpty(v)) {
+                        return r;
+                    }
+                    r = v;
+                    return instance;
+                };
+
+                instance.scaleX = (x) => {
+                    if (_.isEmpty(x)) {
+                        return scalex;
+                    }
+                    scalex = x;
+                    return instance;
+                };
+
+                instance.scaleY = (y) => {
+                    if (_.isEmpty(y)) {
+                        return scaley;
+                    }
+                    scaley = y;
+                    return instance;
+                };
+
+                instance.margin = (m) => {
+                    if (_.isEmpty(m)) {
+                        return margin;
+                    }
+                    margin = m;
+                    return instance;
+                };
+
+                instance.parent = (p) => {
+                    if (_.isEmpty(p)) {
+                        return parent;
+                    }
+                    parent = p;
+                    return instance;
+                };
+
+                instance.append = (p) => {
+
+                    if (!_.isEmpty(p)) {
+                        parent = p;
+                    }
+
+                    let dots = parent.selectAll('.' + cls)
+                        .data(data)
+                        .enter()
+                        .append(type)
+                        .attr('class', cls)
+                        .attr('r', r)
+                        .attr('cx', function(d) {
+                            return scalex(d.x) + margin;
+                        })
+                        .attr('cy', function(d) {
+                            return scaley(d.y) + margin;
+                        });
+
+                    return instance;
+                }
+
+                return instance;
+            };
+
+            // незавершенный объект, необходимо дополнить с учетом остальных объектов
+            let Layer = (spec) => {
+                let instance = {};
+                let id, g;
+                let parent;
+
+                if (_.isEmpty(spec)) {
+                    id = 'id_l_' + Date.now();
+                } else {
+                    if (_.isEmpty(spec.id)) {
+                        id = 'id_l_' + Date.now();
+                    } else {
+                        id = spec.id;
+                    }
+                    if (!_.isEmpty(spec.g)) g = spec.g;
+                    if (!_.isEmpty(spec.parent)) parent = spec.parent;
+                }
+                // присваиваем или получаем Id
+                instance.id = (i) => {
+                    if (_.isEmpty(i)) {
+                        return id.toString();
+                    }
+                    id = i;
+                    return instance;
+                };
+
+                // присваиваем или получаем g
+                instance.g = (v) => {
+                    if (_.isEmpty(v)) {
+                        return g;
+                    }
+                    g = v;
+                    return instance;
+                };
+
+                // присваиваем или получаем parent
+                instance.parent = (p) => {
+                    if (_.isEmpty(p)) {
+                        return parent;
+                    }
+                    parent = p;
+                    return instance;
+                };
+
+                instance.append = (p) => {
+
+                    if (!_.isEmpty(p)) {
+                        parent = p;
+                    }
+
+                    let g = parent.append('g')
+                        .attr('id', id);
+
+                    return instance;
+                }
+                return instance;
+            }
 
             // объект Холст
             function Canvas(spec) {
@@ -970,8 +1118,8 @@
                     }],
                     linedots = [];
 
-
-                instance.testLayer = () => {
+                // тест добавления слоя
+                instance.addLayer = (rawData, width, height, margin, fill, stroke) => {
                     // длина оси X= ширина контейнера svg - отступ слева и справа
                     let xAxisLength = AxisLength(width, margin);
 
@@ -982,49 +1130,32 @@
                     // функция интерполяции значений на ось Y
                     let scaleY = AxisScale(yAxisLength, [100, 0]);
                     // расположение точек линии с учетом интерполяции
-                    linedots = Dots(rawData, scaleX, scaleY, margin);
+                    linedots = LineDots(rawData, scaleX, scaleY, margin);
 
+                    // здесь должен быть объект - слой
                     let g = svg.append("g");
-                    // добавляем путь
-                    /*g.append("path")
-                        .attr("d", Line(linedots))
-                        .style("stroke", "steelblue")
-                        .style("stroke-width", 2);*/
 
-                    /////// доделать объект путь
-                    /**/let area = Path({
-                      id: 'area1'
-                    })
-                        .d(Area(linedots,height,margin))
-                        .fill('lightblue')
-                        .append(g);
-                    /**/ 
                     // добавляем область
-                    /*
-                    g.append("path")
-                        .attr("d", Area(linedots, height, margin))
-                        .style("fill", 'lightblue'); //"lightblue");
-                    */
-                    
-                    // путь
-                    g.append("path")
-                        .attr("d", Line(linedots))
-                        .style("fill", 'none')
-                        .style("stroke", 'lightblue') //"steelblue")
-                        .style("stroke-width", 2);
+                    let area = Path()
+                        .d(Area(linedots, height, margin))
+                        .fill(fill)
+                        .append(g);
 
-                    // добавляем отметки к точкам
-                    svg.selectAll(".dot-2")
+                    // путь
+                    let line = Path()
+                        .d(Line(linedots))
+                        .stroke(stroke)
+                        .strokewidth(2)
+                        .fill('none')
+                        .append(g);
+
+                    // добавляем отметки к точкам, по умолчанию - кружки
+                    let dots = Dots()
                         .data(rawData)
-                        .enter().append("circle")
-                        .attr("class", "dot-2")
-                        .attr("r", 3.5)
-                        .attr("cx", function(d) {
-                            return scaleX(d.x) + margin;
-                        })
-                        .attr("cy", function(d) {
-                            return scaleY(d.y) + margin;
-                        });
+                        .cls('dot-2')
+                        .scaleX(scaleX)
+                        .scaleY(scaleY)
+                        .append(g);
 
                     return instance;
                 };
@@ -1206,7 +1337,8 @@
                 .appendBG("orange", "white");
 
             canvas.showTextWidget();
-            canvas.testLayer();
+            //canvas.testLayer();
+            canvas.addLayer(rawData, width, height, margin, 'red', 'lightblue');
             /*
                         } catch (e) {
                             alert(e);
