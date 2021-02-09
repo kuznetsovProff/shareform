@@ -295,9 +295,9 @@
                 let svg, defs, width, height;
                 let data = {};
                 let margin = 0;
-                data.pallete = [];
-                data.gradients = [];
-                data.layers = [];
+                let pallete = [];
+                let gradients = [];
+                let layers = [];
 
                 instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
@@ -315,7 +315,7 @@
                     layer.appendLine();
                     layer.appendDots();
                     
-                    //data.layers.push(layer);
+                    layers.push(layer);
 
                     return instance;
                 };
@@ -418,23 +418,23 @@
                 };
 
                 // присваиваем и получаем цветовую палитру
-                instance.data.pallete = (p) => {
-                    if (_.isEmpty(p)) return data.pallete;
-                    data.pallete = p;
+                instance.pallete = (p) => {
+                    if (_.isEmpty(p)) return pallete;
+                    pallete = p;
                     return instance;
                 };
 
                 // присваиваем и получаем градиенты
-                instance.data.gradients = (g) => {
-                    if (_.isEmpty(g)) return data.gradients;
-                    data.gradients = g;
+                instance.gradients = (g) => {
+                    if (_.isEmpty(g)) return gradients;
+                    gradients = g;
                     return instance;
                 };
 
                 // присваиваем и получаем слои
-                instance.data.layers = (l) => {
-                    if (_.isEmpty(l)) return data.layers;
-                    data.layers = l;
+                instance.layers = (l) => {
+                    if (_.isEmpty(l)) return layers;
+                    layers = l;
                     return instance;
                 };
 
@@ -460,8 +460,13 @@
                         _colors = _colors.colors(24);
                     }
 
-                    data.pallete = _colors;
+                    pallete = _colors;
 
+                    return instance;
+                };
+
+                instance.appendGradient= (G) => {
+                    G.append(defs);
                     return instance;
                 };
 
@@ -501,7 +506,7 @@
                 .generatePallete({
                     'colors': ['yellow', 'lightgreen']
                 });
-            let p = canvas.data.pallete();
+            let p = canvas.pallete();
             canvas
                 .headline('Pallete')
                 .description(JSON.stringify(p)) //palletejson)
@@ -585,13 +590,17 @@
                 y: 80
             }];
 
-            canvas.newLayer(testData2, width, height, margin, 'orange', 'lightgreen');
+            let G1 = Gradient();
+
+            canvas.appendGradient(G1); // градиент, как и другие объекты, передается по ссылке
+            // стопы добавлять только после создания градиента и добавления его в SVG
+            G1
+                .stop('0', 'blue', '0.25')
+                .stop('1', 'green', '1');
+
+            canvas.newLayer(testData2, width, height, margin, G1.url(), 'lightgreen');
             canvas.newLayer(testData1, width, height, margin, 'red', 'lightblue');
-            /*
-                        } catch (e) {
-                            alert(e);
-                        }
-            */
+
             /*
              let c = coins()
                  .addSite({
