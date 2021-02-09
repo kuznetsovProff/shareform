@@ -488,8 +488,9 @@
                             "translate(" + margin + ", 0 )");
                     
                     // интерполяция значений на оси
-                    linedots = interpolate(data);
+                    //linedots = interpolate(data);
 
+/*
                     // добавляем область
                     let area = Path()
                         .d(Area(linedots, height, margin))
@@ -511,26 +512,30 @@
                         .scaleX(scaleX)
                         .scaleY(scaleY)
                         .append(g);
-
+*/
                     return instance;
                 }
                 
-                instance.addArea = (a) =>{
-                    if (!_.isEmpty(a)) {
-                        linedots = interpolate(a);
+                instance.appendArea = (a) =>{
+               
+                    if (_.isEmpty(a)) {
+                        a = data;
                     }
+                 
+                    let linedots = interpolate(a);
                     let area = Path()
                         .d(Area(linedots, height, margin))
                         .fill(fill)
                         .append(g);
-                        
+                  
                     return instance;
                 };
                 
-                instance.addLine = (l) =>{
-                    if (!_.isEmpty(l)) {
-                        linedots = interpolate(l);
+                instance.appendLine = (l) =>{
+                    if (_.isEmpty(l)) {
+                        l = data;
                     }
+                    let linedots = interpolate(l);
                     let line = Path()
                         .d(Line(linedots))
                         .stroke(stroke)
@@ -540,20 +545,13 @@
                         
                     return instance;
                 };
-                
-                instance.addDots = (d) =>{
-                    if (!_.isEmpty(d)) {
-                        // длина оси X= ширина слоя - отступ слева и справа
-                        let xAxisLength = AxisLength(width, margin);
-                        // длина оси Y = высота слоя - отступ сверху и снизу
-                        let yAxisLength = AxisLength(height, margin);
-                        // функция интерполяции значений на ось X
-                        let scaleX = AxisScale(xAxisLength, [0, 100]);
-                        // функция интерполяции значений на ось Y
-                        let scaleY = AxisScale(yAxisLength, [100, 0]);
-                        // расположение точек линии с учетом интерполяции
-                        linedots = LineDots(d, scaleX, scaleY, margin);
+              
+                instance.appendDots = (d) =>{
+                    if (_.isEmpty(d)) {
+                        d = data;
                     }
+                
+                    let linedots = interpolate(d);
                     let dots = Dots()
                         .data(d)
                         .cls('dot-2')
@@ -563,7 +561,7 @@
                         
                     return instance;
                 };
-                
+             
                 let interpolate = (data)=>{
                     // длина оси X= ширина слоя - отступ слева и справа
                     xAxisLength = AxisLength(width, margin);
@@ -642,8 +640,14 @@
                         .margin(margin)
                         .fill(fill)
                         .stroke(stroke);
-
+                    
                     layer.append(svg);
+                    
+                    layer.appendArea();
+                    layer.appendLine();
+                    layer.appendDots();
+                    
+                    data.layers.push(layer);
 
                     return instance;
                 };
