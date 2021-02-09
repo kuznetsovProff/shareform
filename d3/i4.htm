@@ -1254,100 +1254,21 @@
                 data.gradients = [];
                 data.layers = [];
 
-                // тест слоя
-                rawData = [{
-                        x: 0,
-                        y: 0
-                    }, {
-                        x: 10,
-                        y: 67
-                    }, {
-                        x: 20,
-                        y: 74
-                    }, {
-                        x: 30,
-                        y: 63
-                    }, {
-                        x: 40,
-                        y: 56
-                    }, {
-                        x: 50,
-                        y: 24
-                    }, {
-                        x: 60,
-                        y: 26
-                    }, {
-                        x: 70,
-                        y: 19
-                    }, {
-                        x: 80,
-                        y: 42
-                    }, {
-                        x: 90,
-                        y: 88
-                    }, {
-                        x: 100,
-                        y: 70
-                    }],
-                    linedots = [];
-
                 instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
                     let layer = Layer()
                         .data(data)
                         .width(width)
                         .height(height)
-                        .margin(margin);
-                    layer.fill(fill);
-                    layer.stroke(stroke);
+                        .margin(margin)
+                        .fill(fill)
+                        .stroke(stroke);
 
                     layer.append(svg);
 
                     return instance;
                 };
 
-                // тест добавления слоя
-                instance.addLayer = (rawData, width, height, margin, fill, stroke) => {
-                    // длина оси X= ширина контейнера svg - отступ слева и справа
-                    let xAxisLength = AxisLength(width, margin);
-
-                    // длина оси Y = высота контейнера svg - отступ сверху и снизу
-                    let yAxisLength = AxisLength(height, margin);
-                    // функция интерполяции значений на ось X
-                    let scaleX = AxisScale(xAxisLength, [0, 100]);
-                    // функция интерполяции значений на ось Y
-                    let scaleY = AxisScale(yAxisLength, [100, 0]);
-                    // расположение точек линии с учетом интерполяции
-                    linedots = LineDots(rawData, scaleX, scaleY, margin);
-
-                    // здесь должен быть объект - слой
-                    let g = svg.append("g");
-
-                    // добавляем область
-                    let area = Path()
-                        .d(Area(linedots, height, margin))
-                        .fill(fill)
-                        .append(g);
-
-                    // путь
-                    let line = Path()
-                        .d(Line(linedots))
-                        .stroke(stroke)
-                        .strokewidth(2)
-                        .fill('none')
-                        .append(g);
-
-                    // добавляем отметки к точкам, по умолчанию - кружки
-                    let dots = Dots()
-                        .data(rawData)
-                        .cls('dot-2')
-                        .scaleX(scaleX)
-                        .scaleY(scaleY)
-                        .append(g);
-
-                    return instance;
-                };
-                //конец теста слоя
 
                 // создаем SVG
                 instance.appendSvg = (w, h) => {
@@ -1525,7 +1446,7 @@
                 .appendBG("orange", "white");
 
             canvas.showTextWidget();
-            //canvas.testLayer();
+
             let testData = [{
                 x: 0,
                 y: 0
@@ -1560,7 +1481,6 @@
                 x: 100,
                 y: 70
             }];
-            //canvas.addLayer(testData, width, height, margin, 'red', 'lightblue');
 
             canvas.newLayer(testData, width, height, margin, 'red', 'lightblue');
             /*
