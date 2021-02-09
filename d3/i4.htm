@@ -57,29 +57,20 @@
 <body style='background-color: #01040a'>
 
     <script>
-        const win = window;
 
         win.onload = () => {
-            /*
-                        try {
-                            */
+
             let width = win.innerWidth - 0;
             let height = win.innerHeight - 0;
-
-            //https://mdigi.tools/color-shades/#061639
 
             let margin = 0,
                 padding = 0;
 
            
-
+            //https://mdigi.tools/color-shades/#061639
             //#061639
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
             let palletejson = JSON.stringify(colors);
-
-
-
-
 
             // незавершенный объект, необходимо дополнить с учетом остальных объектов
             let Layer = (spec) => {
@@ -90,8 +81,8 @@
 
                 if (_.isEmpty(spec)) {
                     id = 'id_l_' + Date.now();
-                    width = window.innerWidth;
-                    height = window.innerHeight;
+                    width = win.innerWidth;
+                    height = win.innerHeight;
                     margin = 0;
                     fill = 'white';
                     stroke = 'white';
@@ -104,12 +95,12 @@
                     if (!_.isEmpty(spec.g)) g = spec.g;
                     if (!_.isEmpty(spec.data)) data = spec.data;
                     if (_.isEmpty(spec.width)) {
-                        width = window.innerWidth;
+                        width = win.innerWidth;
                     } else {
                         width = spec.width;
                     }
                     if (_.isEmpty(spec.height)) {
-                        height = window.innerheight;
+                        height = win.innerheight;
                     } else {
                         height = spec.height;
                     }
@@ -229,32 +220,6 @@
                         .attr("transform", // сдвиг слоя вправо
                             "translate(" + margin + ", 0 )");
                     
-                    // интерполяция значений на оси
-                    //linedots = interpolate(data);
-
-/*
-                    // добавляем область
-                    let area = Path()
-                        .d(Area(linedots, height, margin))
-                        .fill(fill)
-                        .append(g);
-
-                    // путь
-                    let line = Path()
-                        .d(Line(linedots))
-                        .stroke(stroke)
-                        .strokewidth(2)
-                        .fill('none')
-                        .append(g);
-
-                    // добавляем отметки к точкам, по умолчанию - кружки
-                    let dots = Dots()
-                        .data(data)
-                        .cls('dot-2')
-                        .scaleX(scaleX)
-                        .scaleY(scaleY)
-                        .append(g);
-*/
                     return instance;
                 }
                 
@@ -301,6 +266,7 @@
                         .scaleY(scaleY)
                         .fill(fill)
                         .stroke(stroke)
+                        .strokewidth(2)
                         .append(g);
                         
                     return instance;
@@ -367,6 +333,19 @@
                     defs = svg.append("defs");
                     return instance;
                 };
+
+                instance.onresize = (on) => {
+                    if (on) {
+                        win.onresize = () => {
+                            svg.attr("width", win.innerWidth);
+                            svg.attr("height", win.innerHeight);
+                        };
+                    } else {
+                        win.onresize = () => {};
+                    }
+
+                    return instance;
+                }
 
                 // создаем defs
                 instance.appendDefs = () => {
@@ -527,6 +506,7 @@
                 .headline('Pallete')
                 .description(JSON.stringify(p)) //palletejson)
                 .appendSvg(width, height)
+                .onresize(true)
                 .appendDefs()
                 .appendBG("orange", "white");
 
