@@ -554,6 +554,7 @@
             let Dots = (spec) => {
                 let instance = {};
                 let data, type, cls, r, scalex, scaley, margin;
+                let fill, stroke;
                 let parent;
 
                 if (_.isEmpty(spec)) {
@@ -581,6 +582,8 @@
                     if (!_.isEmpty(spec.scaleX)) scalex = spec.scaleX;
                     if (!_.isEmpty(spec.scaleY)) scalex = spec.scaleY;
                     if (!_.isEmpty(spec.margin)) margin = spec.margin;
+                    if (!_.isEmpty(spec.fill)) fill = spec.fill;
+                    if (!_.isEmpty(spec.stroke)) stroke = spec.stroke;
                     if (!_.isEmpty(spec.parent)) parent = spec.parent;
                 }
 
@@ -643,6 +646,22 @@
                     return instance;
                 };
 
+                instance.fill = (f) => {
+                    if (_.isEmpty(f)) {
+                        return fill;
+                    }
+                    fill = f;
+                    return instance;
+                };
+
+                instance.stroke = (s) => {
+                    if (_.isEmpty(s)) {
+                        return stroke;
+                    }
+                    stroke = s;
+                    return instance;
+                };
+
                 instance.parent = (p) => {
                     if (_.isEmpty(p)) {
                         return parent;
@@ -669,6 +688,13 @@
                         .attr('cy', function(d) {
                             return scaley(d.y) + margin;
                         });
+
+                    if (!_.isEmpty(fill)) {
+                        dots.style('fill', fill);
+                    }
+                    if (!_.isEmpty(stroke)) {
+                        dots.style('stroke', stroke);
+                    }
 
                     return instance;
                 }
