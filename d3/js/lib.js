@@ -9,42 +9,51 @@ function Gradient(spec) {
     let stops = [];
 
     // присваивание значений при создании
-    if (_.isEmpty(spec.id)) {
+    if (_.isEmpty(spec)) {
         id = 'id_g_' + Date.now();
-    } else {
-        id = spec.id;
-    }
-
-    if (!_.isEmpty(spec.type)) {
-        type = spec.type;
-    }
-
-    if (_.isEmpty(spec.x1)) {
         x1 = '0%';
-    } else {
-        x1 = spec.x1;
-    }
-
-    if (_.isEmpty(spec.y1)) {
         y1 = '0%';
-    } else {
-        y1 = spec.y1;
-    }
-
-    if (_.isEmpty(spec.x2)) {
         x2 = '0%';
-    } else {
-        x2 = spec.x2;
-    }
-
-    if (_.isEmpty(spec.y2)) {
         y2 = '100%';
     } else {
-        y2 = spec.y2;
-    }
 
-    if (!_.isEmpty(spec.defs)) {
-        defs = spec.defs;
+        if (_.isEmpty(spec.id)) {
+            id = 'id_g_' + Date.now();
+        } else {
+            id = spec.id;
+        }
+
+        if (!_.isEmpty(spec.type)) {
+            type = spec.type;
+        }
+
+        if (_.isEmpty(spec.x1)) {
+            x1 = '0%';
+        } else {
+            x1 = spec.x1;
+        }
+
+        if (_.isEmpty(spec.y1)) {
+            y1 = '0%';
+        } else {
+            y1 = spec.y1;
+        }
+
+        if (_.isEmpty(spec.x2)) {
+            x2 = '0%';
+        } else {
+            x2 = spec.x2;
+        }
+
+        if (_.isEmpty(spec.y2)) {
+            y2 = '100%';
+        } else {
+            y2 = spec.y2;
+        }
+
+        if (!_.isEmpty(spec.defs)) {
+            defs = spec.defs;
+        }
     }
 
     // присваиваем или получаем Id
@@ -87,6 +96,11 @@ function Gradient(spec) {
 
         return instance;
     };
+
+    // строка для fill или stroke
+    instance.url = () => {
+        return 'url(#'+id+')';
+    }
 
     return instance;
 }
