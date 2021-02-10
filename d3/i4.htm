@@ -57,7 +57,6 @@
 <body style='background-color: #01040a'>
 
     <script>
-
         win.onload = () => {
 
             let width = win.innerWidth - 0;
@@ -66,7 +65,7 @@
             let margin = 0,
                 padding = 0;
 
-           
+
             //https://mdigi.tools/color-shades/#061639
             //#061639
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
@@ -216,29 +215,29 @@
                     }
 
                     g = parent.append('g')
-                        .attr('id', id)
-                        .attr("transform", // сдвиг слоя вправо
-                            "translate(" + margin + ", 0 )");
-                    
+                    g.attr('id', id);
+                    g.attr("transform", // сдвиг слоя вправо
+                        "translate(" + margin + ", 0 )");
+
                     return instance;
                 }
-                
-                instance.appendArea = (a) =>{
-               
+
+                instance.appendArea = (a) => {
+
                     if (_.isEmpty(a)) {
                         a = data;
                     }
-                 
+
                     let linedots = interpolate(a);
                     let area = Path()
                         .d(Area(linedots, height, margin))
                         .fill(fill)
                         .append(g);
-                  
+
                     return instance;
                 };
-                
-                instance.appendLine = (l) =>{
+
+                instance.appendLine = (l) => {
                     if (_.isEmpty(l)) {
                         l = data;
                     }
@@ -249,15 +248,15 @@
                         .strokewidth(2)
                         .fill('none')
                         .append(g);
-                        
+
                     return instance;
                 };
-              
-                instance.appendDots = (d) =>{
+
+                instance.appendDots = (d) => {
                     if (_.isEmpty(d)) {
                         d = data;
                     }
-                
+
                     let linedots = interpolate(d);
                     let dots = Dots()
                         .data(d)
@@ -268,11 +267,11 @@
                         .stroke(stroke)
                         .strokewidth(2)
                         .append(g);
-                        
+
                     return instance;
                 };
-             
-                let interpolate = (data)=>{
+
+                let interpolate = (data) => {
                     // длина оси X= ширина слоя - отступ слева и справа
                     xAxisLength = AxisLength(width, margin);
                     // длина оси Y = высота слоя - отступ сверху и снизу
@@ -308,17 +307,46 @@
                         .margin(margin)
                         .fill(fill)
                         .stroke(stroke);
-                    
+
                     layer.append(svg);
-                    
+
                     layer.appendArea();
                     layer.appendLine();
                     layer.appendDots();
-                    
+
                     layers.push(layer);
 
                     return instance;
                 };
+
+                instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke) => {
+
+                    let m = Mask();
+                    m.id('newmask');
+                    m.append(defs);
+
+                    let layer = Layer();
+                    layer.data(data);
+                    layer.width(width);
+                    layer.height(height);
+                    layer.margin(margin);
+                    layer.fill(maskfill);
+                    layer.stroke(maskstroke);
+                    layer.append(m.mask()); // переименовать ссылку на d3 объект в node();
+                    layer.appendArea();
+                    layer.appendLine();
+                    layer.appendDots();
+
+                    let r = Rect({
+                        'width': width,
+                        'height': height,
+                        'fill': fill,
+                        'stroke': stroke,
+                        'mask': 'url(#' + m.id() + ')'
+                    }).append(svg);
+
+                    return instance;
+                }
 
 
                 // создаем SVG
@@ -465,7 +493,7 @@
                     return instance;
                 };
 
-                instance.appendGradient= (G) => {
+                instance.appendGradient = (G) => {
                     G.append(defs);
                     return instance;
                 };
@@ -590,16 +618,36 @@
                 y: 80
             }];
 
+            // html цвета
+            // rapidtables.com/web/color/html-color-codes.html
+            // https://www.w3schools.com/colors/colors_names.asp
+            // https://colorscheme.ru/html-colors.html
+            // https://colorscheme.ru/color-names.html
+
+            let G2 = Gradient();
             let G1 = Gradient();
 
-            canvas.appendGradient(G1); // градиент, как и другие объекты, передается по ссылке
+            canvas.appendGradient(G2); // градиент, как и другие объекты, передается по ссылке
             // стопы добавлять только после создания градиента и добавления его в SVG
-            G1
+            G2.id('G2_')
                 .stop('0', 'blue', '0.25')
                 .stop('1', 'green', '1');
 
-            canvas.newLayer(testData2, width, height, margin, G1.url(), 'lightgreen');
-            canvas.newLayer(testData1, width, height, margin, 'red', 'lightblue');
+            let G2url = G2.url();
+            canvas.newLayer(testData2, width, height, margin, G2url, 'lightgreen');
+
+
+            canvas.appendGradient(G1);
+            G1.id('G1_')
+                .stop('0', 'crimson', '0.50')
+                .stop('1', 'darkorange', '1');
+
+            let G1url = G1.url();
+            /*
+            canvas.newLayer(testData1, width, height, margin, G1url, 'lightblue');*/
+
+            canvas.newMaskedLayer(testData1, width, height, margin, G1url, 'lightblue', 'white', 'white');
+
 
             /*
              let c = coins()

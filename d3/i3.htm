@@ -141,7 +141,7 @@
                 let defs = svg.append("defs");
 
                 function createBackgroundGradient(mainColor, gradientColor) {
-
+                    // градиент
                     let whiteGradient = defs.append("linearGradient")
                         .attr("id", "whiteGradient")
                         .attr("x1", "0%")
@@ -159,16 +159,17 @@
                         .attr("stop-color", gradientColor)
                         .attr("stop-opacity", "1");
 
+                    // слой-маска
                     let gradientMask = defs.append("mask")
                         .attr("id", "gradientMask");
-
+                    // прямоугольник слоя-маски
                     let rectMask = gradientMask.append("rect")
                         .attr("x", "0")
                         .attr("y", "0")
                         .attr("width", width)
                         .attr("height", height)
                         .attr("fill", "url(#whiteGradient)");
-
+                    // прямоугольник с наложенной маской
                     svg.append("rect")
                         .attr("x", "0")
                         .attr("y", "0")

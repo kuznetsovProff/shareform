@@ -61,6 +61,7 @@ function Gradient(spec) {
         if (_.isEmpty(i)) {
             return id.toString();
         }
+        d3.select('#' + id).attr('id', i);
         id = i;
         return instance;
     };
@@ -99,7 +100,7 @@ function Gradient(spec) {
 
     // строка для fill или stroke
     instance.url = () => {
-        return 'url(#'+id+')';
+        return 'url(#' + id + ')';
     }
 
     return instance;
@@ -112,17 +113,20 @@ function Mask(spec) {
     let mask;
     let figures = [];
 
-    // присваивание значений при создании
-    if (_.isEmpty(spec.id)) {
-        id = 'id_m_' + Date.now();
+    if (_.isEmpty(spec)) {
+        id = 'id_m_' + Date.now();;
     } else {
-        id = spec.id;
-    }
+        // присваивание значений при создании
+        if (_.isEmpty(spec.id)) {
+            id = 'id_m_' + Date.now();
+        } else {
+            id = spec.id;
+        }
 
-    if (!_.isEmpty(spec.defs)) {
-        defs = spec.defs;
+        if (!_.isEmpty(spec.defs)) {
+            defs = spec.defs;
+        }
     }
-
     // присваиваем или получаем Id
     instance.id = (i) => {
         if (_.isEmpty(i)) {
