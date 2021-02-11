@@ -83,6 +83,7 @@ function Gradient(spec) {
     };
 
     // присваиваем и получаем градиент
+    // подумать над заменой на d3
     instance.gradient = (g) => {
         if (!arguments.length) return gradient;
         gradient = g;
@@ -149,7 +150,8 @@ function Mask(spec) {
         return instance;
     };
 
-    // присваиваем и получаем градиент
+    // присваиваем и получаем маску
+    // подумать над заменой на d3
     instance.mask = (m) => {
         if (!arguments.length) return mask;
         mask = m;
@@ -176,6 +178,7 @@ function Mask(spec) {
 let Rect = (spec) => {
     let instance = {};
     let id, x, y, width, height, fill, mask;
+    let rect;
     let parent;
 
     if (_.isEmpty(spec.id)) {
@@ -233,6 +236,14 @@ let Rect = (spec) => {
         return instance;
     };
 
+    // присваиваем и получаем прямоугольник
+    // подумать над заменой на d3
+    instance.rect = (r) => {
+        if (!arguments.length) return rect;
+        rect = r;
+        return instance;
+    };
+
     // присваиваем или получаем parent
     instance.parent = (p) => {
         if (_.isEmpty(p)) {
@@ -248,7 +259,7 @@ let Rect = (spec) => {
             parent = p;
         }
 
-        let r = parent.append('rect')
+        rect = parent.append('rect')
             .attr('id', id)
             .attr('x', x)
             .attr('y', y)
@@ -294,6 +305,7 @@ let LineDots = (r, x, y, m) => {
 };
 
 // объект - линия
+// переделать в полноценный объект
 let Line = (d) => {
     let l = d3.line()
         .x(function(d) {
@@ -306,6 +318,7 @@ let Line = (d) => {
 };
 
 // объект - область
+// переделать в полноценный объект
 let Area = (d, h, m) => {
     let a = d3.area()
         .x(function(d) {
@@ -323,9 +336,11 @@ let Path = (spec) => {
     let instance = {};
     let id, d, pathLength, cls;
 
+    let path;
+
     let opacity, fill, fillopacity, mask, stroke, strokeopacity, strokewidth;
 
-    let strokedasharray, strokelinecap, strokelinejoin; //--
+    let strokedasharray, strokelinecap, strokelinejoin;
 
     let parent;
 
@@ -497,6 +512,13 @@ let Path = (spec) => {
         return instance;
     };
 
+    // присваиваем и получаем путь
+    // подумать над заменой на d3
+    instance.path = (p) => {
+        if (!arguments.length) return path;
+        path = p;
+        return instance;
+    };
 
     // присваиваем или получаем parent
     instance.parent = (p) => {
@@ -513,7 +535,9 @@ let Path = (spec) => {
             parent = p;
         }
 
-        let path = parent.append('path')
+        // добавить проверку на существование объекта в path
+
+        path = parent.append('path')
             .attr('id', id)
             .attr('d', d);
 
@@ -574,6 +598,7 @@ let Path = (spec) => {
 let Dots = (spec) => {
     let instance = {};
     let data, type, cls, r, scalex, scaley, margin;
+    let dots;
     let fill, stroke, strokewidth;
     let parent;
 
@@ -693,6 +718,14 @@ let Dots = (spec) => {
         return instance;
     };
 
+    // присваиваем и получаем точки
+    // подумать над заменой на d3
+    instance.dots = (d) => {
+        if (!arguments.length) return dots;
+        dots = d;
+        return instance;
+    };
+
     instance.parent = (p) => {
         if (_.isEmpty(p)) {
             return parent;
@@ -707,7 +740,8 @@ let Dots = (spec) => {
             parent = p;
         }
 
-        let dots = parent.selectAll('.' + cls)
+        // добавить проверку на существование объекта в dots
+        dots = parent.selectAll('.' + cls)
             .data(data)
             .enter()
             .append(type)
