@@ -90,6 +90,12 @@ function Gradient(spec) {
         return instance;
     };
 
+    instance.d3 = (g) => {
+        if (!arguments.length) return gradient;
+        gradient = g;
+        return instance;
+    };
+
     instance.stop = (offset, color, opacity) => {
         gradient.append('stop')
             .attr('offset', offset)
@@ -137,6 +143,24 @@ function Mask(spec) {
         return instance;
     };
 
+    // присваиваем и получаем маску
+    // подумать над заменой на d3
+    instance.mask = (m) => {
+        if (!arguments.length) return mask;
+        mask = m;
+        return instance;
+    };
+
+    instance.d3 = (m) => {
+        if (!arguments.length) return mask;
+        mask = m;
+        return instance;
+    };
+
+    instance.url = () => {
+        return 'url(#' + id + ')';
+    };
+
     // добавляем маску в defs
     instance.append = (d) => {
 
@@ -147,14 +171,6 @@ function Mask(spec) {
         mask = defs.append('mask')
             .attr('id', id);
 
-        return instance;
-    };
-
-    // присваиваем и получаем маску
-    // подумать над заменой на d3
-    instance.mask = (m) => {
-        if (!arguments.length) return mask;
-        mask = m;
         return instance;
     };
 
@@ -239,6 +255,12 @@ let Rect = (spec) => {
     // присваиваем и получаем прямоугольник
     // подумать над заменой на d3
     instance.rect = (r) => {
+        if (!arguments.length) return rect;
+        rect = r;
+        return instance;
+    };
+
+    instance.d3 = (r) => {
         if (!arguments.length) return rect;
         rect = r;
         return instance;
@@ -521,6 +543,12 @@ let Path = (spec) => {
         return instance;
     };
 
+    instance.d3 = (p) => {
+        if (!arguments.length) return path;
+        path = p;
+        return instance;
+    };
+
     // присваиваем или получаем parent
     instance.parent = (p) => {
         if (_.isEmpty(p)) {
@@ -727,6 +755,12 @@ let Dots = (spec) => {
         return instance;
     };
 
+    instance.d3 = (d) => {
+        if (!arguments.length) return dots;
+        dots = d;
+        return instance;
+    };
+
     instance.parent = (p) => {
         if (_.isEmpty(p)) {
             return parent;
@@ -770,3 +804,218 @@ let Dots = (spec) => {
 
     return instance;
 };
+
+let Layer = (spec) => {
+    let instance = {};
+    let id, g;
+    let data, width, height, margin, fill, stroke;
+    let parent;
+
+    if (_.isEmpty(spec)) {
+        id = 'id_l_' + Date.now();
+        width = win.innerWidth;
+        height = win.innerHeight;
+        margin = 0;
+        fill = 'white';
+        stroke = 'white';
+    } else {
+        if (_.isEmpty(spec.id)) {
+            id = 'id_l_' + Date.now();
+        } else {
+            id = spec.id;
+        }
+        if (!_.isEmpty(spec.g)) g = spec.g;
+        if (!_.isEmpty(spec.data)) data = spec.data;
+        if (_.isEmpty(spec.width)) {
+            width = win.innerWidth;
+        } else {
+            width = spec.width;
+        }
+        if (_.isEmpty(spec.height)) {
+            height = win.innerheight;
+        } else {
+            height = spec.height;
+        }
+        if (_.isEmpty(spec.margin)) {
+            margin = '0';
+        } else {
+            margin = spec.margin;
+        }
+        if (_.isEmpty(spec.fill)) {
+            fill = 'white';
+        } else {
+            fill = spec.fill;
+        }
+        if (_.isEmpty(spec.stroke)) {
+            stroke = 'white';
+        } else {
+            stroke = spec.stroke;
+        }
+
+        if (!_.isEmpty(spec.parent)) parent = spec.parent;
+    }
+    // присваиваем или получаем Id
+    instance.id = (i) => {
+        if (_.isEmpty(i)) {
+            return id.toString();
+        }
+        id = i;
+        return instance;
+    };
+
+    // присваиваем или получаем g
+    instance.g = (v) => {
+        if (_.isEmpty(v)) {
+            return g;
+        }
+        g = v;
+        return instance;
+    };
+
+    // присваиваем или получаем data
+    instance.data = (d) => {
+        if (_.isEmpty(d)) {
+            return data;
+        }
+        data = d;
+        return instance;
+    };
+
+    // присваиваем или получаем width
+    instance.width = (w) => {
+        if (typeof(w) == 'number') {
+            w = w.toString();
+        }
+        if (_.isEmpty(w)) {
+            return width;
+        }
+        width = w;
+        return instance;
+    };
+
+    // присваиваем или получаем height
+    instance.height = (h) => {
+        if (typeof(h) == 'number') {
+            h = h.toString();
+        }
+        if (_.isEmpty(h)) {
+            return height;
+        }
+        height = h;
+        return instance;
+    };
+
+    // присваиваем или получаем margin
+    instance.margin = (m) => {
+        if (_.isEmpty(m) && m != 0) {
+            return margin;
+        }
+        margin = m;
+        return instance;
+    };
+
+    // присваиваем или получаем parent
+    instance.parent = (p) => {
+        if (_.isEmpty(p)) {
+            return parent;
+        }
+        parent = p;
+        return instance;
+    };
+
+    // присваиваем или получаем fill
+    instance.fill = (f) => {
+        if (_.isEmpty(f)) {
+            return fill;
+        }
+        fill = f;
+        return instance;
+    };
+
+    // присваиваем или получаем stroke
+    instance.stroke = (s) => {
+        if (_.isEmpty(s)) {
+            return stroke;
+        }
+        stroke = s;
+        return instance;
+    };
+
+    instance.append = (p) => {
+
+        if (!_.isEmpty(p)) {
+            parent = p;
+        }
+
+        g = parent.append('g')
+        g.attr('id', id);
+        g.attr("transform", // сдвиг слоя вправо
+            "translate(" + margin + ", 0 )");
+
+        return instance;
+    }
+
+    instance.appendArea = (a) => {
+
+        if (_.isEmpty(a)) {
+            a = data;
+        }
+
+        let linedots = interpolate(a);
+        let area = Path()
+            .d(Area(linedots, height, margin))
+            .fill(fill)
+            .append(g);
+
+        return instance;
+    };
+
+    instance.appendLine = (l) => {
+        if (_.isEmpty(l)) {
+            l = data;
+        }
+        let linedots = interpolate(l);
+        let line = Path()
+            .d(Line(linedots))
+            .stroke(stroke)
+            .strokewidth(2)
+            .fill('none')
+            .append(g);
+
+        return instance;
+    };
+
+    instance.appendDots = (d) => {
+        if (_.isEmpty(d)) {
+            d = data;
+        }
+
+        let linedots = interpolate(d);
+        let dots = Dots()
+            .data(d)
+            .cls('dot-2')
+            .scaleX(scaleX)
+            .scaleY(scaleY)
+            .fill(fill)
+            .stroke(stroke)
+            .strokewidth(2)
+            .append(g);
+
+        return instance;
+    };
+
+    let interpolate = (data) => {
+        // длина оси X= ширина слоя - отступ слева и справа
+        xAxisLength = AxisLength(width, margin);
+        // длина оси Y = высота слоя - отступ сверху и снизу
+        yAxisLength = AxisLength(height, margin);
+        // функция интерполяции значений на ось X
+        scaleX = AxisScale(xAxisLength, [0, 100]);
+        // функция интерполяции значений на ось Y
+        scaleY = AxisScale(yAxisLength, [100, 0]);
+        // расположение точек линии с учетом интерполяции
+        return LineDots(data, scaleX, scaleY, margin);
+    };
+
+    return instance;
+}
