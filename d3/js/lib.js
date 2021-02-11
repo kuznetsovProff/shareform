@@ -259,6 +259,7 @@ let Rect = (spec) => {
             parent = p;
         }
 
+        // добавить проверку на наличие объекта в rect
         rect = parent.append('rect')
             .attr('id', id)
             .attr('x', x)
