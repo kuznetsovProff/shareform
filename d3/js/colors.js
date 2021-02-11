@@ -1,16 +1,17 @@
 let colors = () => {
-  let instance = {};
+    let instance = {};
 
-  instance.red = (type) => {
-    if (_.isEmpty(l)) return layers;
-                    layers = l;
-                    return instance;
-  };
+    instance.red = (type) => {
+        if (_.isEmpty(l)) return layers;
+        layers = l;
+        return instance;
+    };
 
-  return instance;
+    return instance;
 };
 
 //https://www.kakras.ru/mobile/color-list-names.html
+//htmlcolorcodes.com
 
 // Red Colors
 /*

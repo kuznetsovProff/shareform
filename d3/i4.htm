@@ -73,6 +73,8 @@
 
             let MaskedLayer = () => {
                 // Маскированный слой
+                // Свойства должны совпадать с layers
+                // За некоторыми исключениями или в layers добавить пустые свойства
                 let instance = {};
 
                 return instance;
@@ -88,8 +90,8 @@
                 let pallete = [];
                 let gradients = [];
                 let layers = [];
-                let maskedlayers = [];
-                let rects = [];
+                let maskedlayers = []; // объединить с layers
+                let rects = []; // удалить после объединения с layers
 
                 instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
@@ -110,6 +112,7 @@
                     return instance;
                 };
 
+                // объединить c newLayer
                 instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke) => {
 
                     let m = Mask()
@@ -338,6 +341,48 @@
 
             canvas.showTextWidget();
 
+            let testData0 = [{
+                x: 0,
+                y: 0
+            }, {
+                x: 5,
+                y: 47
+            }, {
+                x: 10,
+                y: 35
+            }, {
+                x: 20,
+                y: 64
+            }, {
+                x: 30,
+                y: 53
+            }, {
+                x: 35,
+                y: 43
+            }, {
+                x: 40,
+                y: 46
+            }, {
+                x: 50,
+                y: 14
+            }, {
+                x: 60,
+                y: 16
+            }, {
+                x: 70,
+                y: 29
+            }, {
+                x: 80,
+                y: 32
+            }, {
+                x: 90,
+                y: 78
+            }, {
+                x: 100,
+                y: 60
+            }];
+
+
             let testData1 = [{
                 x: 0,
                 y: 0
@@ -419,6 +464,7 @@
 
             let G2 = Gradient();
             let G1 = Gradient();
+            let G0 = Gradient();
 
             canvas.appendGradient(G2); // градиент, как и другие объекты, передается по ссылке
             // стопы добавлять только после создания градиента и добавления его в SVG
@@ -441,6 +487,15 @@
 
             canvas.newMaskedLayer(testData1, width, height, margin, G1url, 'lightblue', 'white', 'white');
 
+            canvas.appendGradient(G0);
+            G0.id('G0_')
+                .stop('0', 'deepskyblue', '0.50')
+                .stop('0.75', 'cornsilk', '0.75')
+                .stop('1', 'indigo', '1');
+
+            let G0url = G0.url();
+
+            canvas.newMaskedLayer(testData0, width, height, margin, G0url, 'white', 'white', 'white');
 
             /*
              let c = coins()
