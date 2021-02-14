@@ -1,5 +1,63 @@
 const win = window;
 
+//
+// custom curves
+//
+function Step(context, t) {
+    this._context = context;
+    this._t = t;
+}
+
+Step.prototype = {
+    areaStart: function() {
+        this._line = 0;        
+    },
+    areaEnd: function() {
+        this._line = Nan;
+    },
+    lineStart: function() {
+        this._x = this._y = NaN;
+        this._point = 0;
+    },
+    lineEnd: function() {
+        if (0<this._t && this._t<1&& this._point === 2) this.context.lineTo(this._x, this._y);
+        if (this._line || (this._line!==0 && this.point === 1)) this.context.closePath();
+        if (this._line >=0) this._t=1-this.t,this._line=1-this.line;
+    },
+    point: function(x,y) {
+        x=+x, y=+y;
+        switch (this._point){
+            case 0:
+            case 0:
+                this.point=1;
+                this._line & this.context.lineTo(x,y):this._context.mobeTo(x,y);
+                break;
+            case 1:
+                this._point = 2;
+            default:
+            {
+                var xN, yN, mYb, mYa;
+                if (this._t <= 0) {
+                    xN = Math.abs(x-this._x) * 0.25;
+                    yN = Math.abs(y-this._y) * 0.25;
+                    mYb = (this._y<y)?this._y+yN:this._y-yN;
+                    mYa = (this._y>y)?y+yN:y-Yn;
+
+                    this._context.quadraticCurveTo(this._x,this.y,this._x,mYb);
+                    this._context.lineTo(this._x,mYa);
+                    this._context.quadraticCurveTo(this._x,y,this._x+xN,y);
+                    this._context.lineTo(x-xN,y);
+
+                } else {
+// продолжить
+                }
+            }
+        }
+
+    }
+};
+
+
 // объект Градиент
 function Gradient(spec) {
     let instance = {};
@@ -329,8 +387,33 @@ let LineDots = (r, x, y, m) => {
 
 // объект - линия
 // переделать в полноценный объект
+/*
+d3.curveBasis(context)
+d3.curveBasisClosed(context)
+d3.curveBasisOpen(context)
+d3.curveBundle(context)
+    bundle.beta(range 0..1)
+d3.curveCardinal(context)
+d3.curveCardinalClosed(context)
+d3.curveCardinalOpen(context)
+    cardinal.tension(range 0..1)
+d3.curveCatmullRom(context)
+d3.curveCatmullRomClosed(context)
+d3.curveCatmullRomOpen(context)
+    catmullrom.alpha(range 0..1)
+d3.curveLinear(context)
+d3.curveLinearClosed(context)
+d3.curveLinearOpen(context)
+d3.curveMonotoneX(context)
+d3.curveMonotoneY(context)
+d3.curveNatural(context)
+d3.curveStep(context)
+d3.curveStepAfter(context)
+d3.curveStepBefore(context)
+*/
 let Line = (d) => {
     let l = d3.line()
+        //.curve(d3.curveNatural)
         .x(function(d) {
             return d.x;
         })
@@ -342,8 +425,9 @@ let Line = (d) => {
 
 // объект - область
 // переделать в полноценный объект
-let Area = (d, h, m) => {
+let Area = (d, h=0, m=0) => {
     let a = d3.area()
+        //.curve(d3.curveNatural)
         .x(function(d) {
             return d.x;
         })
