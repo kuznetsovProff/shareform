@@ -30,7 +30,7 @@ Step.prototype = {
             case 0:
             case 0:
                 this.point=1;
-                this._line & this.context.lineTo(x,y):this._context.mobeTo(x,y);
+                this._line ? this.context.lineTo(x,y):this._context.mobeTo(x,y);
                 break;
             case 1:
                 this._point = 2;
