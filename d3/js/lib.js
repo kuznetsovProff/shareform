@@ -1,129 +1,165 @@
 const win = window;
-const globalwidth = win.innerWidth;
-const globalheight = win.innerHeight;
+const globalwidth = 1920; //win.innerWidth;
+const globalheight = 1080; //win.innerHeight;
+/*
+
+5:4
+1280x1024
+
+4:3
+1600x1200
+1400x1050
+1280x960
+1024x768
+800x600
+640x480
+320x240
+
+3:2
+1440x960
+1280x854
+1152x768
+
+8:5
+1920x1200
+1680x1050
+1440x900
+1280x800
+320x200
+
+5:3
+1280x768
+800x480
+
+16:9
+1920x1080
+1280x720
+854x480
+
+*/
 
 //
 // custom curves
 //
 function Step(context, t) {
-  this._context = context;
-  this._t = t;
+    this._context = context;
+    this._t = t;
 }
 
 Step.prototype = {
-  areaStart: function() {
-    this._line = 0;
-  },
-  areaEnd: function() {
-    this._line = NaN;
-  },
-  lineStart: function() {
-    this._x = this._y = NaN;
-    this._point = 0;
-  },
-  lineEnd: function() {
-    if (0 < this._t && this._t < 1 && this._point === 2) this._context.lineTo(this._x, this._y);
-    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
-    if (this._line >= 0) this._t = 1 - this._t, this._line = 1 - this._line;
-  },
-  point: function(x, y) {
-    x = +x, y = +y;
-    switch (this._point) {
-      case 0:
-      case 0:
-        this._point = 1;
-        this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
-        break;
-      case 1:
-        this._point = 2; // proceed
-      default:
-        {
-          var xN, yN, mYb, mYa;
-          if (this._t <= 0) {
-            xN = Math.abs(x - this._x) * 0.25;
-            yN = Math.abs(y - this._y) * 0.25;
-            mYb = (this._y < y) ? this._y + yN : this._y - yN;
-            mYa = (this._y > y) ? y + yN : y - yN;
+    areaStart: function() {
+        this._line = 0;
+    },
+    areaEnd: function() {
+        this._line = NaN;
+    },
+    lineStart: function() {
+        this._x = this._y = NaN;
+        this._point = 0;
+    },
+    lineEnd: function() {
+        if (0 < this._t && this._t < 1 && this._point === 2) this._context.lineTo(this._x, this._y);
+        if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
+        if (this._line >= 0) this._t = 1 - this._t, this._line = 1 - this._line;
+    },
+    point: function(x, y) {
+        x = +x, y = +y;
+        switch (this._point) {
+            case 0:
+            case 0:
+                this._point = 1;
+                this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
+                break;
+            case 1:
+                this._point = 2; // proceed
+            default:
+                {
+                    var xN, yN, mYb, mYa;
+                    if (this._t <= 0) {
+                        xN = Math.abs(x - this._x) * 0.25;
+                        yN = Math.abs(y - this._y) * 0.25;
+                        mYb = (this._y < y) ? this._y + yN : this._y - yN;
+                        mYa = (this._y > y) ? y + yN : y - yN;
 
-            this._context.quadraticCurveTo(this._x, this._y, this._x, mYb);
-            this._context.lineTo(this._x, mYa);
-            this._context.quadraticCurveTo(this._x, y, this._x + xN, y);
-            this._context.lineTo(x - xN, y);
+                        this._context.quadraticCurveTo(this._x, this._y, this._x, mYb);
+                        this._context.lineTo(this._x, mYa);
+                        this._context.quadraticCurveTo(this._x, y, this._x + xN, y);
+                        this._context.lineTo(x - xN, y);
 
-          } else {
-            var x1 = this._x * (1 - this._t) + x * this._t;
+                    } else {
+                        var x1 = this._x * (1 - this._t) + x * this._t;
 
-            xN = Math.abs(x - x1) * 0.25;
-            yN = Math.abs(y - this._y) * 0.25;
-            mYb = (this._y < y) ? this._y + yN : this._y - yN;
-            mYa = (this._y > y) ? y + yN : y - yN;
+                        xN = Math.abs(x - x1) * 0.25;
+                        yN = Math.abs(y - this._y) * 0.25;
+                        mYb = (this._y < y) ? this._y + yN : this._y - yN;
+                        mYa = (this._y > y) ? y + yN : y - yN;
 
-            this._context.quadraticCurveTo(x1, this._y, x1, mYb);
-            this._context.lineTo(x1, mYa);
-            this._context.quadraticCurveTo(x1, y, x1 + xN, y);
-            this._context.lineTo(x - xN, y);
-          }
-          break;
+                        this._context.quadraticCurveTo(x1, this._y, x1, mYb);
+                        this._context.lineTo(x1, mYa);
+                        this._context.quadraticCurveTo(x1, y, x1 + xN, y);
+                        this._context.lineTo(x - xN, y);
+                    }
+                    break;
+                }
         }
+        this._x = x, this._y = y;
     }
-    this._x = x, this._y = y;
-  }
 };
 
 stepRound = function(context) {
-  return new Step(context, 0.5);
+    return new Step(context, 0.5);
 };
 
 stepRoundBefore = function(context) {
-  return new Step(context, 0);
+    return new Step(context, 0);
 };
 
 stepRoundAfter = function(context) {
-  return new Step(context, 1);
+    return new Step(context, 1);
 };
 
 // 
 function Natural(context) {
-  this._context = context;
+    this._context = context;
 }
 
 Natural.prototype = {
-  areaStart: function() {
-    this._line = 0;
-  },
-  areaEnd: function() {
-    this._line = NaN;
-  },
-  lineStart: function() {
-    this._x = [];
-    this._y = [];
-  },
-  lineEnd: function() {
-    var x = this._x,
-        y = this._y,
-        n = x.length;
+    areaStart: function() {
+        this._line = 0;
+    },
+    areaEnd: function() {
+        this._line = NaN;
+    },
+    lineStart: function() {
+        this._x = [];
+        this._y = [];
+    },
+    lineEnd: function() {
+        var x = this._x,
+            y = this._y,
+            n = x.length;
 
-    if (n) {
-      this._line ? this._context.lineTo(x[0], y[0]) : this._context.moveTo(x[0], y[0]);
-      if (n === 2) {
-        this._context.lineTo(x[1], y[1]);
-      } else {
-        var px = controlPoints(x),
-            py = controlPoints(y);
-        for (var i0 = 0, i1 = 1; i1 < n; ++i0, ++i1) {
-          this._context.bezierCurveTo(px[0][i0], py[0][i0], px[1][i0], py[1][i0], x[i1], y[i1]);
+        if (n) {
+            this._line ? this._context.lineTo(x[0], y[0]) : this._context.moveTo(x[0], y[0]);
+            if (n === 2) {
+                this._context.lineTo(x[1], y[1]);
+            } else {
+                var px = controlPoints(x),
+                    py = controlPoints(y);
+                for (var i0 = 0, i1 = 1; i1 < n; ++i0, ++i1) {
+                    this._context.bezierCurveTo(px[0][i0], py[0][i0], px[1][i0], py[1][i0], x[i1], y[i1]);
+                }
+            }
         }
-      }
-    }
 
-    if (this._line || (this._line !== 0 && n === 1)) this._context.closePath();
-    this._line = 1 - this._line;
-    this._x = this._y = null;
-  },
-  point: function(x, y) {
-    this._x.push(+x);
-    this._y.push(+y);
-  }
+        if (this._line || (this._line !== 0 && n === 1)) this._context.closePath();
+        this._line = 1 - this._line;
+        this._x = this._y = null;
+    },
+    point: function(x, y) {
+        this._x.push(+x);
+        this._y.push(+y);
+    }
 };
 
 // See https://www.particleincell.com/2012/bezier-splines/ for derivation.
@@ -139,8 +175,8 @@ function controlPoints(x) {
     r[0] = x[0] + 2 * x[1];
 
     for (i = 1; i < n - 1; ++i) {
-        a[i] = 1; 
-        b[i] = 4; 
+        a[i] = 1;
+        b[i] = 4;
         r[i] = 4 * x[i] + 2 * x[i + 1];
     }
     a[n - 1] = 2, b[n - 1] = 7, r[n - 1] = 8 * x[n - 1] + x[n];
@@ -156,51 +192,57 @@ function controlPoints(x) {
 }
 
 function curveNaturalCustom(context) {
-  return new Natural(context);
+    return new Natural(context);
 }
 //
-function Linear(context,t) {
-  this._context = context;
-  this._t = t;
+function Linear(context, t) {
+    this._context = context;
+    this._t = t;
 }
 
 Linear.prototype = {
-  areaStart: function() {
-    this._line = 0;
-  },
-  areaEnd: function() {
-    this._line = NaN;
-  },
-  lineStart: function() {
-    this._point = 0;
-  },
-  lineEnd: function() {
-    if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
-    this._line = 1 - this._line;
-  },
-  point: function(x, y) {
-    x = +x, y = +y;
-    switch (this._t) {
-        case 0:
-            break;
-        case 1:
-            x=x+Math.sqrt(x);
-            break;
-        case 2:
-            x=x-Math.sqrt(x);
-            break;
-    }
+    areaStart: function() {
+        this._line = 0;
+    },
+    areaEnd: function() {
+        this._line = NaN;
+    },
+    lineStart: function() {
+        this._point = 0;
+    },
+    lineEnd: function() {
+        if (this._line || (this._line !== 0 && this._point === 1)) this._context.closePath();
+        this._line = 1 - this._line;
+    },
+    point: function(x, y) {
+        x = +x, y = +y;
+        switch (this._t) {
+            case 0:
+                break;
+            case 1:
+                x = x + Math.sqrt(x);
+                break;
+            case 2:
+                x = x - Math.sqrt(x);
+                break;
+        }
 
-    switch (this._point) {
-      case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
-      case 1: this._point = 2; // proceed
-      default: this._context.lineTo(x, y); break;
+        switch (this._point) {
+            case 0:
+                this._point = 1;
+                this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y);
+                break;
+            case 1:
+                this._point = 2; // proceed
+            default:
+                this._context.lineTo(x, y);
+                break;
+        }
     }
-  }
 };
 
 function curveLinearCustom(context) {
-  return new Linear(context,0);
+    return new Linear(context, 0);
 }
 
 // объект Градиент
@@ -570,7 +612,7 @@ let Line = (d) => {
 
 // объект - область
 // переделать в полноценный объект
-let Area = (d, h=0, m=0) => {
+let Area = (d, h = 0, m = 0) => {
     let a = d3.area()
         .curve(d3.curveLinear)
         .x(function(d) {
@@ -1012,14 +1054,14 @@ let Dots = (spec) => {
             .attr('class', cls)
             .attr('r', function(d) {
                 let _r = r;
-                let ratio = globalheight/100; // глобальную высоту поделить на высоту поля по умолчанию
+                let ratio = globalheight / 108; // глобальную высоту поделить на высоту поля по умолчанию 1920x1080
                 if (typeof(d.r) == 'number') {
-                   
+
                     let n = d.r * ratio;
                     _r = n.toString();
-                } 
+                }
                 if (!_.isEmpty(d.r)) {
-                    _r=d.r*ratio;
+                    _r = d.r * ratio;
                 };
                 return _r;
             })
@@ -1251,9 +1293,9 @@ let Layer = (spec) => {
         // длина оси Y = высота слоя - отступ сверху и снизу
         yAxisLength = AxisLength(height, margin);
         // функция интерполяции значений на ось X
-        scaleX = AxisScale(xAxisLength, [0, 100]);
+        scaleX = AxisScale(xAxisLength, [0, 192]); // 1920x1080
         // функция интерполяции значений на ось Y
-        scaleY = AxisScale(yAxisLength, [100, 0]);
+        scaleY = AxisScale(yAxisLength, [109, 0]); // 1920x1080
         // расположение точек линии с учетом интерполяции
         return LineDots(data, scaleX, scaleY, margin);
     };

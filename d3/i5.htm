@@ -7,9 +7,18 @@
     <script src='/js/d3.v6.min.js'></script>
     <script src='/js/chroma.min.js'></script>
     <script src='/js/lodash.min.js'></script>
+
+    <script src='/js/jquery.min.js'></script>
+    <script src='/js/popper.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+
     <script src='js/lib.js'></script>
     <script src='c.js'></script>
     <link rel='stylesheet' href='/css/null.css' />
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
     <style>
         body {
             font-family: 'Courier New', Courier, monospace
@@ -50,17 +59,27 @@
             stroke: lightblue;
             fill: lightblue;*/
         }
+        
+        svg,
+        img,
+        canvas {
+            display: block;
+        }
     </style>
     <script src="data.js"></script>
 </head>
 
 <body style='background-color: #01040a'>
 
+    <div id='canvas' style='margin: 0 auto; display: none;'></div>
+
+    <canvas id='realcanvas' width='0' height='0'></canvas>
+    <img id='img'></img>
     <script>
         win.onload = () => {
 
-            let width = win.innerWidth - 0;
-            let height = win.innerHeight - 0;
+            let width = globalwidth;
+            let height = globalheight;
 
             let margin = 0,
                 padding = 0;
@@ -130,7 +149,7 @@
                         layer.appendArea();
                         layer.appendLine();
                         layer.appendDots();
-                    } else {    
+                    } else {
                         if (spec.area) layer.appendArea();
                         if (spec.line) layer.appendLine();
                         if (spec.dots) layer.appendDots();
@@ -154,11 +173,11 @@
                 instance.appendSvg = (w, h) => {
                     width = w;
                     height = h;
-                    svg = d3.select("body").append("svg")
+                    svg = d3.select("#canvas").append("svg")
                         .attr("class", "axis")
                         .attr("viewBox", "0 0 " + width + " " + height)
-                        .attr("width", width)
-                        .attr("height", height);
+                        .attr("width", win.innerWidth)
+                        .attr("height", win.innerHeight);
                     defs = svg.append("defs");
                     return instance;
                 };
@@ -201,7 +220,7 @@
                     if (!arguments.length) return width;
                     width = w;
                     svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('width', width);
+                        .attr('width', win.innerWidth);
                     return instance;
                 };
 
@@ -210,7 +229,7 @@
                     if (!arguments.length) return height;
                     height = h;
                     svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('height', height);
+                        .attr('height', win.innerHeight);
                     return instance;
                 };
 
@@ -343,122 +362,8 @@
                 .onresize(true)
                 .appendDefs();
 
-           // canvas.showTextWidget();
+            // canvas.showTextWidget();
 
-            let testData0 = [{
-                x: 0,
-                y: 0
-            }, {
-                x: 5,
-                y: 47
-            }, {
-                x: 10,
-                y: 35
-            }, {
-                x: 20,
-                y: 64
-            }, {
-                x: 30,
-                y: 53
-            }, {
-                x: 35,
-                y: 43
-            }, {
-                x: 40,
-                y: 46
-            }, {
-                x: 50,
-                y: 14
-            }, {
-                x: 60,
-                y: 16
-            }, {
-                x: 70,
-                y: 29
-            }, {
-                x: 80,
-                y: 32
-            }, {
-                x: 90,
-                y: 78
-            }, {
-                x: 100,
-                y: 60
-            }];
-
-
-            let testData1 = [{
-                x: 0,
-                y: 0
-            }, {
-                x: 10,
-                y: 67
-            }, {
-                x: 20,
-                y: 74
-            }, {
-                x: 30,
-                y: 63
-            }, {
-                x: 40,
-                y: 56
-            }, {
-                x: 50,
-                y: 24
-            }, {
-                x: 60,
-                y: 26
-            }, {
-                x: 70,
-                y: 19
-            }, {
-                x: 80,
-                y: 42
-            }, {
-                x: 90,
-                y: 88
-            }, {
-                x: 100,
-                y: 70
-            }];
-
-            let testData2 = [{
-                x: 0,
-                y: 10
-            }, {
-                x: 10,
-                y: 77
-            }, {
-                x: 15,
-                y: 65
-            }, {
-                x: 20,
-                y: 84
-            }, {
-                x: 30,
-                y: 76
-            }, {
-                x: 40,
-                y: 66
-            }, {
-                x: 50,
-                y: 34
-            }, {
-                x: 60,
-                y: 36
-            }, {
-                x: 70,
-                y: 29
-            }, {
-                x: 80,
-                y: 52
-            }, {
-                x: 90,
-                y: 98
-            }, {
-                x: 100,
-                y: 80
-            }];
 
             // html цвета
             // rapidtables.com/web/color/html-color-codes.html
@@ -471,12 +376,12 @@
                 y: 0
             }, {
                 x: 0,
-                y: 100
-            },{
-                x: 100,
-                y: 100
-            },{
-                x: 100,
+                y: 109
+            }, {
+                x: 192,
+                y: 109
+            }, {
+                x: 192,
                 y: 0
             }];
 
@@ -489,94 +394,190 @@
             let GBackurl = GBack.url();
             canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
             // слои
-                                     // 2
-            let Layer3Data = [
-                {x: 20, y: 25, r: 30},
-                {x: 30, y: 40, r: 16},
-                {x: 40, y: 45, r: 18},
-                {x: 50, y: 50, r: 17},
-                {x: 58, y: 37, r: 15},
-                {x: 62, y: 23, r: 17}
-            ];
+            // 5
+            let Layer5Data = [{
+                x: 83,
+                y: 81,
+                r: 10
+            }];
+            let G5 = Gradient();
+            canvas.appendGradient(G5);
+            G5.id('G5')
+                .stop('0', p[16].toString(), '1')
+                .stop('1', p[16].toString(), '1');
+            let G5url = G5.url();
+            canvas.newMaskedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 4
+            let Layer4Data = [{
+                x: 77,
+                y: 76,
+                r: 12
+            }];
+            let G4 = Gradient();
+            canvas.appendGradient(G4);
+            G4.id('G4')
+                .stop('0', p[12].toString(), '1')
+                .stop('1', p[12].toString(), '1');
+            let G4url = G4.url();
+            canvas.newMaskedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 3
+            let Layer3Data = [{
+                x: 46,
+                y: 78,
+                r: 15
+            }, {
+                x: 58,
+                y: 80,
+                r: 17
+            }, {
+                x: 60,
+                y: 70,
+                r: 15
+            }, {
+                x: 70,
+                y: 70,
+                r: 11
+            }, {
+                x: 75,
+                y: 55,
+                r: 13
+            }, {
+                x: 83,
+                y: 60,
+                r: 13
+            }];
             let G3 = Gradient();
-            canvas.appendGradient(G3); 
+            canvas.appendGradient(G3);
             G3.id('G3')
-                .stop('0', p[6].toString(), '1')
-                .stop('1', p[6].toString(), '1');
+                .stop('0', p[8].toString(), '1')
+                .stop('1', p[8].toString(), '1');
             let G3url = G3.url();
-            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white',{line: false, area: true, dots: true});
-                         // 2
-            let Layer2Data = [
-                {x: 15, y: 15, r: 30},
-                {x: 25, y: 30, r: 16},
-                {x: 35, y: 35, r: 18},
-                {x: 45, y: 40, r: 17},
-                {x: 53, y: 27, r: 15},
-                {x: 57, y: 13, r: 17}
-            ];
+            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 2
+            let Layer2Data = [{
+                x: 10,
+                y: 73,
+                r: 18
+            }, {
+                x: 30,
+                y: 70,
+                r: 13
+            }, {
+                x: 45,
+                y: 70,
+                r: 17
+            }, {
+                x: 50,
+                y: 60,
+                r: 15
+            }, {
+                x: 60,
+                y: 60,
+                r: 13
+            }, {
+                x: 77,
+                y: 35,
+                r: 15
+            }, {
+                x: 85,
+                y: 10,
+                r: 17
+            }, {
+                x: 90,
+                y: 5,
+                r: 9
+            }];
             let G2 = Gradient();
-            canvas.appendGradient(G2); 
+            canvas.appendGradient(G2);
             G2.id('G2')
-                .stop('0', p[3].toString(), '1')
-                .stop('1', p[3].toString(), '1');
+                .stop('0', p[4].toString(), '1')
+                .stop('1', p[4].toString(), '1');
             let G2url = G2.url();
-            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white',{line: false, area: true, dots: true});
+            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
             // 1
-            let Layer1Data = [
-                {x: 10, y: 5, r: 30},
-                {x: 20, y: 20, r: 16},
-                {x: 30, y: 25, r: 18},
-                {x: 40, y: 30, r: 17},
-                {x: 48, y: 17, r: 15},
-                {x: 52, y: 3, r: 17}
-            ];
+            let Layer1Data = [{
+                x: 30,
+                y: 15,
+                r: 45
+            }, {
+                x: 5,
+                y: 57,
+                r: 10
+            }, {
+                x: 15,
+                y: 61,
+                r: 13
+            }, {
+                x: 35,
+                y: 55,
+                r: 12
+            }, {
+                x: 50,
+                y: 50,
+                r: 15
+            }, {
+                x: 63,
+                y: 42,
+                r: 9
+            }, {
+                x: 71,
+                y: 32,
+                r: 12
+            }, {
+                x: 84,
+                y: 20,
+                r: 15
+            }, {
+                x: 76,
+                y: 5,
+                r: 13
+            }];
             let G1 = Gradient();
-            canvas.appendGradient(G1); 
+            canvas.appendGradient(G1);
             G1.id('G1')
                 .stop('0', p[0].toString(), '1')
                 .stop('1', p[0].toString(), '1');
             let G1url = G1.url();
-            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white',{line: false, area: true, dots: true});
+            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
 
+            //
+            //
+            //
+            var svg = document.querySelector('svg');
+            var img = document.querySelector('img');
+            var realcanvas = document.querySelector('canvas');
 
+            var xml = new XMLSerializer().serializeToString(svg);
 
-/*
-            let G2 = Gradient();
-            let G1 = Gradient();
-            let G0 = Gradient();
+            var svg64 = btoa(xml);
+            var b64Start = 'data:image/svg+xml;base64,';
 
-            canvas.appendGradient(G2); // градиент, как и другие объекты, передается по ссылке
-            // стопы добавлять только после создания градиента и добавления его в SVG
-            // предусмотреть алгоритм записи параметров до создания градиента
-            G2.id('G2_')
-                .stop('0', 'blue', '0.25')
-                .stop('1', 'green', '1');
+            var image64 = b64Start + svg64;
 
-            let G2url = G2.url();
-            canvas.newLayer(testData2, width, height, margin, G2url, 'lightgreen');
+            img.src = image64;
 
+            realcanvas.getContext('2d').drawImage(img, 0, 0);
 
-            canvas.appendGradient(G1);
-            G1.id('G1_')
-                .stop('0', 'crimson', '0.50')
-                .stop('1', 'darkorange', '1');
-
-            let G1url = G1.url();
-        
-            //canvas.newLayer(testData1, width, height, margin, G1url, 'lightblue');
-
-            canvas.newMaskedLayer(testData1, width, height, margin, G1url, 'lightblue', 'white', 'white');
-
-            canvas.appendGradient(G0);
-            G0.id('G0_')
-                .stop('0', 'deepskyblue', '0.50')
-                .stop('0.75', 'cornsilk', '0.75')
-                .stop('1', 'indigo', '1');
-
-            let G0url = G0.url();
-
-            canvas.newMaskedLayer(testData0, width, height, margin, G0url, 'white', 'white', 'white');
-*/
             /*
              let c = coins()
                  .addSite({
