@@ -188,7 +188,7 @@ Linear.prototype = {
             x=x-Math.sqrt(x);
             break;
     }
-    
+
     switch (this._point) {
       case 0: this._point = 1; this._line ? this._context.lineTo(x, y) : this._context.moveTo(x, y); break;
       case 1: this._point = 2; // proceed
@@ -1008,7 +1008,19 @@ let Dots = (spec) => {
             .enter()
             .append(type)
             .attr('class', cls)
-            .attr('r', r)
+            .attr('r', function(d) {
+                let _r = r;
+                let ratio = win.innerHeight/100;
+                if (typeof(d.r) == 'number') {
+                   
+                    let n = d.r * ratio;
+                    _r = n.toString();
+                } 
+                if (!_.isEmpty(d.r)) {
+                    _r=d.r*ratio;
+                };
+                return _r;
+            })
             .attr('cx', function(d) {
                 return scalex(d.x) + margin;
             })

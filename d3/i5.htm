@@ -333,7 +333,7 @@
                     width: width
                 })
                 .generatePallete({
-                    'colors': ['yellow', 'lightgreen']
+                    'colors': ['white', 'darkblue']
                 });
             let p = canvas.pallete();
             canvas
@@ -480,28 +480,66 @@
                 y: 0
             }];
 
+            // фон
             let GBack = Gradient();
             canvas.appendGradient(GBack);
             GBack.id('Back')
-                .stop('0', 'lightblue', '1')
-                .stop('1', 'darkblue', '1');
-
+                .stop('0', 'darkblue', '1')
+                .stop('1', 'lightblue', '1');
             let GBackurl = GBack.url();
             canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
-            let Layer10Data = [
-                {x: 0, y: 0, r: 50},
-                {x: 20, y: 20, r: 50},
-                {x: 30, y: 25, r: 50},
-                {x: 40, y: 30, r: 50},
-                {x: 50, y: 15, r: 50}
+            // слои
+                                     // 2
+            let Layer3Data = [
+                {x: 20, y: 25, r: 30},
+                {x: 30, y: 40, r: 16},
+                {x: 40, y: 45, r: 18},
+                {x: 50, y: 50, r: 17},
+                {x: 58, y: 37, r: 15},
+                {x: 62, y: 23, r: 17}
             ];
-            let G10 = Gradient();
-            canvas.appendGradient(G10); 
-            G10.id('G10')
-                .stop('0', 'white', '1')
-                .stop('1', 'white', '1');
-            let G10url = G10.url();
-            canvas.newMaskedLayer(Layer10Data, width, height, margin, G10url, 'white', 'white', 'white',{line: false, area: false, dots: true});
+            let G3 = Gradient();
+            canvas.appendGradient(G3); 
+            G3.id('G3')
+                .stop('0', p[6].toString(), '1')
+                .stop('1', p[6].toString(), '1');
+            let G3url = G3.url();
+            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white',{line: false, area: true, dots: true});
+                         // 2
+            let Layer2Data = [
+                {x: 15, y: 15, r: 30},
+                {x: 25, y: 30, r: 16},
+                {x: 35, y: 35, r: 18},
+                {x: 45, y: 40, r: 17},
+                {x: 53, y: 27, r: 15},
+                {x: 57, y: 13, r: 17}
+            ];
+            let G2 = Gradient();
+            canvas.appendGradient(G2); 
+            G2.id('G2')
+                .stop('0', p[3].toString(), '1')
+                .stop('1', p[3].toString(), '1');
+            let G2url = G2.url();
+            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white',{line: false, area: true, dots: true});
+            // 1
+            let Layer1Data = [
+                {x: 10, y: 5, r: 30},
+                {x: 20, y: 20, r: 16},
+                {x: 30, y: 25, r: 18},
+                {x: 40, y: 30, r: 17},
+                {x: 48, y: 17, r: 15},
+                {x: 52, y: 3, r: 17}
+            ];
+            let G1 = Gradient();
+            canvas.appendGradient(G1); 
+            G1.id('G1')
+                .stop('0', p[0].toString(), '1')
+                .stop('1', p[0].toString(), '1');
+            let G1url = G1.url();
+            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white',{line: false, area: true, dots: true});
+
+
+
 /*
             let G2 = Gradient();
             let G1 = Gradient();
