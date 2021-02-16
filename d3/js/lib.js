@@ -1,4 +1,6 @@
 const win = window;
+const globalwidth = win.innerWidth;
+const globalheight = win.innerHeight;
 
 //
 // custom curves
@@ -417,13 +419,13 @@ let Rect = (spec) => {
     }
 
     if (_.isEmpty(spec.width)) {
-        width = win.innerWidth;
+        width = globalwidth;
     } else {
         width = spec.width;
     }
 
     if (_.isEmpty(spec.height)) {
-        height = win.innerHeight;
+        height = globalheight;
     } else {
         height = spec.height;
     }
@@ -1010,7 +1012,7 @@ let Dots = (spec) => {
             .attr('class', cls)
             .attr('r', function(d) {
                 let _r = r;
-                let ratio = win.innerHeight/100;
+                let ratio = globalheight/100; // глобальную высоту поделить на высоту поля по умолчанию
                 if (typeof(d.r) == 'number') {
                    
                     let n = d.r * ratio;
@@ -1052,8 +1054,8 @@ let Layer = (spec) => {
 
     if (_.isEmpty(spec)) {
         id = 'id_l_' + Date.now();
-        width = win.innerWidth;
-        height = win.innerHeight;
+        width = globalwidth;
+        height = globalheight;
         margin = 0;
         fill = 'white';
         stroke = 'white';
@@ -1066,12 +1068,12 @@ let Layer = (spec) => {
         if (!_.isEmpty(spec.g)) g = spec.g;
         if (!_.isEmpty(spec.data)) data = spec.data;
         if (_.isEmpty(spec.width)) {
-            width = win.innerWidth;
+            width = globalwidth;
         } else {
             width = spec.width;
         }
         if (_.isEmpty(spec.height)) {
-            height = win.innerheight;
+            height = globalheight;
         } else {
             height = spec.height;
         }
