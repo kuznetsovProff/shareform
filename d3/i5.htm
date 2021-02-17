@@ -579,16 +579,63 @@
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
 
+            let createImage = ()=>{
+              const doctype = '<?xml version="1.0" standalone="no"?>' + 
+				        //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+				        '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+
+                // сериализуем наш SVG XML в строку.
+                const source = (new XMLSerializer()).serializeToString(svg);
+                
+                // создаём файл - пузырь нашего SVG.
+                const blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+
+                const url = window.URL.createObjectURL(blob);
+
+                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                const img = d3.select('body').append('img')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .attr('id','img_png')
+                    .node();
+                    
+                img.onload = function(){
+                    // Когда картинка загружена помещаем картинку в элемент Canvas.
+                    const canvaspng = d3.select('body').append('canvas').attr('id','canvaspng').node();
+                    canvaspng.width = width;
+                    canvaspng.height = height;
+                    
+                    const ctxpng = canvaspng.getContext('2d');
+                    
+                    ctxpng.drawImage(img, 0, 0);
+                    const canvaspngUrl = canvaspng.toDataURL('image/png');
+                    const imgpng2 = d3.select('body').append('img')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .attr('id','img_png_2')
+                    .node();
+                    // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
+                    // пользователю для загрузки PNG, отправив ему ссылку 
+                    // `window.location.href= canvasUrl`.
+                    imgpng2.src = canvasUrl; 
+                    // Прячем Canvas от посторонних глаз
+                    canvaspng.width = 0;
+                    canvaspng.height = 0;
+                }
+                // Начало загрузки картинки.
+                img.src = url;
+                alert('good');
+
+            };
+
+
+createImage();
             /*
 
             предыдущий подвиг для анализа 
 
             внешний css - надо запомнить
-
-const doctype = '<?xml version="1.0" standalone="no"?>' + 
-				'<?xml-stylesheet type="text/css" href="banner.css"?>' +
-				'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
-
+      
             // создаем картинку в формате png
             function createImage() {
                 // сериализуем наш SVG XML в строку.
@@ -640,6 +687,38 @@ const doctype = '<?xml version="1.0" standalone="no"?>' +
                     .attr('height',0);
             }
 
+            */
+            
+            /*
+            
+            //точки по окружности
+var container = $('.container');
+var radius = $('.container').height() / 2;
+var item = $('.item');
+
+var leftAngle = 0;
+
+//start angle
+var angle = -Math.PI / 2; // 90 deg
+
+//angle steps between elements
+var step = Math.PI / 12; //15 deg
+
+var multiplier = 1;
+
+function calcPositions() {
+  //calculate left rotation angle 
+  item.each(function() {
+    //difference in sizes if item hovered
+    var sizesDiff = $(this).attr('data-width') - $(this).attr('data-before');
+  
+    //if sizes are different, calc angle to rotate items to left
+    if(sizesDiff != 0 && leftAngle == 0) {
+      leftAngle = angleByChord($(this).attr('data-width') / 2, radius) / 4;
+    }
+  });
+  
+  //rotate items to left
             */
 
             /*
