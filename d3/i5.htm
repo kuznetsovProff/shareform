@@ -76,6 +76,7 @@
     <canvas id='realcanvas' width='0' height='0'></canvas>
     <img id='img'></img>
     <script>
+        //width='3840' height='2160'
         win.onload = () => {
 
             let width = globalwidth;
@@ -577,6 +578,69 @@
             img.src = image64;
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
+
+            /*
+
+            предыдущий подвиг для анализа 
+
+            внешний css - надо запомнить
+
+const doctype = '<?xml version="1.0" standalone="no"?>' + 
+				'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+				'<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+
+            // создаем картинку в формате png
+            function createImage() {
+                // сериализуем наш SVG XML в строку.
+                const source = (new XMLSerializer()).serializeToString(banner.board.svg.node());
+
+                // создаём файл - пузырь нашего SVG.
+                const blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+
+                const url = window.URL.createObjectURL(blob);
+
+                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                const img = banner.parent.append('img')
+                    .attr('width', banner.width)
+                    .attr('height', banner.height)
+                    .attr('id','img_1')
+                    .node();
+
+                img.onload = function(){
+                    // Когда картинка загружена помещаем картинку в элемент Canvas.
+                    const canvas = banner.parent.append('canvas').attr('id','canvas').node();
+                    canvas.width = banner.width;
+                    canvas.height = banner.height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const canvasUrl = canvas.toDataURL('image/png');
+                    const img2 = banner.parent.append('img')
+                    .attr('width', banner.width)
+                    .attr('height', banner.height)
+                    .attr('id','img_2')
+                    .node();
+                    // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
+                    // пользователю для загрузки PNG, отправив ему ссылку 
+                    // `window.location.href= canvasUrl`.
+                    img2.src = canvasUrl; 
+                    // Прячем Canvas от посторонних глаз
+                    canvas.width = 0;
+                    canvas.height = 0;
+                }
+                // Начало загрузки картинки.
+                img.src = url;
+                
+                //// Прячем SVG и первую картинку
+                banner.parent.select('svg')
+                    .attr('width',0)
+                    .attr('height',0);
+                banner.parent.select('img#img_1')
+                    .attr('width',0)
+                    .attr('height',0);
+            }
+
+            */
 
             /*
              let c = coins()
