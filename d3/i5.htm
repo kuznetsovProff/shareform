@@ -417,14 +417,14 @@
                 x: 77,
                 y: 76,
                 r: 12
-            },{
-              x: 83,
-              y: 70,
-              r: 11
-            },{
-              x: 90,
-              y: 55,
-              r: 17
+            }, {
+                x: 83,
+                y: 70,
+                r: 11
+            }, {
+                x: 90,
+                y: 55,
+                r: 17
             }];
             let G4 = Gradient();
             canvas.appendGradient(G4);
@@ -576,6 +576,7 @@
             var img = document.querySelector('img');
             var realcanvas = document.querySelector('canvas');
 
+            /*
             var xml = new XMLSerializer().serializeToString(svg);
 
             var svg64 = btoa(xml);
@@ -586,17 +587,19 @@
             img.src = image64;
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
-
-            let createImage = ()=>{
-              const doctype = '<?xml version="1.0" standalone="no"?>' + 
-				        //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
-				        '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+*/
+            let createImage = () => {
+                const doctype = '<?xml version="1.0" standalone="no"?>' +
+                    //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
 
                 // сериализуем наш SVG XML в строку.
                 const source = (new XMLSerializer()).serializeToString(svg);
-                
+
                 // создаём файл - пузырь нашего SVG.
-                const blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+                const blob = new Blob([doctype + source], {
+                    type: 'image/svg+xml;charset=utf-8'
+                });
 
                 const url = window.URL.createObjectURL(blob);
 
@@ -604,40 +607,40 @@
                 const img = d3.select('body').append('img')
                     .attr('width', width)
                     .attr('height', height)
-                    .attr('id','img_png')
+                    .attr('id', 'img_png')
                     .node();
-                    
-                img.onload = function(){
-                    // Когда картинка загружена помещаем картинку в элемент Canvas.
-                    const canvaspng = d3.select('body').append('canvas').attr('id','canvaspng').node();
-                    canvaspng.width = width;
-                    canvaspng.height = height;
-                    
-                    const ctxpng = canvaspng.getContext('2d');
-                    
-                    ctxpng.drawImage(img, 0, 0);
-                    const canvaspngUrl = canvaspng.toDataURL('image/png');
-                    const imgpng2 = d3.select('body').append('img')
-                    .attr('width', width)
-                    .attr('height', height)
-                    .attr('id','img_png_2')
-                    .node();
-                    // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
-                    // пользователю для загрузки PNG, отправив ему ссылку 
-                    // `window.location.href= canvasUrl`.
-                    imgpng2.src = canvasUrl; 
-                    // Прячем Canvas от посторонних глаз
-                    canvaspng.width = 0;
-                    canvaspng.height = 0;
-                }
-                // Начало загрузки картинки.
+
+                img.onload = function() {
+                        // Когда картинка загружена помещаем картинку в элемент Canvas.
+                        const canvaspng = d3.select('body').append('canvas').attr('id', 'canvaspng').node();
+                        canvaspng.width = width;
+                        canvaspng.height = height;
+
+                        const ctxpng = canvaspng.getContext('2d');
+
+                        ctxpng.drawImage(img, 0, 0);
+                        const canvaspngUrl = canvaspng.toDataURL('image/png');
+                        const imgpng2 = d3.select('body').append('img')
+                            .attr('width', width)
+                            .attr('height', height)
+                            .attr('id', 'img_png_2')
+                            .node();
+                        // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
+                        // пользователю для загрузки PNG, отправив ему ссылку 
+                        // `window.location.href= canvasUrl`.
+                        imgpng2.src = canvasUrl;
+                        // Прячем Canvas от посторонних глаз
+                        canvaspng.width = 0;
+                        canvaspng.height = 0;
+                    }
+                    // Начало загрузки картинки.
                 img.src = url;
                 alert('good');
 
             };
 
 
-createImage();
+            createImage();
             /*
 
             предыдущий подвиг для анализа 
@@ -696,7 +699,7 @@ createImage();
             }
 
             */
-            
+
             /*
             
             //точки по окружности
