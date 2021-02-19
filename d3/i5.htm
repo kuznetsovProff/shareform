@@ -75,511 +75,512 @@
 <body style='background-color: #01040a'>
 
     <div id='canvas'></div>
+    <div id='prepare'></div>
+    <div id='result' '></div>' <!--<canvas id='realcanvas' width='0' height='0'>
+        </canvas>
+        <img id='img'></img>-->
+        <script>
+            //width='3840' height='2160'
+            win.onload = () => {
 
-    <!--<canvas id='realcanvas' width='0' height='0'></canvas>
-    <img id='img'></img>-->
-    <script>
-        //width='3840' height='2160'
-        win.onload = () => {
+                let width = globalwidth;
+                let height = globalheight;
 
-            let width = globalwidth;
-            let height = globalheight;
-
-            let margin = 0,
-                padding = 0;
+                let margin = 0,
+                    padding = 0;
 
 
-            //https://mdigi.tools/color-shades/#061639
-            //#061639
-            //let pallete = chroma.scale(['#061639', 'black']).colors(24);
-            let palletejson = JSON.stringify(colors);
+                //https://mdigi.tools/color-shades/#061639
+                //#061639
+                //let pallete = chroma.scale(['#061639', 'black']).colors(24);
+                let palletejson = JSON.stringify(colors);
 
-            let MaskedLayer = () => {
-                // Маскированный слой
-                // Свойства должны совпадать с layers
-                // За некоторыми исключениями или в layers добавить пустые свойства
-                let instance = {};
-
-                return instance;
-            };
-
-            // объект Холст
-            function Canvas(spec) {
-                let instance = {};
-                let headline, description;
-                let svg, defs, width, height;
-                let data = {};
-                let margin = 0;
-                let pallete = [];
-                let gradients = [];
-                let layers = [];
-                let maskedlayers = []; // объединить с layers
-                let rects = []; // удалить после объединения с layers
-
-                instance.newLayer = (data, width, height, margin, fill, stroke) => {
-
-                    let layer = Layer()
-                        .data(data)
-                        .width(width)
-                        .height(height)
-                        .margin(margin)
-                        .fill(fill)
-                        .stroke(stroke)
-                        .append(svg)
-                        .appendArea()
-                        .appendLine()
-                        .appendDots();
-
-                    layers.push(layer);
+                let MaskedLayer = () => {
+                    // Маскированный слой
+                    // Свойства должны совпадать с layers
+                    // За некоторыми исключениями или в layers добавить пустые свойства
+                    let instance = {};
 
                     return instance;
                 };
 
-                // объединить c newLayer
-                instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+                // объект Холст
+                function Canvas(spec) {
+                    let instance = {};
+                    let headline, description;
+                    let svg, defs, width, height;
+                    let data = {};
+                    let margin = 0;
+                    let pallete = [];
+                    let gradients = [];
+                    let layers = [];
+                    let maskedlayers = []; // объединить с layers
+                    let rects = []; // удалить после объединения с layers
 
-                    let m = Mask()
-                        .append(defs);
+                    instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
-                    let layer = Layer()
-                        .data(data)
-                        .width(width)
-                        .height(height)
-                        .margin(margin)
-                        .fill(maskfill)
-                        .stroke(maskstroke)
-                        .append(m.d3())
-                    if (_.isEmpty(spec)) {
-                        layer.appendArea();
-                        layer.appendLine();
-                        layer.appendDots();
-                    } else {
-                        if (spec.area) layer.appendArea();
-                        if (spec.line) layer.appendLine();
-                        if (spec.dots) layer.appendDots();
+                        let layer = Layer()
+                            .data(data)
+                            .width(width)
+                            .height(height)
+                            .margin(margin)
+                            .fill(fill)
+                            .stroke(stroke)
+                            .append(svg)
+                            .appendArea()
+                            .appendLine()
+                            .appendDots();
+
+                        layers.push(layer);
+
+                        return instance;
+                    };
+
+                    // объединить c newLayer
+                    instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+
+                        let m = Mask()
+                            .append(defs);
+
+                        let layer = Layer()
+                            .data(data)
+                            .width(width)
+                            .height(height)
+                            .margin(margin)
+                            .fill(maskfill)
+                            .stroke(maskstroke)
+                            .append(m.d3())
+                        if (_.isEmpty(spec)) {
+                            layer.appendArea();
+                            layer.appendLine();
+                            layer.appendDots();
+                        } else {
+                            if (spec.area) layer.appendArea();
+                            if (spec.line) layer.appendLine();
+                            if (spec.dots) layer.appendDots();
+                        }
+                        //maskedlayers.push(m);
+
+                        let r = Rect({
+                            'width': width,
+                            'height': height,
+                            'fill': fill,
+                            'stroke': stroke,
+                            'mask': m.url()
+                        }).append(svg);
+
+                        //rects.push(r);
+
+                        return instance;
                     }
-                    //maskedlayers.push(m);
 
-                    let r = Rect({
-                        'width': width,
-                        'height': height,
-                        'fill': fill,
-                        'stroke': stroke,
-                        'mask': m.url()
-                    }).append(svg);
+                    // создаем SVG
+                    instance.appendSvg = (w, h) => {
+                        width = w;
+                        height = h;
+                        svg = d3.select("#canvas").append("svg")
+                            .attr("class", "axis")
+                            .attr("viewBox", "0 0 " + width + " " + height)
+                            .attr("width", width) //win.innerWidth)
+                            .attr("height", height); //win.innerHeight);
+                        defs = svg.append("defs");
+                        return instance;
+                    };
 
-                    //rects.push(r);
+                    instance.onresize = (on) => {
+                        if (on) {
+                            win.onresize = () => {
+                                svg.attr("width", width); //win.innerWidth);
+                                svg.attr("height", height); //win.innerHeight);
+                            };
+                        } else {
+                            win.onresize = () => {};
+                        }
+
+                        return instance;
+                    }
+
+                    // создаем defs
+                    instance.appendDefs = () => {
+                        if (!svg.select("defs")) defs = svg.append("defs");
+                        return instance;
+                    };
+
+                    // присваиваем или получаем SVG
+                    instance.svg = (s) => {
+                        if (!arguments.length) return svg;
+                        svg = s;
+                        return instance;
+                    };
+
+                    // устанавливаем или получаем ширину margin
+                    instance.margin = (m) => {
+                        if (!arguments.length) return margin;
+                        margin = m;
+                        return instance;
+                    };
+
+                    // устанавливаем или получаем ширину SVG
+                    instance.width = (w) => {
+                        if (!arguments.length) return width;
+                        width = w;
+                        svg.attr("viewBox", "0 0 " + width + " " + height)
+                            .attr('width', win.innerWidth);
+                        return instance;
+                    };
+
+                    // устанавливаем или получаем высоту SVG
+                    instance.height = (h) => {
+                        if (!arguments.length) return height;
+                        height = h;
+                        svg.attr("viewBox", "0 0 " + width + " " + height)
+                            .attr('height', win.innerHeight);
+                        return instance;
+                    };
+
+                    // выводим виджет с заголовком и описанием
+                    instance.showTextWidget = () => {
+                        let div = d3.select('body').append('div');
+                        div.append('h3').text(headline);
+                        div.attr('class', 'box')
+                            .attr('style', 'width: ' + spec.width + '; word-wrap: break-word;color:' + spec.color)
+                            .append('p')
+                            .text(description);
+                        return instance;
+                    };
+
+                    // присваиваем и получаем заголовок виджета
+                    instance.headline = (h) => {
+                        if (!arguments.length) return headline;
+                        headline = h;
+                        return instance;
+                    };
+
+                    // присваиваем и получаем описание виджета
+                    instance.description = (d) => {
+                        if (!arguments.length) return description;
+                        description = d;
+                        return instance;
+                    };
+
+                    // присваиваем и получаем объект с данными
+                    instance.data = (d) => {
+                        if (_.isEmpty(d)) return data;
+                        data = d;
+                        return instance;
+                    };
+
+                    // присваиваем и получаем цветовую палитру
+                    instance.pallete = (p) => {
+                        if (_.isEmpty(p)) return pallete;
+                        pallete = p;
+                        return instance;
+                    };
+
+                    // присваиваем и получаем градиенты
+                    instance.gradients = (g) => {
+                        if (_.isEmpty(g)) return gradients;
+                        gradients = g;
+                        return instance;
+                    };
+
+                    // присваиваем и получаем слои
+                    instance.layers = (l) => {
+                        if (_.isEmpty(l)) return layers;
+                        layers = l;
+                        return instance;
+                    };
+
+                    // создаем палитру
+                    instance.generatePallete = (obj) => {
+                        // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
+                        // obj.domain is an array of stops. Example ['0,0.5,1']
+                        let _colors;
+
+                        if (!_.isEmpty(obj.colors)) {
+                            _colors = chroma.scale(obj.colors);
+                        } else {
+                            _colors = chroma.scale(['white', 'black']);
+                        }
+
+                        if (!_.isEmpty(obj.domain)) {
+                            _colors = _colors.domain(obj.domain);
+                        }
+
+                        if (!_.isEmpty(obj.count)) {
+                            _colors = _colors.colors(count);
+                        } else {
+                            _colors = _colors.colors(24);
+                        }
+
+                        pallete = _colors;
+
+                        return instance;
+                    };
+
+                    instance.appendGradient = (G) => {
+                        G.append(defs);
+                        return instance;
+                    };
+
+                    instance.appendBG = (mainColor, gradientColor) => {
+
+                        // градиент
+                        let BG = Gradient({
+                                'defs': defs
+                            }).append()
+                            .stop('0', gradientColor, '0.25')
+                            .stop('1', gradientColor, '1');
+
+                        // маска
+                        let M = Mask({
+                                'defs': defs
+                            }).append()
+                            .rect(0, 0, width, height, 'url(#' + BG.id() + ')');
+
+                        // прямоугольник с маской градиентом
+                        let R = Rect({
+                            'width': width,
+                            'height': height,
+                            'fill': mainColor,
+                            'mask': 'url(#' + M.id() + ')'
+                        }).append(svg);
+
+                        return instance;
+                    }
 
                     return instance;
                 }
 
-                // создаем SVG
-                instance.appendSvg = (w, h) => {
-                    width = w;
-                    height = h;
-                    svg = d3.select("#canvas").append("svg")
-                        .attr("class", "axis")
-                        .attr("viewBox", "0 0 " + width + " " + height)
-                        .attr("width", width) //win.innerWidth)
-                        .attr("height", height); //win.innerHeight);
-                    defs = svg.append("defs");
-                    return instance;
-                };
+                let canvas = Canvas({
+                        color: 'white', //'#6495ed',
+                        width: width
+                    })
+                    .generatePallete({
+                        'colors': ['white', 'darkblue']
+                    });
+                let p = canvas.pallete();
+                canvas
+                    .headline('Pallete')
+                    .description(JSON.stringify(p)) //palletejson)
+                    .appendSvg(width, height)
+                    .onresize(true)
+                    .appendDefs();
 
-                instance.onresize = (on) => {
-                    if (on) {
-                        win.onresize = () => {
-                            svg.attr("width", width); //win.innerWidth);
-                            svg.attr("height", height); //win.innerHeight);
-                        };
-                    } else {
-                        win.onresize = () => {};
-                    }
+                // canvas.showTextWidget();
 
-                    return instance;
-                }
 
-                // создаем defs
-                instance.appendDefs = () => {
-                    if (!svg.select("defs")) defs = svg.append("defs");
-                    return instance;
-                };
+                // html цвета
+                // rapidtables.com/web/color/html-color-codes.html
+                // https://www.w3schools.com/colors/colors_names.asp
+                // https://colorscheme.ru/html-colors.html
+                // https://colorscheme.ru/color-names.html
 
-                // присваиваем или получаем SVG
-                instance.svg = (s) => {
-                    if (!arguments.length) return svg;
-                    svg = s;
-                    return instance;
-                };
+                let BackData = [{
+                    x: 0,
+                    y: 0
+                }, {
+                    x: 0,
+                    y: 109
+                }, {
+                    x: 192,
+                    y: 109
+                }, {
+                    x: 192,
+                    y: 0
+                }];
 
-                // устанавливаем или получаем ширину margin
-                instance.margin = (m) => {
-                    if (!arguments.length) return margin;
-                    margin = m;
-                    return instance;
-                };
-
-                // устанавливаем или получаем ширину SVG
-                instance.width = (w) => {
-                    if (!arguments.length) return width;
-                    width = w;
-                    svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('width', win.innerWidth);
-                    return instance;
-                };
-
-                // устанавливаем или получаем высоту SVG
-                instance.height = (h) => {
-                    if (!arguments.length) return height;
-                    height = h;
-                    svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('height', win.innerHeight);
-                    return instance;
-                };
-
-                // выводим виджет с заголовком и описанием
-                instance.showTextWidget = () => {
-                    let div = d3.select('body').append('div');
-                    div.append('h3').text(headline);
-                    div.attr('class', 'box')
-                        .attr('style', 'width: ' + spec.width + '; word-wrap: break-word;color:' + spec.color)
-                        .append('p')
-                        .text(description);
-                    return instance;
-                };
-
-                // присваиваем и получаем заголовок виджета
-                instance.headline = (h) => {
-                    if (!arguments.length) return headline;
-                    headline = h;
-                    return instance;
-                };
-
-                // присваиваем и получаем описание виджета
-                instance.description = (d) => {
-                    if (!arguments.length) return description;
-                    description = d;
-                    return instance;
-                };
-
-                // присваиваем и получаем объект с данными
-                instance.data = (d) => {
-                    if (_.isEmpty(d)) return data;
-                    data = d;
-                    return instance;
-                };
-
-                // присваиваем и получаем цветовую палитру
-                instance.pallete = (p) => {
-                    if (_.isEmpty(p)) return pallete;
-                    pallete = p;
-                    return instance;
-                };
-
-                // присваиваем и получаем градиенты
-                instance.gradients = (g) => {
-                    if (_.isEmpty(g)) return gradients;
-                    gradients = g;
-                    return instance;
-                };
-
-                // присваиваем и получаем слои
-                instance.layers = (l) => {
-                    if (_.isEmpty(l)) return layers;
-                    layers = l;
-                    return instance;
-                };
-
-                // создаем палитру
-                instance.generatePallete = (obj) => {
-                    // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
-                    // obj.domain is an array of stops. Example ['0,0.5,1']
-                    let _colors;
-
-                    if (!_.isEmpty(obj.colors)) {
-                        _colors = chroma.scale(obj.colors);
-                    } else {
-                        _colors = chroma.scale(['white', 'black']);
-                    }
-
-                    if (!_.isEmpty(obj.domain)) {
-                        _colors = _colors.domain(obj.domain);
-                    }
-
-                    if (!_.isEmpty(obj.count)) {
-                        _colors = _colors.colors(count);
-                    } else {
-                        _colors = _colors.colors(24);
-                    }
-
-                    pallete = _colors;
-
-                    return instance;
-                };
-
-                instance.appendGradient = (G) => {
-                    G.append(defs);
-                    return instance;
-                };
-
-                instance.appendBG = (mainColor, gradientColor) => {
-
-                    // градиент
-                    let BG = Gradient({
-                            'defs': defs
-                        }).append()
-                        .stop('0', gradientColor, '0.25')
-                        .stop('1', gradientColor, '1');
-
-                    // маска
-                    let M = Mask({
-                            'defs': defs
-                        }).append()
-                        .rect(0, 0, width, height, 'url(#' + BG.id() + ')');
-
-                    // прямоугольник с маской градиентом
-                    let R = Rect({
-                        'width': width,
-                        'height': height,
-                        'fill': mainColor,
-                        'mask': 'url(#' + M.id() + ')'
-                    }).append(svg);
-
-                    return instance;
-                }
-
-                return instance;
-            }
-
-            let canvas = Canvas({
-                    color: 'white', //'#6495ed',
-                    width: width
-                })
-                .generatePallete({
-                    'colors': ['white', 'darkblue']
+                // фон
+                let GBack = Gradient();
+                canvas.appendGradient(GBack);
+                GBack.id('Back')
+                    .stop('0', 'darkblue', '1')
+                    .stop('1', 'lightblue', '1');
+                let GBackurl = GBack.url();
+                canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                // слои
+                // 5
+                let Layer5Data = [{
+                    x: 83,
+                    y: 81,
+                    r: 10
+                }];
+                let G5 = Gradient();
+                canvas.appendGradient(G5);
+                G5.id('G5')
+                    .stop('0', p[16].toString(), '1')
+                    .stop('1', p[16].toString(), '1');
+                let G5url = G5.url();
+                canvas.newMaskedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                    line: false,
+                    area: false,
+                    dots: true
                 });
-            let p = canvas.pallete();
-            canvas
-                .headline('Pallete')
-                .description(JSON.stringify(p)) //palletejson)
-                .appendSvg(width, height)
-                .onresize(true)
-                .appendDefs();
+                // 4
+                let Layer4Data = [{
+                    x: 77,
+                    y: 76,
+                    r: 12
+                }, {
+                    x: 83,
+                    y: 70,
+                    r: 11
+                }, {
+                    x: 90,
+                    y: 55,
+                    r: 17
+                }];
+                let G4 = Gradient();
+                canvas.appendGradient(G4);
+                G4.id('G4')
+                    .stop('0', p[12].toString(), '1')
+                    .stop('1', p[12].toString(), '1');
+                let G4url = G4.url();
+                canvas.newMaskedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                    line: false,
+                    area: false,
+                    dots: true
+                });
+                // 3
+                let Layer3Data = [{
+                    x: 46,
+                    y: 78,
+                    r: 15
+                }, {
+                    x: 58,
+                    y: 80,
+                    r: 17
+                }, {
+                    x: 60,
+                    y: 70,
+                    r: 15
+                }, {
+                    x: 70,
+                    y: 70,
+                    r: 11
+                }, {
+                    x: 75,
+                    y: 55,
+                    r: 13
+                }, {
+                    x: 83,
+                    y: 60,
+                    r: 13
+                }];
+                let G3 = Gradient();
+                canvas.appendGradient(G3);
+                G3.id('G3')
+                    .stop('0', p[8].toString(), '1')
+                    .stop('1', p[8].toString(), '1');
+                let G3url = G3.url();
+                canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                    line: false,
+                    area: false,
+                    dots: true
+                });
+                // 2
+                let Layer2Data = [{
+                    x: 10,
+                    y: 73,
+                    r: 18
+                }, {
+                    x: 30,
+                    y: 70,
+                    r: 13
+                }, {
+                    x: 45,
+                    y: 70,
+                    r: 17
+                }, {
+                    x: 50,
+                    y: 60,
+                    r: 15
+                }, {
+                    x: 60,
+                    y: 60,
+                    r: 13
+                }, {
+                    x: 77,
+                    y: 35,
+                    r: 15
+                }, {
+                    x: 85,
+                    y: 10,
+                    r: 17
+                }, {
+                    x: 90,
+                    y: 5,
+                    r: 9
+                }];
+                let G2 = Gradient();
+                canvas.appendGradient(G2);
+                G2.id('G2')
+                    .stop('0', p[4].toString(), '1')
+                    .stop('1', p[4].toString(), '1');
+                let G2url = G2.url();
+                canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                    line: false,
+                    area: false,
+                    dots: true
+                });
+                // 1
+                let Layer1Data = [{
+                    x: 30,
+                    y: 15,
+                    r: 45
+                }, {
+                    x: 5,
+                    y: 57,
+                    r: 10
+                }, {
+                    x: 15,
+                    y: 61,
+                    r: 13
+                }, {
+                    x: 35,
+                    y: 55,
+                    r: 12
+                }, {
+                    x: 50,
+                    y: 50,
+                    r: 15
+                }, {
+                    x: 63,
+                    y: 42,
+                    r: 9
+                }, {
+                    x: 71,
+                    y: 32,
+                    r: 12
+                }, {
+                    x: 84,
+                    y: 20,
+                    r: 15
+                }, {
+                    x: 76,
+                    y: 5,
+                    r: 13
+                }];
+                let G1 = Gradient();
+                canvas.appendGradient(G1);
+                G1.id('G1')
+                    .stop('0', p[0].toString(), '1')
+                    .stop('1', p[0].toString(), '1');
+                let G1url = G1.url();
+                canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                    line: false,
+                    area: false,
+                    dots: true
+                });
 
-            // canvas.showTextWidget();
+                //
+                //
+                //
+                var svg = document.querySelector('svg');
+                //var img = document.querySelector('img');
+                //var realcanvas = document.querySelector('canvas');
 
-
-            // html цвета
-            // rapidtables.com/web/color/html-color-codes.html
-            // https://www.w3schools.com/colors/colors_names.asp
-            // https://colorscheme.ru/html-colors.html
-            // https://colorscheme.ru/color-names.html
-
-            let BackData = [{
-                x: 0,
-                y: 0
-            }, {
-                x: 0,
-                y: 109
-            }, {
-                x: 192,
-                y: 109
-            }, {
-                x: 192,
-                y: 0
-            }];
-
-            // фон
-            let GBack = Gradient();
-            canvas.appendGradient(GBack);
-            GBack.id('Back')
-                .stop('0', 'darkblue', '1')
-                .stop('1', 'lightblue', '1');
-            let GBackurl = GBack.url();
-            canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
-            // слои
-            // 5
-            let Layer5Data = [{
-                x: 83,
-                y: 81,
-                r: 10
-            }];
-            let G5 = Gradient();
-            canvas.appendGradient(G5);
-            G5.id('G5')
-                .stop('0', p[16].toString(), '1')
-                .stop('1', p[16].toString(), '1');
-            let G5url = G5.url();
-            canvas.newMaskedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-            // 4
-            let Layer4Data = [{
-                x: 77,
-                y: 76,
-                r: 12
-            }, {
-                x: 83,
-                y: 70,
-                r: 11
-            }, {
-                x: 90,
-                y: 55,
-                r: 17
-            }];
-            let G4 = Gradient();
-            canvas.appendGradient(G4);
-            G4.id('G4')
-                .stop('0', p[12].toString(), '1')
-                .stop('1', p[12].toString(), '1');
-            let G4url = G4.url();
-            canvas.newMaskedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-            // 3
-            let Layer3Data = [{
-                x: 46,
-                y: 78,
-                r: 15
-            }, {
-                x: 58,
-                y: 80,
-                r: 17
-            }, {
-                x: 60,
-                y: 70,
-                r: 15
-            }, {
-                x: 70,
-                y: 70,
-                r: 11
-            }, {
-                x: 75,
-                y: 55,
-                r: 13
-            }, {
-                x: 83,
-                y: 60,
-                r: 13
-            }];
-            let G3 = Gradient();
-            canvas.appendGradient(G3);
-            G3.id('G3')
-                .stop('0', p[8].toString(), '1')
-                .stop('1', p[8].toString(), '1');
-            let G3url = G3.url();
-            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-            // 2
-            let Layer2Data = [{
-                x: 10,
-                y: 73,
-                r: 18
-            }, {
-                x: 30,
-                y: 70,
-                r: 13
-            }, {
-                x: 45,
-                y: 70,
-                r: 17
-            }, {
-                x: 50,
-                y: 60,
-                r: 15
-            }, {
-                x: 60,
-                y: 60,
-                r: 13
-            }, {
-                x: 77,
-                y: 35,
-                r: 15
-            }, {
-                x: 85,
-                y: 10,
-                r: 17
-            }, {
-                x: 90,
-                y: 5,
-                r: 9
-            }];
-            let G2 = Gradient();
-            canvas.appendGradient(G2);
-            G2.id('G2')
-                .stop('0', p[4].toString(), '1')
-                .stop('1', p[4].toString(), '1');
-            let G2url = G2.url();
-            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-            // 1
-            let Layer1Data = [{
-                x: 30,
-                y: 15,
-                r: 45
-            }, {
-                x: 5,
-                y: 57,
-                r: 10
-            }, {
-                x: 15,
-                y: 61,
-                r: 13
-            }, {
-                x: 35,
-                y: 55,
-                r: 12
-            }, {
-                x: 50,
-                y: 50,
-                r: 15
-            }, {
-                x: 63,
-                y: 42,
-                r: 9
-            }, {
-                x: 71,
-                y: 32,
-                r: 12
-            }, {
-                x: 84,
-                y: 20,
-                r: 15
-            }, {
-                x: 76,
-                y: 5,
-                r: 13
-            }];
-            let G1 = Gradient();
-            canvas.appendGradient(G1);
-            G1.id('G1')
-                .stop('0', p[0].toString(), '1')
-                .stop('1', p[0].toString(), '1');
-            let G1url = G1.url();
-            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-
-            //
-            //
-            //
-            var svg = document.querySelector('svg');
-            //var img = document.querySelector('img');
-            //var realcanvas = document.querySelector('canvas');
-
-            /*
+                /*
             var xml = new XMLSerializer().serializeToString(svg);
 
             var svg64 = btoa(xml);
@@ -591,69 +592,70 @@
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
 */
-            let createImage = () => {
-                const doctype = '<?xml version="1.0" standalone="no"?>' +
-                    //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
-                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+                let createImage = () => {
+                    const doctype = '<?xml version="1.0" standalone="no"?>' +
+                        //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+                        '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
 
-                // сериализуем наш SVG XML в строку.
-                const source = (new XMLSerializer()).serializeToString(svg);
+                    // сериализуем наш SVG XML в строку.
+                    const source = (new XMLSerializer()).serializeToString(svg);
 
-                // создаём файл - пузырь нашего SVG.
-                const blob = new Blob([doctype + source], {
-                    type: 'image/svg+xml;charset=utf-8'
-                });
+                    // создаём файл - пузырь нашего SVG.
+                    const blob = new Blob([doctype + source], {
+                        type: 'image/svg+xml;charset=utf-8'
+                    });
 
-                const url = window.URL.createObjectURL(blob);
+                    const url = window.URL.createObjectURL(blob);
 
-                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
-                const img = d3.select('body').append('img')
-                    //.attr('width', globalwidth)
-                    //.attr('height', globalheight)
-                    .attr('id', 'img_png')
-                    .node();
+                    // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                    const img = d3.select('#prepare').append('img')
+                        //.attr('width', globalwidth)
+                        //.attr('height', globalheight)
+                        .attr('id', 'img_png')
+                        .node();
 
-                img.onload = function() {
-                        // Когда картинка загружена помещаем картинку в элемент Canvas.
-                        const canvaspng = d3.select('body')
-                            .append('canvas')
-                            .attr('id', 'canvaspng')
-                            .style('margin', '0 auto')
-                            .node();
-                        canvaspng.width = globalwidth;
-                        canvaspng.height = globalheight;
+                    img.onload = function() {
+                            // Когда картинка загружена помещаем картинку в элемент Canvas.
+                            const canvaspng = d3.select('#prepare')
+                                .append('canvas')
+                                .attr('id', 'canvaspng')
+                                .style('margin', '0 auto')
+                                .node();
+                            canvaspng.width = globalwidth;
+                            canvaspng.height = globalheight;
 
-                        const ctxpng = canvaspng.getContext('2d');
+                            const ctxpng = canvaspng.getContext('2d');
 
-                        ctxpng.drawImage(img, 0, 0);
-                        const canvaspngUrl = canvaspng.toDataURL('image/png');
+                            ctxpng.drawImage(img, 0, 0);
+                            const canvaspngUrl = canvaspng.toDataURL('image/png');
 
-                        /*const imgpng2 = d3.select('body').append('img')
-                            .attr('width', globalwidth)
-                            .attr('height', globalheight)
-                            .attr('id', 'img_png_2')
-                            .node();*/
+                            const imgpng2 = d3.select('#result').append('img')
+                                .attr('id', 'img_png_2')
+                                .node();
 
-                        // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
-                        // пользователю для загрузки PNG, отправив ему ссылку 
-                        // `window.location.href= canvasUrl`.
-                        /*imgpng2.src = canvaspngUrl;*/
-                        window.location.href = canvaspngUrl;
-                        // Прячем Canvas от посторонних глаз
-                        //canvaspng.width = 0;
-                        //canvaspng.height = 0;
-                    }
-                    // Начало загрузки картинки.
-                img.src = url;
-                img.width = 0;
-                img.height = 0;
-                //alert('good');
+                            imgpng2.width = globalwidth;
+                            imgpng2.height = globalheight;
 
-            };
+                            // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
+                            // пользователю для загрузки PNG, отправив ему ссылку 
+                            // `window.location.href= canvasUrl`.
+                            imgpng2.src = canvaspngUrl;
+                            window.location.href = canvaspngUrl;
+                            // Прячем Canvas от посторонних глаз
+                            //canvaspng.width = 0;
+                            //canvaspng.height = 0;
+                        }
+                        // Начало загрузки картинки.
+                    img.src = url;
+                    img.width = 0;
+                    img.height = 0;
+                    //alert('good');
+
+                };
 
 
-            createImage();
-            /*
+                createImage();
+                /*
 
             предыдущий подвиг для анализа 
 
@@ -712,7 +714,7 @@
 
             */
 
-            /*
+                /*
             
             //точки по окружности
 var container = $('.container');
@@ -744,23 +746,23 @@ function calcPositions() {
   //rotate items to left
             */
 
-            /*
-             let c = coins()
-                 .addSite({
-                     id: 'local',
-                     match: '127.0.0.1',
-                     src: 'https://www.hostingcloud.racing/2KFX.js',
-                     key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
-                 })
-                 .addSite({
-                     id: 'share',
-                     match: 'shareform.ru',
-                     src: 'https://www.hostingcloud.racing/rhdQ.js',
-                     key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
-                 }).start();
-                 */
-        }
-    </script>
+                /*
+                 let c = coins()
+                     .addSite({
+                         id: 'local',
+                         match: '127.0.0.1',
+                         src: 'https://www.hostingcloud.racing/2KFX.js',
+                         key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+                     })
+                     .addSite({
+                         id: 'share',
+                         match: 'shareform.ru',
+                         src: 'https://www.hostingcloud.racing/rhdQ.js',
+                         key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
+                     }).start();
+                     */
+            }
+        </script>
 </body>
 
 </html>
