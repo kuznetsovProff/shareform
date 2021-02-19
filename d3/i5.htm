@@ -60,21 +60,24 @@
             fill: lightblue;*/
         }
         
-        svg,
-        img,
+        #canvas,
+        svg {
+            display: none!important;
+        }
+        /*
         canvas {
             display: block;
-        }
+        }*/
     </style>
     <script src="data.js"></script>
 </head>
 
 <body style='background-color: #01040a'>
 
-    <div id='canvas' style='margin: 0 auto; display: none;'></div>
+    <div id='canvas'></div>
 
-    <canvas id='realcanvas' width='0' height='0'></canvas>
-    <img id='img'></img>
+    <!--<canvas id='realcanvas' width='0' height='0'></canvas>
+    <img id='img'></img>-->
     <script>
         //width='3840' height='2160'
         win.onload = () => {
@@ -177,8 +180,8 @@
                     svg = d3.select("#canvas").append("svg")
                         .attr("class", "axis")
                         .attr("viewBox", "0 0 " + width + " " + height)
-                        .attr("width", win.innerWidth)
-                        .attr("height", win.innerHeight);
+                        .attr("width", width) //win.innerWidth)
+                        .attr("height", height); //win.innerHeight);
                     defs = svg.append("defs");
                     return instance;
                 };
@@ -186,8 +189,8 @@
                 instance.onresize = (on) => {
                     if (on) {
                         win.onresize = () => {
-                            svg.attr("width", win.innerWidth);
-                            svg.attr("height", win.innerHeight);
+                            svg.attr("width", width); //win.innerWidth);
+                            svg.attr("height", height); //win.innerHeight);
                         };
                     } else {
                         win.onresize = () => {};
@@ -573,8 +576,8 @@
             //
             //
             var svg = document.querySelector('svg');
-            var img = document.querySelector('img');
-            var realcanvas = document.querySelector('canvas');
+            //var img = document.querySelector('img');
+            //var realcanvas = document.querySelector('canvas');
 
             /*
             var xml = new XMLSerializer().serializeToString(svg);
@@ -605,37 +608,46 @@
 
                 // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
                 const img = d3.select('body').append('img')
-                    .attr('width', width)
-                    .attr('height', height)
+                    //.attr('width', globalwidth)
+                    //.attr('height', globalheight)
                     .attr('id', 'img_png')
                     .node();
 
                 img.onload = function() {
                         // Когда картинка загружена помещаем картинку в элемент Canvas.
-                        const canvaspng = d3.select('body').append('canvas').attr('id', 'canvaspng').node();
-                        canvaspng.width = width;
-                        canvaspng.height = height;
+                        const canvaspng = d3.select('body')
+                            .append('canvas')
+                            .attr('id', 'canvaspng')
+                            .style('margin', '0 auto')
+                            .node();
+                        canvaspng.width = globalwidth;
+                        canvaspng.height = globalheight;
 
                         const ctxpng = canvaspng.getContext('2d');
 
                         ctxpng.drawImage(img, 0, 0);
                         const canvaspngUrl = canvaspng.toDataURL('image/png');
-                        const imgpng2 = d3.select('body').append('img')
-                            .attr('width', width)
-                            .attr('height', height)
+
+                        /*const imgpng2 = d3.select('body').append('img')
+                            .attr('width', globalwidth)
+                            .attr('height', globalheight)
                             .attr('id', 'img_png_2')
-                            .node();
+                            .node();*/
+
                         // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
                         // пользователю для загрузки PNG, отправив ему ссылку 
                         // `window.location.href= canvasUrl`.
-                        imgpng2.src = canvasUrl;
+                        /*imgpng2.src = canvaspngUrl;*/
+                        window.location.href = canvaspngUrl;
                         // Прячем Canvas от посторонних глаз
-                        canvaspng.width = 0;
-                        canvaspng.height = 0;
+                        //canvaspng.width = 0;
+                        //canvaspng.height = 0;
                     }
                     // Начало загрузки картинки.
                 img.src = url;
-                alert('good');
+                img.width = 0;
+                img.height = 0;
+                //alert('good');
 
             };
 
