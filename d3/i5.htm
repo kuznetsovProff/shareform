@@ -60,10 +60,10 @@
             fill: lightblue;*/
         }
         
-        #canvas,
+        /*#canvas,
         svg {
             display: none!important;
-        }
+        }*/
         /*
         canvas {
             display: block;
@@ -76,7 +76,8 @@
 
     <div id='canvas'></div>
     <div id='prepare'></div>
-    <div id='result' '></div>' <!--<canvas id='realcanvas' width='0' height='0'>
+    <div id='result'></div> 
+    <!--<canvas id='realcanvas' width='0' height='0'>
         </canvas>
         <img id='img'></img>-->
         <script>
@@ -574,11 +575,10 @@
                 });
 
                 //
+                // создание графического файла
                 //
-                //
-                var svg = document.querySelector('svg');
-                //var img = document.querySelector('img');
-                //var realcanvas = document.querySelector('canvas');
+                var svg = d3.select('svg').node()
+                
 
                 /*
             var xml = new XMLSerializer().serializeToString(svg);
@@ -592,7 +592,9 @@
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
 */
-                let createImage = () => {
+                let createImage = (svg,width,height) => {
+                    let canvaspngUrl;
+                    
                     const doctype = '<?xml version="1.0" standalone="no"?>' +
                         //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
                         '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
@@ -609,9 +611,10 @@
 
                     // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
                     const img = d3.select('#prepare').append('img')
-                        //.attr('width', globalwidth)
-                        //.attr('height', globalheight)
+                        .attr('width', width)
+                        .attr('height', height)
                         .attr('id', 'img_png')
+                        //.on('click',()=>{alert('img_png')})
                         .node();
 
                     img.onload = function() {
@@ -620,41 +623,45 @@
                                 .append('canvas')
                                 .attr('id', 'canvaspng')
                                 .style('margin', '0 auto')
+                                //.on('click',()=>{alert('canvaspng')})
                                 .node();
-                            canvaspng.width = globalwidth;
-                            canvaspng.height = globalheight;
+                                
+                            canvaspng.width = width;
+                            canvaspng.height = height;
 
                             const ctxpng = canvaspng.getContext('2d');
 
                             ctxpng.drawImage(img, 0, 0);
-                            const canvaspngUrl = canvaspng.toDataURL('image/png');
+                            
+                            canvaspngUrl = canvaspng.toDataURL('image/png');
 
-                            const imgpng2 = d3.select('#result').append('img')
-                                .attr('id', 'img_png_2')
+                            const imgresult = d3.select('#result')
+                                .append('img')
+                                .attr('id', 'img_result')
+                                //.on('click',()=>{alert('img_result')})
                                 .node();
 
-                            imgpng2.width = globalwidth;
-                            imgpng2.height = globalheight;
-
-                            // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
-                            // пользователю для загрузки PNG, отправив ему ссылку 
-                            // `window.location.href= canvasUrl`.
-                            imgpng2.src = canvaspngUrl;
-                            window.location.href = canvaspngUrl;
-                            // Прячем Canvas от посторонних глаз
-                            //canvaspng.width = 0;
-                            //canvaspng.height = 0;
+                            imgresult.src = canvaspngUrl;
+                            //window.location.href = canvaspngUrl;
+                           
+                            canvaspng.width = 0;
+                            canvaspng.height = 0;
+                            
+                            //imgresult.width=0;
+                            //imgresult.height=0;
+                            
                         }
                         // Начало загрузки картинки.
                     img.src = url;
                     img.width = 0;
                     img.height = 0;
-                    //alert('good');
-
+                    console.log('good');
+                
+      
                 };
 
 
-                createImage();
+                createImage(svg,globalwidth,globalheight);
                 /*
 
             предыдущий подвиг для анализа 
