@@ -76,7 +76,7 @@
 
     <div id='canvas'></div>
     <div id='prepare'></div>
-    <div id='result'></div> 
+    <div id='result' width='100%' height='100%'></div> 
     <!--<canvas id='realcanvas' width='0' height='0'>
         </canvas>
         <img id='img'></img>-->
@@ -662,6 +662,70 @@
 
 
                 createImage(svg,globalwidth,globalheight);
+/*
+<div class="container">
+    <img src="http://placehold.it/1600x1200" />
+</div>
+
+<style>
+
+ze an image to fit the view port (100% of browser width or height):
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.container {
+    height: 100%;
+    width: 100%;
+    background-color: red;
+    text-align: center;
+}
+.container img {
+    vertical-align: top;
+}
+.portrait img {
+    width: 100%;
+}
+
+.landscape img {
+    height: 100%;
+}
+
+</style>
+
+}
+Use the following jQuery method to pick the correct CSS rule depending on the aspect ratio of the view port:
+
+function resizeImg() {
+    var thisImg= $('.container');
+    var refH = thisImg.height();
+    var refW = thisImg.width();
+    var refRatio = refW/refH;
+
+    var imgH = thisImg.children("img").height();
+    var imgW = thisImg.children("img").width();
+
+    if ( (imgW/imgH) > refRatio ) { 
+        thisImg.addClass("portrait");
+        thisImg.removeClass("landscape");
+    } else {
+        thisImg.addClass("landscape");
+        thisImg.removeClass("portrait");
+    }
+}
+
+$(document).ready(resizeImg())
+
+$(window).resize(function(){
+    resizeImg();
+});
+
+
+
+*/
+                
+                
                 /*
 
             предыдущий подвиг для анализа 
