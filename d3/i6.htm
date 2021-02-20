@@ -185,7 +185,7 @@
 
         <!-- Page Content  -->
         <div id="content" class="container-fluid m-0 p-0">
-            <button type="button" id="sidebarCollapse" class="btn btn-info btnfloat">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary btnfloat">
                         <i class="fas fa-arrow-right"></i>
                     </button>
             <!--					
@@ -373,8 +373,8 @@
                 instance.onresize = (on) => {
                     if (on) {
                         win.onresize = () => {
-                            svg.attr("width", width); //win.innerWidth);
-                            svg.attr("height", height); //win.innerHeight);
+                            //svg.attr("width", width); //win.innerWidth);
+                            //svg.attr("height", height); //win.innerHeight);
                         };
                     } else {
                         win.onresize = () => {};
