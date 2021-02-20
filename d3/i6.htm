@@ -223,8 +223,8 @@
 
             <!-- SVG put here -->
             <div id='canvas' style='max-width:100%;height:100%;'></div>
-            <div id='prepare' style=''></div>
-            <div id='result' style=''></div>
+            <div id='prepare' style='max-width:100%;height:100%;'></div>
+            <div id='result' style='max-width:100%;height:100%;'></div>
 
 
             <!--
@@ -362,10 +362,10 @@
                         .append("svg")
                         .style('max-width', '100%')
                         .style('max-height', '100%')
-                        .attr("class", "axis")
-                        .attr("viewBox", "0 0 " + width + " " + height)
-                        .attr("width", width) //win.innerWidth)
-                        .attr("height", height); //win.innerHeight);
+                        .attr("class", "axis w-100")
+                        .attr("viewBox", "0 0 " + width + " " + height);
+                    //.attr("width", width) //win.innerWidth)
+                    //.attr("height", height); //win.innerHeight);
                     defs = svg.append("defs");
                     return instance;
                 };
@@ -407,8 +407,8 @@
                 instance.width = (w) => {
                     if (!arguments.length) return width;
                     width = w;
-                    svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('width', win.innerWidth);
+                    svg.attr("viewBox", "0 0 " + width + " " + height);
+                    //.attr('width', win.innerWidth);
                     return instance;
                 };
 
@@ -416,8 +416,8 @@
                 instance.height = (h) => {
                     if (!arguments.length) return height;
                     height = h;
-                    svg.attr("viewBox", "0 0 " + width + " " + height)
-                        .attr('height', win.innerHeight);
+                    svg.attr("viewBox", "0 0 " + width + " " + height);
+                    //.attr('height', win.innerHeight);
                     return instance;
                 };
 
@@ -789,7 +789,11 @@
                     type: 'image/svg+xml;charset=utf-8'
                 });
 
+
+
                 const url = window.URL.createObjectURL(blob);
+
+
 
                 // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
                 const img = d3.select('#prepare').append('img')
@@ -817,9 +821,21 @@
 
                         canvaspngUrl = canvaspng.toDataURL('image/png');
 
-                        const imgresult = d3.select('#result')
+                        let a = d3.select('#result')
+                            .append('a')
+                            .attr('id', 'resultlink')
+                            .node();
+                        a.href = canvaspngUrl;
+                        a.title = 'result';
+                        a.download = 'result.png';
+
+                        const imgresult = d3.select('#resultlink')
                             .append('img')
                             .attr('id', 'img_result')
+                            .attr('name', 'result')
+                            .attr('title', 'result')
+                            .style('max-width', '100%')
+                            .style('max-height', '100%')
                             //.on('click',()=>{alert('img_result')})
                             .node();
 
@@ -843,7 +859,7 @@
             };
 
 
-            //createImage(svg, globalwidth, globalheight);
+            createImage(svg, globalwidth, globalheight);
             /*
             <div class="container">
                 <img src="http://placehold.it/1600x1200" />
