@@ -87,10 +87,20 @@
     <script src='c.js'></script>
 
     <script type="text/javascript">
-        // проверить все подключаемые файлы и скрипты из i5.htm
+        // https://manos.malihu.gr/jquery-custom-content-scroller/
         $(document).ready(function() {
             $("#sidebar").mCustomScrollbar({
                 theme: "minimal"
+            });
+
+            $("#content").mCustomScrollbar({
+                theme: "minimal",
+                autoHideScrollbar: true,
+                snapOffset: 3,
+                scrollInertia: 100,
+                mouseWheel: {
+                    deltaFactor: 30
+                }
             });
 
             $('#dismiss, .overlay').on('click', function() {
@@ -104,6 +114,10 @@
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
+            $('#btnsave').on('click', function() {
+                $('#modalsave').modal('show');
+            });
+
         });
     </script>
     <script src="data.js"></script>
@@ -118,16 +132,18 @@
                 <i class="fas fa-arrow-left"></i>
             </div>
 
-
-
-
-
             <div class="container m-2 p-2">
 
-
-                <h3>Clouds Settings</h3>
-
-                <h4>Canvas Sizes</h4>
+                <h3>Clouds</h3>
+                <div class="line"></div>
+                <div>
+                    <p class="text-light">if you want to save the image click the button.</p>
+                    <button type="button" id="btnsave" class="btn btn-light mx-auto">
+                        Save Image
+                    </button>
+                </div>
+                <div class="line"></div>
+                <h4>Settings</h4>
 
 
                 width: height:
@@ -185,7 +201,7 @@
 
         <!-- Page Content  -->
         <div id="content" class="container-fluid m-0 p-0">
-            <button type="button" id="sidebarCollapse" class="btn btn-primary btnfloat">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary btn-float">
                         <i class="fas fa-arrow-right"></i>
                     </button>
             <!--					
@@ -223,8 +239,8 @@
 
             <!-- SVG put here -->
             <div id='canvas' style='max-width:100%;height:100%;'></div>
-            <div id='prepare' style='max-width:100%;height:100%;'></div>
-            <div id='result' style='max-width:100%;height:100%;'></div>
+            <div id='prepare' style='max-width:100%;height:0;'></div>
+
 
 
             <!--
@@ -258,7 +274,31 @@
 
     <div class="overlay"></div>
 
+    <!-- 1 -->
+    <div class="modal fade" id="modalsave">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
 
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Save Image</h4>
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                </div>
+
+                <!-- Modal body -->
+                <div id="saveimg" class="modal-body text-center container">
+                    <div id='result' style='max-width:100%;height:100%;' class="mx-auto d-block"></div>
+                    <p>Click thumbnail to save image</p>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <script>
         //width='3840' height='2160'
         win.onload = () => {

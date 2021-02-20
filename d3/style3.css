@@ -6,6 +6,7 @@
 body {
     font-family: 'Poppins', sans-serif;
     background: #fafafa;
+    overflow-y: hidden;
 }
 
 p {
@@ -16,14 +17,14 @@ p {
     color: #999;
 }
 
-.btnfloat {
+.btn-float {
     position: fixed;
     top: 7px;
     left: 7px;
     opacity: 0.4;
 }
 
-.btnfloat:hover {
+.btn-float:hover {
     opacity: 0.9;
 }
 
@@ -198,8 +199,10 @@ a.article:hover {
     width: 100%;
     padding: 20px;
     min-height: 100vh;
+    height: 100vh;
     transition: all 0.3s;
     position: absolute;
+    overflow-y: scroll;
     top: 0;
     right: 0;
 }
