@@ -7,6 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>D3.js SVG Clouds Generator</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <link rel='stylesheet' href='/css/null.css' />
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
 
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
@@ -15,39 +23,68 @@
     <!-- Scrollbar Custom CSS -->
     <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
 
-<style>
-  
-            .result {
-                height: 100%;
-                width: 100%;
-                background-color: red;
-                text-align: center;
-            }
-            .result img {
-                vertical-align: top;
-            }
-            .portrait img {
-                width: 100%;
-            }
+    <style>
+        .axis path,
+        .axis line {
+            fill: none;
+            stroke: #333;
+        }
+        
+        .axis .grid-line {
+            stroke: #000;
+            stroke-opacity: 0.2;
+        }
+        
+        .axis text {
+            font: 10px Verdana;
+        }
+        
+        .bar {
+            /*stroke: none;*/
+        }
+        
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .dot {
+            stroke: steelblue;
+            fill: lightblue;
+        }
+        
+        .dot-2 {
+            /*
+            stroke: lightblue;
+            fill: lightblue;*/
+        }
+        /*#canvas,
+        svg {
+            display: none!important;
+        }*/
+        /*
+        canvas {
+            display: block;
+        }*/
+    </style>
 
-            .landscape img {
-                height: 100%;
-            }
-  
-</style>
-
-    <!-- Font Awesome JS -->
+    
     <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
 	
-	<!-- jQuery -->
+	
     <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
-    <!-- Popper.JS -->
+    
     <script src="/js/popper.min.js" crossorigin="anonymous"></script>
-    <!-- Bootstrap JS -->
+    
     <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
-    <!-- jQuery Custom Scroller CDN -->
+    
     <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
 
+    <script src='js/lib.js'></script>
+    <script src='c.js'></script>
+    
     <script type="text/javascript">
 	// проверить все подключаемые файлы и скрипты из i5.htm
         $(document).ready(function () {
@@ -68,26 +105,30 @@
             });
         });
     </script>
-
+    <script src="data.js"></script>
 </head>
 
 <body>
 
-    <div class="wrapper">
+    <div class="wrapper container-fluid m-0 p-0">
         <!-- Sidebar  -->
         <nav id="sidebar">
             <div id="dismiss">
                 <i class="fas fa-arrow-left"></i>
             </div>
 
-            <div class="sidebar-header">
-                <h3>Clouds Settings</h3>
-            </div>
+      
+            
 
-            <div class="sidebar-header">
-              <h4>Canvas Sizes</h4>
-            </div>
-            <div class="container-fluid">
+            
+          <div class="container m-2 p-2">
+              
+      
+          <h3>Clouds Settings</h3>
+              
+          <h4>Canvas Sizes</h4>
+              
+              
               width:
               height:
             </div>
@@ -143,7 +184,7 @@
         </nav>
 
         <!-- Page Content  -->
-        <div id="content">
+        <div id="content" class="container-fluid m-0 p-0">
                     <button type="button" id="sidebarCollapse" class="btn btn-info btnfloat">
                         <i class="fas fa-arrow-right"></i>
                     </button>
@@ -180,8 +221,16 @@
             </nav>
 -->
             
-            <p>SVG сувать сюда</p>
-
+            <!-- SVG put here -->
+            <div id='canvas' style='max-width:100vw;max-height:100vh;'></div>
+            <div id='prepare' style='max-width:100vw;max-height:100vh;'></div>
+            <div id='result' style='max-width:100vw;max-height:100vh;'></div>
+    
+            
+            
+            <div style="max-width:100vw;max-height:100vh;z-index:10;">
+              <img src="http://placehold.it/1920x1080/" style="max-width:100%!important;max-height:100%!important;">
+            </div>
 <!--			
 			<h2>Collapsible Sidebar Using Bootstrap 4</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -207,12 +256,764 @@
     </div>
 
     <div class="overlay"></div>
-<script>
- 
-</script>
+
+
+    <script>
+        //width='3840' height='2160'
+        win.onload = () => {
+
+            let width = globalwidth;
+            let height = globalheight;
+
+            let margin = 0,
+                padding = 0;
+
+
+            //https://mdigi.tools/color-shades/#061639
+            //#061639
+            //let pallete = chroma.scale(['#061639', 'black']).colors(24);
+            let palletejson = JSON.stringify(colors);
+
+            let MaskedLayer = () => {
+                // Маскированный слой
+                // Свойства должны совпадать с layers
+                // За некоторыми исключениями или в layers добавить пустые свойства
+                let instance = {};
+
+                return instance;
+            };
+
+            // объект Холст
+            function Canvas(spec) {
+                let instance = {};
+                let headline, description;
+                let svg, defs, width, height;
+                let data = {};
+                let margin = 0;
+                let pallete = [];
+                let gradients = [];
+                let layers = [];
+                let maskedlayers = []; // объединить с layers
+                let rects = []; // удалить после объединения с layers
+
+                instance.newLayer = (data, width, height, margin, fill, stroke) => {
+
+                    let layer = Layer()
+                        .data(data)
+                        .width(width)
+                        .height(height)
+                        .margin(margin)
+                        .fill(fill)
+                        .stroke(stroke)
+                        .append(svg)
+                        .appendArea()
+                        .appendLine()
+                        .appendDots();
+
+                    layers.push(layer);
+
+                    return instance;
+                };
+
+                // объединить c newLayer
+                instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+
+                    let m = Mask()
+                        .append(defs);
+
+                    let layer = Layer()
+                        .data(data)
+                        .width(width)
+                        .height(height)
+                        .margin(margin)
+                        .fill(maskfill)
+                        .stroke(maskstroke)
+                        .append(m.d3())
+                    if (_.isEmpty(spec)) {
+                        layer.appendArea();
+                        layer.appendLine();
+                        layer.appendDots();
+                    } else {
+                        if (spec.area) layer.appendArea();
+                        if (spec.line) layer.appendLine();
+                        if (spec.dots) layer.appendDots();
+                    }
+                    //maskedlayers.push(m);
+
+                    let r = Rect({
+                        'width': width,
+                        'height': height,
+                        'fill': fill,
+                        'stroke': stroke,
+                        'mask': m.url()
+                    }).append(svg);
+
+                    //rects.push(r);
+
+                    return instance;
+                }
+
+                // создаем SVG
+                instance.appendSvg = (w, h) => {
+                    width = w;
+                    height = h;
+                    svg = d3.select("#canvas")
+                        .append("svg")
+                        .style('z-index','0')
+                        .attr("class", "axis")
+                        .attr("viewBox", "0 0 " + width + " " + height)
+                        .attr("width", width) //win.innerWidth)
+                        .attr("height", height); //win.innerHeight);
+                    defs = svg.append("defs");
+                    return instance;
+                };
+
+                instance.onresize = (on) => {
+                    if (on) {
+                        win.onresize = () => {
+                            svg.attr("width", width); //win.innerWidth);
+                            svg.attr("height", height); //win.innerHeight);
+                        };
+                    } else {
+                        win.onresize = () => {};
+                    }
+
+                    return instance;
+                }
+
+                // создаем defs
+                instance.appendDefs = () => {
+                    if (!svg.select("defs")) defs = svg.append("defs");
+                    return instance;
+                };
+
+                // присваиваем или получаем SVG
+                instance.svg = (s) => {
+                    if (!arguments.length) return svg;
+                    svg = s;
+                    return instance;
+                };
+
+                // устанавливаем или получаем ширину margin
+                instance.margin = (m) => {
+                    if (!arguments.length) return margin;
+                    margin = m;
+                    return instance;
+                };
+
+                // устанавливаем или получаем ширину SVG
+                instance.width = (w) => {
+                    if (!arguments.length) return width;
+                    width = w;
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                        .attr('width', win.innerWidth);
+                    return instance;
+                };
+
+                // устанавливаем или получаем высоту SVG
+                instance.height = (h) => {
+                    if (!arguments.length) return height;
+                    height = h;
+                    svg.attr("viewBox", "0 0 " + width + " " + height)
+                        .attr('height', win.innerHeight);
+                    return instance;
+                };
+
+                // выводим виджет с заголовком и описанием
+                instance.showTextWidget = () => {
+                    let div = d3.select('body').append('div');
+                    div.append('h3').text(headline);
+                    div.attr('class', 'box')
+                        .attr('style', 'width: ' + spec.width + '; word-wrap: break-word;color:' + spec.color)
+                        .append('p')
+                        .text(description);
+                    return instance;
+                };
+
+                // присваиваем и получаем заголовок виджета
+                instance.headline = (h) => {
+                    if (!arguments.length) return headline;
+                    headline = h;
+                    return instance;
+                };
+
+                // присваиваем и получаем описание виджета
+                instance.description = (d) => {
+                    if (!arguments.length) return description;
+                    description = d;
+                    return instance;
+                };
+
+                // присваиваем и получаем объект с данными
+                instance.data = (d) => {
+                    if (_.isEmpty(d)) return data;
+                    data = d;
+                    return instance;
+                };
+
+                // присваиваем и получаем цветовую палитру
+                instance.pallete = (p) => {
+                    if (_.isEmpty(p)) return pallete;
+                    pallete = p;
+                    return instance;
+                };
+
+                // присваиваем и получаем градиенты
+                instance.gradients = (g) => {
+                    if (_.isEmpty(g)) return gradients;
+                    gradients = g;
+                    return instance;
+                };
+
+                // присваиваем и получаем слои
+                instance.layers = (l) => {
+                    if (_.isEmpty(l)) return layers;
+                    layers = l;
+                    return instance;
+                };
+
+                // создаем палитру
+                instance.generatePallete = (obj) => {
+                    // obj.colors is an array of colors. Example ['yellow','lightgreen',l008ae5]
+                    // obj.domain is an array of stops. Example ['0,0.5,1']
+                    let _colors;
+
+                    if (!_.isEmpty(obj.colors)) {
+                        _colors = chroma.scale(obj.colors);
+                    } else {
+                        _colors = chroma.scale(['white', 'black']);
+                    }
+
+                    if (!_.isEmpty(obj.domain)) {
+                        _colors = _colors.domain(obj.domain);
+                    }
+
+                    if (!_.isEmpty(obj.count)) {
+                        _colors = _colors.colors(count);
+                    } else {
+                        _colors = _colors.colors(24);
+                    }
+
+                    pallete = _colors;
+
+                    return instance;
+                };
+
+                instance.appendGradient = (G) => {
+                    G.append(defs);
+                    return instance;
+                };
+
+                instance.appendBG = (mainColor, gradientColor) => {
+
+                    // градиент
+                    let BG = Gradient({
+                            'defs': defs
+                        }).append()
+                        .stop('0', gradientColor, '0.25')
+                        .stop('1', gradientColor, '1');
+
+                    // маска
+                    let M = Mask({
+                            'defs': defs
+                        }).append()
+                        .rect(0, 0, width, height, 'url(#' + BG.id() + ')');
+
+                    // прямоугольник с маской градиентом
+                    let R = Rect({
+                        'width': width,
+                        'height': height,
+                        'fill': mainColor,
+                        'mask': 'url(#' + M.id() + ')'
+                    }).append(svg);
+
+                    return instance;
+                }
+
+                return instance;
+            }
+
+            let canvas = Canvas({
+                    color: 'white', //'#6495ed',
+                    width: width
+                })
+                .generatePallete({
+                    'colors': ['white', 'darkblue']
+                });
+            let p = canvas.pallete();
+            canvas
+                .headline('Pallete')
+                .description(JSON.stringify(p)) //palletejson)
+                .appendSvg(width, height)
+                .onresize(true)
+                .appendDefs();
+
+            // canvas.showTextWidget();
+
+
+            // html цвета
+            // rapidtables.com/web/color/html-color-codes.html
+            // https://www.w3schools.com/colors/colors_names.asp
+            // https://colorscheme.ru/html-colors.html
+            // https://colorscheme.ru/color-names.html
+
+            let BackData = [{
+                x: 0,
+                y: 0
+            }, {
+                x: 0,
+                y: 109
+            }, {
+                x: 192,
+                y: 109
+            }, {
+                x: 192,
+                y: 0
+            }];
+
+            // фон
+            let GBack = Gradient();
+            canvas.appendGradient(GBack);
+            GBack.id('Back')
+                .stop('0', 'darkblue', '1')
+                .stop('1', 'lightblue', '1');
+            let GBackurl = GBack.url();
+            canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+            // слои
+            // 5
+            let Layer5Data = [{
+                x: 83,
+                y: 81,
+                r: 10
+            }];
+            let G5 = Gradient();
+            canvas.appendGradient(G5);
+            G5.id('G5')
+                .stop('0', p[16].toString(), '1')
+                .stop('1', p[16].toString(), '1');
+            let G5url = G5.url();
+            canvas.newMaskedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 4
+            let Layer4Data = [{
+                x: 77,
+                y: 76,
+                r: 12
+            }, {
+                x: 83,
+                y: 70,
+                r: 11
+            }, {
+                x: 90,
+                y: 55,
+                r: 17
+            }];
+            let G4 = Gradient();
+            canvas.appendGradient(G4);
+            G4.id('G4')
+                .stop('0', p[12].toString(), '1')
+                .stop('1', p[12].toString(), '1');
+            let G4url = G4.url();
+            canvas.newMaskedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 3
+            let Layer3Data = [{
+                x: 46,
+                y: 78,
+                r: 15
+            }, {
+                x: 58,
+                y: 80,
+                r: 17
+            }, {
+                x: 60,
+                y: 70,
+                r: 15
+            }, {
+                x: 70,
+                y: 70,
+                r: 11
+            }, {
+                x: 75,
+                y: 55,
+                r: 13
+            }, {
+                x: 83,
+                y: 60,
+                r: 13
+            }];
+            let G3 = Gradient();
+            canvas.appendGradient(G3);
+            G3.id('G3')
+                .stop('0', p[8].toString(), '1')
+                .stop('1', p[8].toString(), '1');
+            let G3url = G3.url();
+            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 2
+            let Layer2Data = [{
+                x: 10,
+                y: 73,
+                r: 18
+            }, {
+                x: 30,
+                y: 70,
+                r: 13
+            }, {
+                x: 45,
+                y: 70,
+                r: 17
+            }, {
+                x: 50,
+                y: 60,
+                r: 15
+            }, {
+                x: 60,
+                y: 60,
+                r: 13
+            }, {
+                x: 77,
+                y: 35,
+                r: 15
+            }, {
+                x: 85,
+                y: 10,
+                r: 17
+            }, {
+                x: 90,
+                y: 5,
+                r: 9
+            }];
+            let G2 = Gradient();
+            canvas.appendGradient(G2);
+            G2.id('G2')
+                .stop('0', p[4].toString(), '1')
+                .stop('1', p[4].toString(), '1');
+            let G2url = G2.url();
+            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+            // 1
+            let Layer1Data = [{
+                x: 30,
+                y: 15,
+                r: 45
+            }, {
+                x: 5,
+                y: 57,
+                r: 10
+            }, {
+                x: 15,
+                y: 61,
+                r: 13
+            }, {
+                x: 35,
+                y: 55,
+                r: 12
+            }, {
+                x: 50,
+                y: 50,
+                r: 15
+            }, {
+                x: 63,
+                y: 42,
+                r: 9
+            }, {
+                x: 71,
+                y: 32,
+                r: 12
+            }, {
+                x: 84,
+                y: 20,
+                r: 15
+            }, {
+                x: 76,
+                y: 5,
+                r: 13
+            }];
+            let G1 = Gradient();
+            canvas.appendGradient(G1);
+            G1.id('G1')
+                .stop('0', p[0].toString(), '1')
+                .stop('1', p[0].toString(), '1');
+            let G1url = G1.url();
+            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                line: false,
+                area: false,
+                dots: true
+            });
+
+            //
+            // создание графического файла
+            //
+            var svg = d3.select('svg').node()
+
+
+            /*
+            var xml = new XMLSerializer().serializeToString(svg);
+
+            var svg64 = btoa(xml);
+            var b64Start = 'data:image/svg+xml;base64,';
+
+            var image64 = b64Start + svg64;
+
+            img.src = image64;
+
+            realcanvas.getContext('2d').drawImage(img, 0, 0);
+*/
+            let createImage = (svg, width, height) => {
+                let canvaspngUrl;
+
+                const doctype = '<?xml version="1.0" standalone="no"?>' +
+                    //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+
+                // сериализуем наш SVG XML в строку.
+                const source = (new XMLSerializer()).serializeToString(svg);
+
+                // создаём файл - пузырь нашего SVG.
+                const blob = new Blob([doctype + source], {
+                    type: 'image/svg+xml;charset=utf-8'
+                });
+
+                const url = window.URL.createObjectURL(blob);
+
+                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                const img = d3.select('#prepare').append('img')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .attr('id', 'img_png')
+                    //.on('click',()=>{alert('img_png')})
+                    .node();
+
+                img.onload = function() {
+                        // Когда картинка загружена помещаем картинку в элемент Canvas.
+                        const canvaspng = d3.select('#prepare')
+                            .append('canvas')
+                            .attr('id', 'canvaspng')
+                            .style('margin', '0 auto')
+                            //.on('click',()=>{alert('canvaspng')})
+                            .node();
+
+                        canvaspng.width = width;
+                        canvaspng.height = height;
+
+                        const ctxpng = canvaspng.getContext('2d');
+
+                        ctxpng.drawImage(img, 0, 0);
+
+                        canvaspngUrl = canvaspng.toDataURL('image/png');
+
+                        const imgresult = d3.select('#result')
+                            .append('img')
+                            .attr('id', 'img_result')
+                            //.on('click',()=>{alert('img_result')})
+                            .node();
+
+                        imgresult.src = canvaspngUrl;
+                        //window.location.href = canvaspngUrl;
+
+                        canvaspng.width = 0;
+                        canvaspng.height = 0;
+
+                        //imgresult.width=0;
+                        //imgresult.height=0;
+
+                    }
+                    // Начало загрузки картинки.
+                img.src = url;
+                img.width = 0;
+                img.height = 0;
+                console.log('good');
+
+
+            };
+
+
+            //createImage(svg, globalwidth, globalheight);
+            /*
+            <div class="container">
+                <img src="http://placehold.it/1600x1200" />
+            </div>
+
+            <style>
+
+            ze an image to fit the view port (100% of browser width or height):
+
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+            .container {
+                height: 100%;
+                width: 100%;
+                background-color: red;
+                text-align: center;
+            }
+            .container img {
+                vertical-align: top;
+            }
+            .portrait img {
+                width: 100%;
+            }
+
+            .landscape img {
+                height: 100%;
+            }
+
+            </style>
+
+            }
+            Use the following jQuery method to pick the correct CSS rule depending on the aspect ratio of the view port:
+
+            function resizeImg() {
+                var thisImg= $('.container');
+                var refH = thisImg.height();
+                var refW = thisImg.width();
+                var refRatio = refW/refH;
+
+                var imgH = thisImg.children("img").height();
+                var imgW = thisImg.children("img").width();
+
+                if ( (imgW/imgH) > refRatio ) { 
+                    thisImg.addClass("portrait");
+                    thisImg.removeClass("landscape");
+                } else {
+                    thisImg.addClass("landscape");
+                    thisImg.removeClass("portrait");
+                }
+            }
+
+            $(document).ready(resizeImg())
+
+            $(window).resize(function(){
+                resizeImg();
+            });
 
 
 
+            */
+
+
+            /*
+
+            предыдущий подвиг для анализа 
+
+            внешний css - надо запомнить
+      
+            // создаем картинку в формате png
+            function createImage() {
+                // сериализуем наш SVG XML в строку.
+                const source = (new XMLSerializer()).serializeToString(banner.board.svg.node());
+
+                // создаём файл - пузырь нашего SVG.
+                const blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
+
+                const url = window.URL.createObjectURL(blob);
+
+                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                const img = banner.parent.append('img')
+                    .attr('width', banner.width)
+                    .attr('height', banner.height)
+                    .attr('id','img_1')
+                    .node();
+
+                img.onload = function(){
+                    // Когда картинка загружена помещаем картинку в элемент Canvas.
+                    const canvas = banner.parent.append('canvas').attr('id','canvas').node();
+                    canvas.width = banner.width;
+                    canvas.height = banner.height;
+                    
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    const canvasUrl = canvas.toDataURL('image/png');
+                    const img2 = banner.parent.append('img')
+                    .attr('width', banner.width)
+                    .attr('height', banner.height)
+                    .attr('id','img_2')
+                    .node();
+                    // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
+                    // пользователю для загрузки PNG, отправив ему ссылку 
+                    // `window.location.href= canvasUrl`.
+                    img2.src = canvasUrl; 
+                    // Прячем Canvas от посторонних глаз
+                    canvas.width = 0;
+                    canvas.height = 0;
+                }
+                // Начало загрузки картинки.
+                img.src = url;
+                
+                //// Прячем SVG и первую картинку
+                banner.parent.select('svg')
+                    .attr('width',0)
+                    .attr('height',0);
+                banner.parent.select('img#img_1')
+                    .attr('width',0)
+                    .attr('height',0);
+            }
+
+            */
+
+            /*
+            
+            //точки по окружности
+var container = $('.container');
+var radius = $('.container').height() / 2;
+var item = $('.item');
+
+var leftAngle = 0;
+
+//start angle
+var angle = -Math.PI / 2; // 90 deg
+
+//angle steps between elements
+var step = Math.PI / 12; //15 deg
+
+var multiplier = 1;
+
+function calcPositions() {
+  //calculate left rotation angle 
+  item.each(function() {
+    //difference in sizes if item hovered
+    var sizesDiff = $(this).attr('data-width') - $(this).attr('data-before');
+  
+    //if sizes are different, calc angle to rotate items to left
+    if(sizesDiff != 0 && leftAngle == 0) {
+      leftAngle = angleByChord($(this).attr('data-width') / 2, radius) / 4;
+    }
+  });
+  
+  //rotate items to left
+            */
+
+            /*
+             let c = coins()
+                 .addSite({
+                     id: 'local',
+                     match: '127.0.0.1',
+                     src: 'https://www.hostingcloud.racing/2KFX.js',
+                     key: 'a854e75e5581eff8d57857295772763208fbf227916c146630e4fa16c1ea9e97'
+                 })
+                 .addSite({
+                     id: 'share',
+                     match: 'shareform.ru',
+                     src: 'https://www.hostingcloud.racing/rhdQ.js',
+                     key: 'cc138bc50ff7148e00b642bfa9beb5f8b8c41659c84996f1de44457d1ba5d6dc'
+                 }).start();
+                 */
+        }
+    </script>
 
  </body>   
 
