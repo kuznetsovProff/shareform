@@ -806,7 +806,64 @@
 
             realcanvas.getContext('2d').drawImage(img, 0, 0);
 */
-            let createImage = (svg, width, height) => {
+            let createImage = (svg, width, height, type = 'png') => {
+              if (type=="svg"){
+                
+                let source = (new XMLSerializer()).serializeToString(svg);
+
+                let svg64 = btoa(source);
+                let b64Start = 'data:image/svg+xml;base64,';
+
+                let image64 = b64Start + svg64;
+
+                let a = d3.select('#result')
+                    .append('a')
+                    .attr('id', 'resultlink')
+                    .node();
+                a.href = image64;
+                a.title = 'result';
+                a.download = 'result.svg';
+
+                let imgresult = d3.select('#resultlink')
+                    .append('img')
+                    .attr('id', 'img_result')
+                    .attr('name', 'result')
+                    .attr('title', 'result')
+                    .style('max-width', '100%')
+                    .style('max-height', '100%')
+                    .node();
+
+                imgresult.src = image64;
+                
+
+   /*
+   // may be this work with svg
+//get svg element.
+var svg = document.getElementById("svg");
+
+//get svg source.
+var serializer = new XMLSerializer();
+var source = serializer.serializeToString(svg);
+
+//add name spaces.
+if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+}
+if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
+    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
+}
+
+//add xml declaration
+source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+
+//convert svg source to URI data scheme.
+var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+
+//set url value to a element's href attribute.
+document.getElementById("link").href = url;
+//you can download svg file by right click menu.*/
+                
+              } else {  
                 let canvaspngUrl;
 
                 const doctype = '<?xml version="1.0" standalone="no"?>' +
@@ -832,7 +889,6 @@
                     .attr('width', width)
                     .attr('height', height)
                     .attr('id', 'img_png')
-                    //.on('click',()=>{alert('img_png')})
                     .node();
 
                 img.onload = function() {
@@ -841,16 +897,14 @@
                             .append('canvas')
                             .attr('id', 'canvaspng')
                             .style('margin', '0 auto')
-                            //.on('click',()=>{alert('canvaspng')})
                             .node();
 
                         canvaspng.width = width;
                         canvaspng.height = height;
 
                         const ctxpng = canvaspng.getContext('2d');
-
                         ctxpng.drawImage(img, 0, 0);
-
+                        
                         canvaspngUrl = canvaspng.toDataURL('image/png');
 
                         let a = d3.select('#result')
@@ -885,9 +939,7 @@
                 img.src = url;
                 img.width = 0;
                 img.height = 0;
-                console.log('good');
-
-
+              }
             };
 
 
