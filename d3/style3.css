@@ -206,3 +206,85 @@ a.article:hover {
     top: 0;
     right: 0;
 }
+
+
+/* ---------------------------------------------------
+	BUTTONS
+----------------------------------------------------- */
+
+.btn-cancel {
+    color: #fff;
+    background-color: #7386D5;
+    border-color: #7386D5;
+}
+
+.btn-cancel:hover {
+    color: #fff;
+    background-color: #6375bb;
+    border-color: #3e5b8b;
+}
+
+.btn-cancel:focus,
+.btn-cancel.focus {
+    color: #fff;
+    background-color: #6375bb;
+    border-color: #3e5b8b;
+    box-shadow: 0 0 0 0.2rem rgba(58, 122, 195, 0.5);
+}
+
+.btn-cancel.disabled,
+.btn-cancel:disabled {
+    color: #fff;
+    background-color: #7386D5;
+    border-color: #7386D5;
+}
+
+.btn-cancel:not(:disabled):not(.disabled):active,
+.btn-cancel:not(:disabled):not(.disabled).active,
+.show>.btn-cancel.dropdown-toggle {
+    color: #fff;
+    background-color: #3e5b8b;
+    border-color: #304c72;
+}
+
+.btn-cancel:not(:disabled):not(.disabled):active:focus,
+.btn-cancel:not(:disabled):not(.disabled).active:focus,
+.show>.btn-cancel.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(58, 117, 195, 0.5);
+}
+
+.btn-outline-cancel {
+    color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-outline-cancel:hover {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-outline-cancel:focus,
+.btn-outline-cancel.focus {
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+}
+
+.btn-outline-cancel.disabled,
+.btn-outline-cancel:disabled {
+    color: #17a2b8;
+    background-color: transparent;
+}
+
+.btn-outline-cancel:not(:disabled):not(.disabled):active,
+.btn-outline-cancel:not(:disabled):not(.disabled).active,
+.show>.btn-outline-cancel.dropdown-toggle {
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.btn-outline-cancel:not(:disabled):not(.disabled):active:focus,
+.btn-outline-cancel:not(:disabled):not(.disabled).active:focus,
+.show>.btn-outline-cancel.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.5);
+}
