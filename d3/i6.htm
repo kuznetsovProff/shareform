@@ -392,6 +392,7 @@
                     height = h;
                     svg = d3.select("#canvas")
                         .append("svg")
+                        .attr('id','svgcanvas')
                         .style('max-width', '100%')
                         .style('max-height', '100%')
                         .attr("class", "axis w-100")
@@ -635,6 +636,7 @@
             let Layer4Data = [{
                 x: 77,
                 y: 76,
+                y: 76,
                 r: 12
             }, {
                 x: 83,
@@ -791,7 +793,7 @@
             //
             // создание графического файла
             //
-            var svg = d3.select('svg').node()
+            var svg = d3.select('#svgcanvas').node()
 
 
             /*
@@ -943,7 +945,7 @@ document.getElementById("link").href = url;
             };
 
 
-            createImage(svg, globalwidth, globalheight);
+            createImage(svg, globalwidth, globalheight,'svg');
             /*
             <div class="container">
                 <img src="http://placehold.it/1600x1200" />
