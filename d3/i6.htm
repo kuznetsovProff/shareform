@@ -712,7 +712,7 @@
             return instance;
         }
 
-        let ExtendedLayer = () => {
+        let ExtendedLayer = (spec) => {
             // Маскированный слой
             // Свойства должны совпадать с layers
             // За некоторыми исключениями или в layers добавить пустые свойства
@@ -934,16 +934,12 @@
                 return instance;
             };
 
-
             instance.append = (p) => {
-
                 if (!_.isEmpty(p)) {
                     parent = p;
                 }
-
                 m = Mask()
                     .append(defs); //defs - родитель для обычного слоя
-
                 layer = Layer()
                     .data(data)
                     .width(width).height(height)
@@ -951,11 +947,9 @@
                     .fill(maskfill)
                     .stroke(maskstroke)
                     .append(m.d3());
-
                 if (area) layer.appendArea();
                 if (line) layer.appendLine();
                 if (dots) layer.appendDots();
-
                 rect = Rect({
                     'width': width,
                     'height': height,
@@ -964,70 +958,14 @@
                     'mask': m.url()
                 }).append(parent); // соотношение с defs, parent, svg
 
-                /*
-               
-                // объединить c newLayer
-                instance.newExtendedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
-
-                    let m = Mask()
-                        .append(defs);
-
-                    let layer = Layer()
-                        .data(data)
-                        .width(width).height(height)
-                        .margin(margin)
-                        .fill(maskfill)
-                        .stroke(maskstroke)
-                        .append(m.d3())
-                    if (_.isEmpty(spec)) {
-                        layer.appendArea();
-                        layer.appendLine();
-                        layer.appendDots();
-                    } else {
-                        if (spec.area) layer.appendArea();
-                        if (spec.line) layer.appendLine();
-                        if (spec.dots) layer.appendDots();
-                    }
-                    extendedlayers.push(m);
-
-                    let r = Rect({
-                        'width': width,
-                        'height': height,
-                        'fill': fill,
-                        'stroke': stroke,
-                        'mask': m.url()
-                    }).append(svg);
-
-                    //rects.push(r);
-
-                    return instance;
-                }
-
-                */
-                // заменить с обычным слоем
-                /*
-                g = parent.append('g')
-                g.attr('id', id);
-                g.attr("transform", // сдвиг слоя вправо
-                    "translate(" + margin + ", 0 )");
-                */
-
-
                 return instance;
             }
 
-
             instance.appendArea = (a) => {
-
                 if (_.isEmpty(a)) {
                     a = data;
                 }
-                /*
-                                let linedots = interpolate(a);
-                                let area = Path()
-                                    .d(Area(linedots, height, margin))
-                                    .fill(fill)
-                                    .append(g);*/
+                layer.appendArea(a);
 
                 return instance;
             };
@@ -1036,14 +974,7 @@
                 if (_.isEmpty(l)) {
                     l = data;
                 }
-                /*
-                let linedots = interpolate(l);
-                let line = Path()
-                    .d(Line(linedots))
-                    .stroke(stroke)
-                    .strokewidth(2)
-                    .fill('none')
-                    .append(g);*/
+                layer.appendLine(l);
 
                 return instance;
             };
@@ -1052,17 +983,7 @@
                 if (_.isEmpty(d)) {
                     d = data;
                 }
-                /*
-                                let linedots = interpolate(d);
-                                let dots = Dots()
-                                    .data(d)
-                                    .cls('dot-2')
-                                    .scaleX(scaleX)
-                                    .scaleY(scaleY)
-                                    .fill(fill)
-                                    .stroke(stroke)
-                                    .strokewidth(2)
-                                    .append(g);*/
+                layer.appendDots(d);
 
                 return instance;
             };
@@ -1153,6 +1074,35 @@
 
                     return instance;
                 }
+
+                instance.newExtendedLayerV2 = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+
+                    let extended = ExtendedLayer()
+                        .data(data)
+                        .width(width)
+                        .height(height)
+                        .margin(margin)
+                        .fill(fill)
+                        .stroke(stroke)
+                        .maskfill(maskfill)
+                        .maskstroke(maskstroke)
+                        .defs(defs)
+                        .append(svg);
+                    if (_.isEmpty(spec)) {
+                        extended.appendArea();
+                        extended.appendLine();
+                        extended.appendDots();
+                    } else {
+                        if (spec.area) extended.appendArea();
+                        if (spec.line) extended.appendLine();
+                        if (spec.dots) extended.appendDots();
+                    }
+
+                    extendedlayers.push(extended);
+
+                    return instance;
+                }
+
 
                 // создаем SVG
                 instance.appendSvg = (w, h) => {
@@ -1336,7 +1286,9 @@
                 return instance;
             }
 
-            var firstCloudsOn = true;
+            let firstCloudsOn = false;
+            let secondCloudsOn = true;
+
             const firstClouds = ((enabled) => {
                 if (enabled) {
                     // Создание картинки
@@ -1564,6 +1516,225 @@
 
                 }
             })(firstCloudsOn);
+
+            const secondClouds = ((enabled) => {
+                if (enabled) {
+                    // Создание картинки
+                    let canvas = Canvas({
+                            color: 'white', //'#6495ed',
+                            width: width
+                        })
+                        .generatePallete({
+                            'colors': ['white', 'darkblue']
+                        });
+                    let p = canvas.pallete();
+
+                    canvas
+                        .headline('Pallete')
+                        .description(JSON.stringify(p)) //palletejson)
+                        .appendSvg(width, height)
+                        .onresize(true)
+                        .appendDefs();
+
+                    let BackData = [{
+                        x: 0,
+                        y: 0
+                    }, {
+                        x: 0,
+                        y: 109
+                    }, {
+                        x: 192,
+                        y: 109
+                    }, {
+                        x: 192,
+                        y: 0
+                    }];
+
+                    // фон
+                    let GBack = Gradient();
+                    canvas.appendGradient(GBack);
+                    GBack.id('Back')
+                        .stop('0', 'darkblue', '1')
+                        .stop('1', 'lightblue', '1');
+                    let GBackurl = GBack.url();
+                    canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                    // слои
+                    // 5
+                    let Layer5Data = [{
+                        x: 83,
+                        y: 81,
+                        r: 10
+                    }];
+                    let G5 = Gradient();
+                    canvas.appendGradient(G5);
+                    G5.id('G5')
+                        .stop('0', p[16].toString(), '1')
+                        .stop('1', p[16].toString(), '1');
+                    let G5url = G5.url();
+                    canvas.newExtendedLayerV2(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 4
+                    let Layer4Data = [{
+                        x: 77,
+                        y: 76,
+                        r: 12
+                    }, {
+                        x: 83,
+                        y: 70,
+                        r: 11
+                    }, {
+                        x: 90,
+                        y: 55,
+                        r: 17
+                    }];
+                    let G4 = Gradient();
+                    canvas.appendGradient(G4);
+                    G4.id('G4')
+                        .stop('0', p[12].toString(), '1')
+                        .stop('1', p[12].toString(), '1');
+                    let G4url = G4.url();
+                    canvas.newExtendedLayerV2(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 3
+                    let Layer3Data = [{
+                        x: 46,
+                        y: 78,
+                        r: 15
+                    }, {
+                        x: 58,
+                        y: 80,
+                        r: 17
+                    }, {
+                        x: 60,
+                        y: 70,
+                        r: 15
+                    }, {
+                        x: 70,
+                        y: 70,
+                        r: 11
+                    }, {
+                        x: 75,
+                        y: 55,
+                        r: 13
+                    }, {
+                        x: 83,
+                        y: 60,
+                        r: 13
+                    }];
+                    let G3 = Gradient();
+                    canvas.appendGradient(G3);
+                    G3.id('G3')
+                        .stop('0', p[8].toString(), '1')
+                        .stop('1', p[8].toString(), '1');
+                    let G3url = G3.url();
+                    canvas.newExtendedLayerV2(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 2
+                    let Layer2Data = [{
+                        x: 10,
+                        y: 73,
+                        r: 18
+                    }, {
+                        x: 30,
+                        y: 70,
+                        r: 13
+                    }, {
+                        x: 45,
+                        y: 70,
+                        r: 17
+                    }, {
+                        x: 50,
+                        y: 60,
+                        r: 15
+                    }, {
+                        x: 60,
+                        y: 60,
+                        r: 13
+                    }, {
+                        x: 77,
+                        y: 35,
+                        r: 15
+                    }, {
+                        x: 85,
+                        y: 10,
+                        r: 17
+                    }, {
+                        x: 90,
+                        y: 5,
+                        r: 9
+                    }];
+                    let G2 = Gradient();
+                    canvas.appendGradient(G2);
+                    G2.id('G2')
+                        .stop('0', p[4].toString(), '1')
+                        .stop('1', p[4].toString(), '1');
+                    let G2url = G2.url();
+                    canvas.newExtendedLayerV2(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 1
+                    let Layer1Data = [{
+                        x: 30,
+                        y: 15,
+                        r: 45
+                    }, {
+                        x: 5,
+                        y: 57,
+                        r: 10
+                    }, {
+                        x: 15,
+                        y: 61,
+                        r: 13
+                    }, {
+                        x: 35,
+                        y: 55,
+                        r: 12
+                    }, {
+                        x: 50,
+                        y: 50,
+                        r: 15
+                    }, {
+                        x: 63,
+                        y: 42,
+                        r: 9
+                    }, {
+                        x: 71,
+                        y: 32,
+                        r: 12
+                    }, {
+                        x: 84,
+                        y: 20,
+                        r: 15
+                    }, {
+                        x: 76,
+                        y: 5,
+                        r: 13
+                    }];
+                    let G1 = Gradient();
+                    canvas.appendGradient(G1);
+                    G1.id('G1')
+                        .stop('0', p[0].toString(), '1')
+                        .stop('1', p[0].toString(), '1');
+                    let G1url = G1.url();
+                    canvas.newExtendedLayerV2(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+
+                }
+            })(secondCloudsOn);
 
 
             d3.select('#btnsavesvg').on('click', function() {
