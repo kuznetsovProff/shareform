@@ -114,9 +114,6 @@
                 $('.collapse.in').toggleClass('in');
                 $('a[aria-expanded=true]').attr('aria-expanded', 'false');
             });
-            $('#btnsave').on('click', function() {
-                $('#modalsave').modal('show');
-            });
 
         });
     </script>
@@ -137,28 +134,41 @@
                 <h3>Clouds</h3>
                 <div class="line"></div>
                 <div>
-                    <p class="text-light">if you want to save the image click the button.</p>
-                    <button type="button" id="btnsave" class="btn btn-light mx-auto">
-                        Save Image
-                    </button>
+                    <p class="text-light">Edit the filename and click one of the buttons to save image.</p>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Filename</span>
+                        </div>
+                        <input id="filename" type="text" class="form-control" placeholder="result" value="result">
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" id="btnsavesvg" class="btn btn-light btn-sm mx-auto d-block" style="max-width:55px">SVG</button></div>
+                        <div class="col">
+                            <button type="button" id="btnsavepng" class="btn btn-light btn-sm mx-auto d-block" style="max-width:55px">PNG</button>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btnsavebmp" class="btn btn-light btn-sm mx-auto d-block" style="max-width:55px">BMP</button>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="btnsavejpeg" class="btn btn-light btn-sm mx-auto d-block" style="max-width:55px">JPG</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="line"></div>
                 <h4>Settings</h4>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">Width</span>
+                        <span class="input-group-text" style="min-width:80px;">Width</span>
                     </div>
                     <input type="text" class="form-control">
                 </div>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <span class="input-group-text">Height</span>
+                        <span class="input-group-text" style="min-width:80px;">Height</span>
                     </div>
                     <input type="text" class="form-control">
                 </div>
-
-
-
             </div>
 
             <!--<ul class="list-unstyled components">
@@ -273,7 +283,7 @@
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Save Image</h4>
+                    <h4 id="ModalTitle" class="modal-title">Save Image</h4>
                     <button type="button" class="close" data-dismiss="modal">×</button>
                 </div>
 
@@ -292,7 +302,774 @@
         </div>
     </div>
     <script>
+        //
+        // создание графического файла
+        //
+
+        let createImage = (svg, width, height, type = 'png', filename = 'result', divresultId = '#result', divprepareId = '#prepare') => {
+            d3.select(divresultId).html('');
+            d3.select(divprepareId).html('');
+
+            if (type == 'svg') {
+                let source = (new XMLSerializer()).serializeToString(svg);
+
+                let svg64 = btoa(source);
+                let b64Start = 'data:image/svg+xml;base64,';
+
+                let image64 = b64Start + svg64;
+
+                let a = d3.select(divresultId)
+                    .append('a')
+                    .attr('id', 'resultlink')
+                    .node();
+                a.href = image64;
+                a.title = filename;
+                a.download = filename + '.svg';
+
+                let imgresult = d3.select('#resultlink')
+                    .append('img')
+                    .attr('id', 'img_result')
+                    .attr('name', filename)
+                    .attr('title', filename)
+                    .style('max-width', '100%')
+                    .style('max-height', '100%')
+                    .node();
+
+                imgresult.src = image64;
+                /*
+                var svg = document.getElementById("svg");
+                var serializer = new XMLSerializer();
+                var source = serializer.serializeToString(svg);
+                if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+                }
+                if(!source.match(/^<svg[^>]+"http\:\/\/wwww\.w3\.org/1999\/xlink"/)){
+                    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"')
+                }
+                source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+                var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
+                document.getElementById("link").href = url;
+                */
+            } else {
+                let imgid;
+                let canvasid;
+                let canvasimgUrl;
+                let imagetype;
+                let fname;
+                if (type == 'png') {
+                    imgid = 'img_png';
+                    canvasid = 'canvaspng';
+                    imagetype = 'image/png';
+                    fname = filename + '.png';
+                }
+                if (type == 'bmp') {
+                    imgid = 'img_bmp';
+                    canvasid = 'canvasbmp';
+                    imagetype = 'image/bmp';
+                    fname = filename + '.bmp';
+                }
+                if (type == "jpeg") {
+                    imgid = "img_jpeg";
+                    canvasid = 'canvasjpeg';
+                    imagetype = 'image/jpeg';
+                    fname = filename + '.jpg';
+                }
+                //let canvaspngUrl;
+
+                const doctype = '<?xml version="1.0" standalone="no"?>' +
+                    //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
+                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
+
+                // сериализуем наш SVG XML в строку.
+                const source = (new XMLSerializer()).serializeToString(svg);
+
+                // создаём файл - пузырь нашего SVG.
+                const blob = new Blob([doctype + source], {
+                    type: 'image/svg+xml;charset=utf-8'
+                });
+
+                const url = window.URL.createObjectURL(blob);
+
+                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
+                const img = d3.select(divprepareId)
+                    .append('img')
+                    .attr('width', width)
+                    .attr('height', height)
+                    .attr('id', imgid)
+                    .node();
+
+                img.onload = function() {
+                        // Когда картинка загружена помещаем картинку в элемент Canvas.
+                        const canvasimg = d3.select(divprepareId)
+                            .append('canvas')
+                            .attr('id', canvasid)
+                            .style('margin', '0 auto')
+                            .node();
+
+                        canvasimg.width = width;
+                        canvasimg.height = height;
+
+                        const ctximg = canvasimg.getContext('2d');
+
+                        ctximg.drawImage(img, 0, 0);
+
+                        canvasimgUrl = canvasimg.toDataURL(imagetype);
+
+                        let a = d3.select(divresultId)
+                            .append('a')
+                            .attr('id', 'resultlink')
+                            .node();
+                        a.href = canvasimgUrl;
+                        a.title = filename;
+                        a.download = fname;
+
+                        const imgresult = d3.select('#resultlink')
+                            .append('img')
+                            .attr('id', 'img_result')
+                            .attr('name', filename)
+                            .attr('title', filename)
+                            .style('max-width', '100%')
+                            .style('max-height', '100%')
+                            .node();
+
+                        imgresult.src = canvasimgUrl;
+                        //window.location.href = canvaspngUrl;
+
+                        canvasimg.width = 0;
+                        canvasimg.height = 0;
+
+                        //imgresult.width=0;
+                        //imgresult.height=0;
+
+                    }
+                    // Начало загрузки картинки.
+                img.src = url;
+                img.width = 0;
+                img.height = 0;
+            }
+        };
+        /*
+        // stackoverflow.com/questions/50537735/convert-blob-to-image-file
+
+        // How to conver the file to a blob (binary file) and upload it to the server
+        // This function is used to convert base64 encoding to mine type (blob)
+        function base64ToBlob(base64,mine) {
+            mine = mime || '';
+            let sliceSize = 1024;
+            let byteChars = window.atob(base64);
+            let byteArrays = [];
+
+            for (let offset = 0; len = byteChars.length; offset<len;offset+=sliceSize) {
+                let slice = byteChars.slice(offset,offset+sliceSize);
+                
+                let byteNumbers = new Array(slice.length);
+                for (let i=0; i<slice.length; i++) {
+                    byteNumbers[i] = slice.chartCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+
+                byteArrays.push(byteArray);
+            }
+
+            return new Blob(byteArrays, {type: mime})
+        }
+
+        // Now clean the base64 up and then pass it into the function above:
+
+        var jpegFile64 = jpegFile.replace(/^data:image\/(png|jpeg);base64,/,"");
+        var jpegBlob = base64ToBlob(jpegFile64,'image/jpeg');
+
+        // Now send the 'jpegBlob' with ajax
+        var oReq = new XMLHttpRequest();
+        oReq.open("POST", url, true);
+        oReq.onLoad = function (oEvent) {
+            // Uploaded.
+        };
+
+        oReq.send(jpegBlob);
+
+
+        */
+
         //width='3840' height='2160'
+
+        //  //  //  //  //  //  //  //  //  //  //  //
+        //
+        //  //  //  //  //  //  //  //  //  //  //  //
+
+        let Layer = (spec) => {
+            let instance = {};
+            let id, g;
+            let data, width, height, margin, fill, stroke;
+            let parent;
+
+            if (_.isEmpty(spec)) {
+                id = 'id_l_' + Date.now();
+                width = globalwidth;
+                height = globalheight;
+                margin = 0;
+                fill = 'white';
+                stroke = 'white';
+            } else {
+                if (_.isEmpty(spec.id)) {
+                    id = 'id_l_' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+                if (!_.isEmpty(spec.g)) g = spec.g;
+                if (!_.isEmpty(spec.data)) data = spec.data;
+                if (_.isEmpty(spec.width)) {
+                    width = globalwidth;
+                } else {
+                    width = spec.width;
+                }
+                if (_.isEmpty(spec.height)) {
+                    height = globalheight;
+                } else {
+                    height = spec.height;
+                }
+                if (_.isEmpty(spec.margin)) {
+                    margin = '0';
+                } else {
+                    margin = spec.margin;
+                }
+                if (_.isEmpty(spec.fill)) {
+                    fill = 'white';
+                } else {
+                    fill = spec.fill;
+                }
+                if (_.isEmpty(spec.stroke)) {
+                    stroke = 'white';
+                } else {
+                    stroke = spec.stroke;
+                }
+
+                if (!_.isEmpty(spec.parent)) parent = spec.parent;
+            }
+            // присваиваем или получаем Id
+            instance.id = (i) => {
+                if (_.isEmpty(i)) {
+                    return id.toString();
+                }
+                id = i;
+                return instance;
+            };
+
+            // присваиваем или получаем g
+            instance.g = (v) => {
+                if (_.isEmpty(v)) {
+                    return g;
+                }
+                g = v;
+                return instance;
+            };
+
+            // присваиваем или получаем data
+            instance.data = (d) => {
+                if (_.isEmpty(d)) {
+                    return data;
+                }
+                data = d;
+                return instance;
+            };
+
+            // присваиваем или получаем width
+            instance.width = (w) => {
+                if (typeof(w) == 'number') {
+                    w = w.toString();
+                }
+                if (_.isEmpty(w)) {
+                    return width;
+                }
+                width = w;
+                return instance;
+            };
+
+            // присваиваем или получаем height
+            instance.height = (h) => {
+                if (typeof(h) == 'number') {
+                    h = h.toString();
+                }
+                if (_.isEmpty(h)) {
+                    return height;
+                }
+                height = h;
+                return instance;
+            };
+
+            // присваиваем или получаем margin
+            instance.margin = (m) => {
+                if (_.isEmpty(m) && m != 0) {
+                    return margin;
+                }
+                margin = m;
+                return instance;
+            };
+
+            // присваиваем или получаем parent
+            instance.parent = (p) => {
+                if (_.isEmpty(p)) {
+                    return parent;
+                }
+                parent = p;
+                return instance;
+            };
+
+            // присваиваем или получаем fill
+            instance.fill = (f) => {
+                if (_.isEmpty(f)) {
+                    return fill;
+                }
+                fill = f;
+                return instance;
+            };
+
+            // присваиваем или получаем stroke
+            instance.stroke = (s) => {
+                if (_.isEmpty(s)) {
+                    return stroke;
+                }
+                stroke = s;
+                return instance;
+            };
+
+            instance.append = (p) => {
+
+                if (!_.isEmpty(p)) {
+                    parent = p;
+                }
+
+                g = parent.append('g')
+                g.attr('id', id);
+                g.attr("transform", // сдвиг слоя вправо
+                    "translate(" + margin + ", 0 )");
+
+                return instance;
+            }
+
+            instance.appendArea = (a) => {
+
+                if (_.isEmpty(a)) {
+                    a = data;
+                }
+
+                let linedots = interpolate(a);
+                let area = Path()
+                    .d(Area(linedots, height, margin))
+                    .fill(fill)
+                    .append(g);
+
+                return instance;
+            };
+
+            instance.appendLine = (l) => {
+                if (_.isEmpty(l)) {
+                    l = data;
+                }
+                let linedots = interpolate(l);
+                let line = Path()
+                    .d(Line(linedots))
+                    .stroke(stroke)
+                    .strokewidth(2)
+                    .fill('none')
+                    .append(g);
+
+                return instance;
+            };
+
+            instance.appendDots = (d) => {
+                if (_.isEmpty(d)) {
+                    d = data;
+                }
+
+                let linedots = interpolate(d);
+                let dots = Dots()
+                    .data(d)
+                    .cls('dot-2')
+                    .scaleX(scaleX)
+                    .scaleY(scaleY)
+                    .fill(fill)
+                    .stroke(stroke)
+                    .strokewidth(2)
+                    .append(g);
+
+                return instance;
+            };
+
+            let interpolate = (data) => {
+                // длина оси X= ширина слоя - отступ слева и справа
+                xAxisLength = AxisLength(width, margin);
+                // длина оси Y = высота слоя - отступ сверху и снизу
+                yAxisLength = AxisLength(height, margin);
+                // функция интерполяции значений на ось X
+                scaleX = AxisScale(xAxisLength, [0, 192]); // 1920x1080
+                // функция интерполяции значений на ось Y
+                scaleY = AxisScale(yAxisLength, [109, 0]); // 1920x1080
+                // расположение точек линии с учетом интерполяции
+                return LineDots(data, scaleX, scaleY, margin);
+            };
+
+            return instance;
+        }
+
+        let ExtendedLayer = () => {
+            // Маскированный слой
+            // Свойства должны совпадать с layers
+            // За некоторыми исключениями или в layers добавить пустые свойства
+
+            let instance = {};
+
+            let layer; // Ссылка на обычный слой
+            let m; // Ссылка на маску
+
+            let id, g;
+            let defs; // Добавить ссылку на defs
+            let rect;
+            let data, width, height, margin, fill, stroke;
+
+            let maskfill; // Добавить в свойства
+            let maskstroke; // Добавить в свойства
+
+            let area = false;
+            let line = false;
+            let dots = false;
+
+            let parent;
+
+            if (_.isEmpty(spec)) {
+                id = 'id_l_' + Date.now();
+                width = globalwidth;
+                height = globalheight;
+                margin = 0;
+                fill = 'white';
+                stroke = 'white';
+            } else {
+                if (_.isEmpty(spec.id)) {
+                    id = 'id_l_' + Date.now();
+                } else {
+                    id = spec.id;
+                }
+                if (!_.isEmpty(spec.g)) g = spec.g;
+                if (!_.isEmpty(spec.defs)) defs = spec.defs;
+                if (!_.isEmpty(spec.rect)) rect = spec.rect;
+                if (!_.isEmpty(spec.data)) data = spec.data;
+                if (_.isEmpty(spec.width)) {
+                    width = globalwidth;
+                } else {
+                    width = spec.width;
+                }
+                if (_.isEmpty(spec.height)) {
+                    height = globalheight;
+                } else {
+                    height = spec.height;
+                }
+                if (_.isEmpty(spec.margin)) {
+                    margin = '0';
+                } else {
+                    margin = spec.margin;
+                }
+                if (_.isEmpty(spec.fill)) {
+                    fill = 'white';
+                } else {
+                    fill = spec.fill;
+                }
+                if (_.isEmpty(spec.stroke)) {
+                    stroke = 'white';
+                } else {
+                    stroke = spec.stroke;
+                }
+                if (!_.isEmpty(spec.maskfill)) maskfill = spec.maskfill;
+                if (!_.isEmpty(spec.maskstroke)) maskstroke = spec.maskstroke;
+
+                if (!_.isEmpty(spec.parent)) parent = spec.parent;
+            }
+
+            // присваиваем или получаем Id
+            instance.id = (i) => {
+                if (_.isEmpty(i)) {
+                    return id.toString();
+                }
+                id = i;
+                return instance;
+            };
+
+            // присваиваем или получаем g
+            instance.g = (v) => {
+                if (_.isEmpty(v)) {
+                    return g;
+                }
+                g = v;
+                return instance;
+            };
+
+            // присваиваем или получаем defs
+            instance.defs = (d) => {
+                if (_.isEmpty(d)) {
+                    return defs;
+                }
+                defs = d;
+                return instance;
+            };
+
+            // присваиваем или получаем rect
+            instance.rect = (r) => {
+                if (_.isEmpty(r)) {
+                    return rect;
+                }
+                rect = r;
+                return instance;
+            };
+
+            // присваиваем или получаем data
+            instance.data = (d) => {
+                if (_.isEmpty(d)) {
+                    return data;
+                }
+                data = d;
+                return instance;
+            };
+
+            // присваиваем или получаем width
+            instance.width = (w) => {
+                if (typeof(w) == 'number') {
+                    w = w.toString();
+                }
+                if (_.isEmpty(w)) {
+                    return width;
+                }
+                width = w;
+                return instance;
+            };
+
+            // присваиваем или получаем height
+            instance.height = (h) => {
+                if (typeof(h) == 'number') {
+                    h = h.toString();
+                }
+                if (_.isEmpty(h)) {
+                    return height;
+                }
+                height = h;
+                return instance;
+            };
+
+            // присваиваем или получаем margin
+            instance.margin = (m) => {
+                if (_.isEmpty(m) && m != 0) {
+                    return margin;
+                }
+                margin = m;
+                return instance;
+            };
+
+            // присваиваем или получаем parent
+            instance.parent = (p) => {
+                if (_.isEmpty(p)) {
+                    return parent;
+                }
+                parent = p;
+                return instance;
+            };
+
+            // присваиваем или получаем fill
+            instance.fill = (f) => {
+                if (_.isEmpty(f)) {
+                    return fill;
+                }
+                fill = f;
+                return instance;
+            };
+
+            // присваиваем или получаем stroke
+            instance.stroke = (s) => {
+                if (_.isEmpty(s)) {
+                    return stroke;
+                }
+                stroke = s;
+                return instance;
+            };
+
+            // присваиваем или получаем maskfill
+            instance.maskfill = (m) => {
+                if (_.isEmpty(m)) {
+                    return maskfill;
+                }
+                maskfill = m;
+                return instance;
+            };
+
+            // присваиваем или получаем maskstroke
+            instance.maskstroke = (m) => {
+                if (_.isEmpty(m)) {
+                    return maskstroke;
+                }
+                maskstroke = m;
+                return instance;
+            };
+
+            // присваиваем или получаем area
+            instance.area = (a) => {
+                if (_.isEmpty(a)) {
+                    return area;
+                }
+                area = a;
+                return instance;
+            };
+
+            // присваиваем или получаем line
+            instance.line = (l) => {
+                if (_.isEmpty(l)) {
+                    return line;
+                }
+                line = l;
+                return instance;
+            };
+
+            // присваиваем или получаем dots
+            instance.dots = (d) => {
+                if (_.isEmpty(d)) {
+                    return dots;
+                }
+                dots = d;
+                return instance;
+            };
+
+
+            instance.append = (p) => {
+
+                if (!_.isEmpty(p)) {
+                    parent = p;
+                }
+
+                m = Mask()
+                    .append(defs); //defs - родитель для обычного слоя
+
+                layer = Layer()
+                    .data(data)
+                    .width(width).height(height)
+                    .margin(margin)
+                    .fill(maskfill)
+                    .stroke(maskstroke)
+                    .append(m.d3());
+
+                if (area) layer.appendArea();
+                if (line) layer.appendLine();
+                if (dots) layer.appendDots();
+
+                rect = Rect({
+                    'width': width,
+                    'height': height,
+                    'fill': fill,
+                    'stroke': stroke,
+                    'mask': m.url()
+                }).append(parent); // соотношение с defs, parent, svg
+
+                /*
+               
+                // объединить c newLayer
+                instance.newExtendedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+
+                    let m = Mask()
+                        .append(defs);
+
+                    let layer = Layer()
+                        .data(data)
+                        .width(width).height(height)
+                        .margin(margin)
+                        .fill(maskfill)
+                        .stroke(maskstroke)
+                        .append(m.d3())
+                    if (_.isEmpty(spec)) {
+                        layer.appendArea();
+                        layer.appendLine();
+                        layer.appendDots();
+                    } else {
+                        if (spec.area) layer.appendArea();
+                        if (spec.line) layer.appendLine();
+                        if (spec.dots) layer.appendDots();
+                    }
+                    extendedlayers.push(m);
+
+                    let r = Rect({
+                        'width': width,
+                        'height': height,
+                        'fill': fill,
+                        'stroke': stroke,
+                        'mask': m.url()
+                    }).append(svg);
+
+                    //rects.push(r);
+
+                    return instance;
+                }
+
+                */
+                // заменить с обычным слоем
+                /*
+                g = parent.append('g')
+                g.attr('id', id);
+                g.attr("transform", // сдвиг слоя вправо
+                    "translate(" + margin + ", 0 )");
+                */
+
+
+                return instance;
+            }
+
+
+            instance.appendArea = (a) => {
+
+                if (_.isEmpty(a)) {
+                    a = data;
+                }
+                /*
+                                let linedots = interpolate(a);
+                                let area = Path()
+                                    .d(Area(linedots, height, margin))
+                                    .fill(fill)
+                                    .append(g);*/
+
+                return instance;
+            };
+
+            instance.appendLine = (l) => {
+                if (_.isEmpty(l)) {
+                    l = data;
+                }
+                /*
+                let linedots = interpolate(l);
+                let line = Path()
+                    .d(Line(linedots))
+                    .stroke(stroke)
+                    .strokewidth(2)
+                    .fill('none')
+                    .append(g);*/
+
+                return instance;
+            };
+
+            instance.appendDots = (d) => {
+                if (_.isEmpty(d)) {
+                    d = data;
+                }
+                /*
+                                let linedots = interpolate(d);
+                                let dots = Dots()
+                                    .data(d)
+                                    .cls('dot-2')
+                                    .scaleX(scaleX)
+                                    .scaleY(scaleY)
+                                    .fill(fill)
+                                    .stroke(stroke)
+                                    .strokewidth(2)
+                                    .append(g);*/
+
+                return instance;
+            };
+
+            return instance;
+        };
+
         win.onload = () => {
 
             let width = globalwidth;
@@ -307,14 +1084,7 @@
             //let pallete = chroma.scale(['#061639', 'black']).colors(24);
             let palletejson = JSON.stringify(colors);
 
-            let MaskedLayer = () => {
-                // Маскированный слой
-                // Свойства должны совпадать с layers
-                // За некоторыми исключениями или в layers добавить пустые свойства
-                let instance = {};
 
-                return instance;
-            };
 
             // объект Холст
             function Canvas(spec) {
@@ -326,15 +1096,14 @@
                 let pallete = [];
                 let gradients = [];
                 let layers = [];
-                let maskedlayers = []; // объединить с layers
+                let extendedlayers = []; // объединить с layers
                 let rects = []; // удалить после объединения с layers
 
                 instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
                     let layer = Layer()
                         .data(data)
-                        .width(width)
-                        .height(height)
+                        .width(width).height(height)
                         .margin(margin)
                         .fill(fill)
                         .stroke(stroke)
@@ -349,15 +1118,14 @@
                 };
 
                 // объединить c newLayer
-                instance.newMaskedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
+                instance.newExtendedLayer = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
 
                     let m = Mask()
                         .append(defs);
 
                     let layer = Layer()
                         .data(data)
-                        .width(width)
-                        .height(height)
+                        .width(width).height(height)
                         .margin(margin)
                         .fill(maskfill)
                         .stroke(maskstroke)
@@ -371,7 +1139,7 @@
                         if (spec.line) layer.appendLine();
                         if (spec.dots) layer.appendDots();
                     }
-                    //maskedlayers.push(m);
+                    extendedlayers.push(m);
 
                     let r = Rect({
                         'width': width,
@@ -392,6 +1160,7 @@
                     height = h;
                     svg = d3.select("#canvas")
                         .append("svg")
+                        .attr('id', 'svgcanvas')
                         .style('max-width', '100%')
                         .style('max-height', '100%')
                         .attr("class", "axis w-100")
@@ -567,453 +1336,273 @@
                 return instance;
             }
 
-            let canvas = Canvas({
-                    color: 'white', //'#6495ed',
-                    width: width
-                })
-                .generatePallete({
-                    'colors': ['white', 'darkblue']
-                });
-            let p = canvas.pallete();
-            canvas
-                .headline('Pallete')
-                .description(JSON.stringify(p)) //palletejson)
-                .appendSvg(width, height)
-                .onresize(true)
-                .appendDefs();
+            var firstCloudsOn = true;
+            const firstClouds = ((enabled) => {
+                if (enabled) {
+                    // Создание картинки
+                    let canvas = Canvas({
+                            color: 'white', //'#6495ed',
+                            width: width
+                        })
+                        .generatePallete({
+                            'colors': ['white', 'darkblue']
+                        });
+                    let p = canvas.pallete();
 
-            // canvas.showTextWidget();
+                    canvas
+                        .headline('Pallete')
+                        .description(JSON.stringify(p)) //palletejson)
+                        .appendSvg(width, height)
+                        .onresize(true)
+                        .appendDefs();
+
+                    // canvas.showTextWidget();
 
 
-            // html цвета
-            // rapidtables.com/web/color/html-color-codes.html
-            // https://www.w3schools.com/colors/colors_names.asp
-            // https://colorscheme.ru/html-colors.html
-            // https://colorscheme.ru/color-names.html
+                    // html цвета
+                    // rapidtables.com/web/color/html-color-codes.html
+                    // https://www.w3schools.com/colors/colors_names.asp
+                    // https://colorscheme.ru/html-colors.html
+                    // https://colorscheme.ru/color-names.html
 
-            let BackData = [{
-                x: 0,
-                y: 0
-            }, {
-                x: 0,
-                y: 109
-            }, {
-                x: 192,
-                y: 109
-            }, {
-                x: 192,
-                y: 0
-            }];
+                    let BackData = [{
+                        x: 0,
+                        y: 0
+                    }, {
+                        x: 0,
+                        y: 109
+                    }, {
+                        x: 192,
+                        y: 109
+                    }, {
+                        x: 192,
+                        y: 0
+                    }];
 
-            // фон
-            let GBack = Gradient();
-            canvas.appendGradient(GBack);
-            GBack.id('Back')
-                .stop('0', 'darkblue', '1')
-                .stop('1', 'lightblue', '1');
-            let GBackurl = GBack.url();
-            canvas.newMaskedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
-            // слои
-            // 5
-            let Layer5Data = [{
-                x: 83,
-                y: 81,
-                r: 10
-            }];
-            let G5 = Gradient();
-            canvas.appendGradient(G5);
-            G5.id('G5')
-                .stop('0', p[16].toString(), '1')
-                .stop('1', p[16].toString(), '1');
-            let G5url = G5.url();
-            canvas.newMaskedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
+                    // фон
+                    let GBack = Gradient();
+                    canvas.appendGradient(GBack);
+                    GBack.id('Back')
+                        .stop('0', 'darkblue', '1')
+                        .stop('1', 'lightblue', '1');
+                    let GBackurl = GBack.url();
+                    canvas.newExtendedLayer(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                    // слои
+                    // 5
+                    let Layer5Data = [{
+                        x: 83,
+                        y: 81,
+                        r: 10
+                    }];
+                    let G5 = Gradient();
+                    canvas.appendGradient(G5);
+                    G5.id('G5')
+                        .stop('0', p[16].toString(), '1')
+                        .stop('1', p[16].toString(), '1');
+                    let G5url = G5.url();
+                    canvas.newExtendedLayer(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 4
+                    let Layer4Data = [{
+                        x: 77,
+                        y: 76,
+                        r: 12
+                    }, {
+                        x: 83,
+                        y: 70,
+                        r: 11
+                    }, {
+                        x: 90,
+                        y: 55,
+                        r: 17
+                    }];
+                    let G4 = Gradient();
+                    canvas.appendGradient(G4);
+                    G4.id('G4')
+                        .stop('0', p[12].toString(), '1')
+                        .stop('1', p[12].toString(), '1');
+                    let G4url = G4.url();
+                    canvas.newExtendedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 3
+                    let Layer3Data = [{
+                        x: 46,
+                        y: 78,
+                        r: 15
+                    }, {
+                        x: 58,
+                        y: 80,
+                        r: 17
+                    }, {
+                        x: 60,
+                        y: 70,
+                        r: 15
+                    }, {
+                        x: 70,
+                        y: 70,
+                        r: 11
+                    }, {
+                        x: 75,
+                        y: 55,
+                        r: 13
+                    }, {
+                        x: 83,
+                        y: 60,
+                        r: 13
+                    }];
+                    let G3 = Gradient();
+                    canvas.appendGradient(G3);
+                    G3.id('G3')
+                        .stop('0', p[8].toString(), '1')
+                        .stop('1', p[8].toString(), '1');
+                    let G3url = G3.url();
+                    canvas.newExtendedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 2
+                    let Layer2Data = [{
+                        x: 10,
+                        y: 73,
+                        r: 18
+                    }, {
+                        x: 30,
+                        y: 70,
+                        r: 13
+                    }, {
+                        x: 45,
+                        y: 70,
+                        r: 17
+                    }, {
+                        x: 50,
+                        y: 60,
+                        r: 15
+                    }, {
+                        x: 60,
+                        y: 60,
+                        r: 13
+                    }, {
+                        x: 77,
+                        y: 35,
+                        r: 15
+                    }, {
+                        x: 85,
+                        y: 10,
+                        r: 17
+                    }, {
+                        x: 90,
+                        y: 5,
+                        r: 9
+                    }];
+                    let G2 = Gradient();
+                    canvas.appendGradient(G2);
+                    G2.id('G2')
+                        .stop('0', p[4].toString(), '1')
+                        .stop('1', p[4].toString(), '1');
+                    let G2url = G2.url();
+                    canvas.newExtendedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+                    // 1
+                    let Layer1Data = [{
+                        x: 30,
+                        y: 15,
+                        r: 45
+                    }, {
+                        x: 5,
+                        y: 57,
+                        r: 10
+                    }, {
+                        x: 15,
+                        y: 61,
+                        r: 13
+                    }, {
+                        x: 35,
+                        y: 55,
+                        r: 12
+                    }, {
+                        x: 50,
+                        y: 50,
+                        r: 15
+                    }, {
+                        x: 63,
+                        y: 42,
+                        r: 9
+                    }, {
+                        x: 71,
+                        y: 32,
+                        r: 12
+                    }, {
+                        x: 84,
+                        y: 20,
+                        r: 15
+                    }, {
+                        x: 76,
+                        y: 5,
+                        r: 13
+                    }];
+                    let G1 = Gradient();
+                    canvas.appendGradient(G1);
+                    G1.id('G1')
+                        .stop('0', p[0].toString(), '1')
+                        .stop('1', p[0].toString(), '1');
+                    let G1url = G1.url();
+                    canvas.newExtendedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                        line: false,
+                        area: false,
+                        dots: true
+                    });
+
+                }
+            })(firstCloudsOn);
+
+
+            d3.select('#btnsavesvg').on('click', function() {
+
+                var svg = d3.select('#svgcanvas').node()
+                var filename = d3.select('#filename').property('value');
+                createImage(svg, globalwidth, globalheight, 'svg', filename);
+                d3.select('#ModalTitle').text('Save Image as SVG file');
+                $('#modalsave').modal('show');
             });
-            // 4
-            let Layer4Data = [{
-                x: 77,
-                y: 76,
-                r: 12
-            }, {
-                x: 83,
-                y: 70,
-                r: 11
-            }, {
-                x: 90,
-                y: 55,
-                r: 17
-            }];
-            let G4 = Gradient();
-            canvas.appendGradient(G4);
-            G4.id('G4')
-                .stop('0', p[12].toString(), '1')
-                .stop('1', p[12].toString(), '1');
-            let G4url = G4.url();
-            canvas.newMaskedLayer(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
+            d3.select('#btnsavepng').on('click', function() {
+
+                var svg = d3.select('#svgcanvas').node()
+                var filename = d3.select('#filename').property('value');
+                createImage(svg, globalwidth, globalheight, 'png', filename);
+                d3.select('#ModalTitle').text('Save Image as PNG file');
+                $('#modalsave').modal('show');
             });
-            // 3
-            let Layer3Data = [{
-                x: 46,
-                y: 78,
-                r: 15
-            }, {
-                x: 58,
-                y: 80,
-                r: 17
-            }, {
-                x: 60,
-                y: 70,
-                r: 15
-            }, {
-                x: 70,
-                y: 70,
-                r: 11
-            }, {
-                x: 75,
-                y: 55,
-                r: 13
-            }, {
-                x: 83,
-                y: 60,
-                r: 13
-            }];
-            let G3 = Gradient();
-            canvas.appendGradient(G3);
-            G3.id('G3')
-                .stop('0', p[8].toString(), '1')
-                .stop('1', p[8].toString(), '1');
-            let G3url = G3.url();
-            canvas.newMaskedLayer(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
+            d3.select('#btnsavebmp').on('click', function() {
+
+                var svg = d3.select('#svgcanvas').node()
+                var filename = d3.select('#filename').property('value');
+                createImage(svg, globalwidth, globalheight, 'bmp', filename);
+                d3.select('#ModalTitle').text('Save Image as BMP file');
+                $('#modalsave').modal('show');
             });
-            // 2
-            let Layer2Data = [{
-                x: 10,
-                y: 73,
-                r: 18
-            }, {
-                x: 30,
-                y: 70,
-                r: 13
-            }, {
-                x: 45,
-                y: 70,
-                r: 17
-            }, {
-                x: 50,
-                y: 60,
-                r: 15
-            }, {
-                x: 60,
-                y: 60,
-                r: 13
-            }, {
-                x: 77,
-                y: 35,
-                r: 15
-            }, {
-                x: 85,
-                y: 10,
-                r: 17
-            }, {
-                x: 90,
-                y: 5,
-                r: 9
-            }];
-            let G2 = Gradient();
-            canvas.appendGradient(G2);
-            G2.id('G2')
-                .stop('0', p[4].toString(), '1')
-                .stop('1', p[4].toString(), '1');
-            let G2url = G2.url();
-            canvas.newMaskedLayer(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
-            });
-            // 1
-            let Layer1Data = [{
-                x: 30,
-                y: 15,
-                r: 45
-            }, {
-                x: 5,
-                y: 57,
-                r: 10
-            }, {
-                x: 15,
-                y: 61,
-                r: 13
-            }, {
-                x: 35,
-                y: 55,
-                r: 12
-            }, {
-                x: 50,
-                y: 50,
-                r: 15
-            }, {
-                x: 63,
-                y: 42,
-                r: 9
-            }, {
-                x: 71,
-                y: 32,
-                r: 12
-            }, {
-                x: 84,
-                y: 20,
-                r: 15
-            }, {
-                x: 76,
-                y: 5,
-                r: 13
-            }];
-            let G1 = Gradient();
-            canvas.appendGradient(G1);
-            G1.id('G1')
-                .stop('0', p[0].toString(), '1')
-                .stop('1', p[0].toString(), '1');
-            let G1url = G1.url();
-            canvas.newMaskedLayer(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
-                line: false,
-                area: false,
-                dots: true
+            d3.select('#btnsavejpeg').on('click', function() {
+
+                var svg = d3.select('#svgcanvas').node()
+                var filename = d3.select('#filename').property('value');
+                createImage(svg, globalwidth, globalheight, 'jpeg', filename);
+                d3.select('#ModalTitle').text('Save Image as JPEG file');
+                $('#modalsave').modal('show');
             });
 
-            //
-            // создание графического файла
-            //
-            var svg = d3.select('svg').node()
-
-
-            /*
-            var xml = new XMLSerializer().serializeToString(svg);
-
-            var svg64 = btoa(xml);
-            var b64Start = 'data:image/svg+xml;base64,';
-
-            var image64 = b64Start + svg64;
-
-            img.src = image64;
-
-            realcanvas.getContext('2d').drawImage(img, 0, 0);
-*/
-            let createImage = (svg, width, height) => {
-                let canvaspngUrl;
-
-                const doctype = '<?xml version="1.0" standalone="no"?>' +
-                    //'<?xml-stylesheet type="text/css" href="banner.css"?>' +
-                    '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">';
-
-                // сериализуем наш SVG XML в строку.
-                const source = (new XMLSerializer()).serializeToString(svg);
-
-                // создаём файл - пузырь нашего SVG.
-                const blob = new Blob([doctype + source], {
-                    type: 'image/svg+xml;charset=utf-8'
-                });
-
-
-
-                const url = window.URL.createObjectURL(blob);
-
-
-
-                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
-                const img = d3.select('#prepare').append('img')
-                    .attr('width', width)
-                    .attr('height', height)
-                    .attr('id', 'img_png')
-                    //.on('click',()=>{alert('img_png')})
-                    .node();
-
-                img.onload = function() {
-                        // Когда картинка загружена помещаем картинку в элемент Canvas.
-                        const canvaspng = d3.select('#prepare')
-                            .append('canvas')
-                            .attr('id', 'canvaspng')
-                            .style('margin', '0 auto')
-                            //.on('click',()=>{alert('canvaspng')})
-                            .node();
-
-                        canvaspng.width = width;
-                        canvaspng.height = height;
-
-                        const ctxpng = canvaspng.getContext('2d');
-
-                        ctxpng.drawImage(img, 0, 0);
-
-                        canvaspngUrl = canvaspng.toDataURL('image/png');
-
-                        let a = d3.select('#result')
-                            .append('a')
-                            .attr('id', 'resultlink')
-                            .node();
-                        a.href = canvaspngUrl;
-                        a.title = 'result';
-                        a.download = 'result.png';
-
-                        const imgresult = d3.select('#resultlink')
-                            .append('img')
-                            .attr('id', 'img_result')
-                            .attr('name', 'result')
-                            .attr('title', 'result')
-                            .style('max-width', '100%')
-                            .style('max-height', '100%')
-                            //.on('click',()=>{alert('img_result')})
-                            .node();
-
-                        imgresult.src = canvaspngUrl;
-                        //window.location.href = canvaspngUrl;
-
-                        canvaspng.width = 0;
-                        canvaspng.height = 0;
-
-                        //imgresult.width=0;
-                        //imgresult.height=0;
-
-                    }
-                    // Начало загрузки картинки.
-                img.src = url;
-                img.width = 0;
-                img.height = 0;
-                console.log('good');
-
-
-            };
-
-
-            createImage(svg, globalwidth, globalheight);
             /*
             <div class="container">
                 <img src="http://placehold.it/1600x1200" />
             </div>
-
-            <style>
-
-            ze an image to fit the view port (100% of browser width or height):
-
-            html, body {
-                height: 100%;
-                margin: 0;
-            }
-            .container {
-                height: 100%;
-                width: 100%;
-                background-color: red;
-                text-align: center;
-            }
-            .container img {
-                vertical-align: top;
-            }
-            .portrait img {
-                width: 100%;
-            }
-
-            .landscape img {
-                height: 100%;
-            }
-
-            </style>
-
-            }
-            Use the following jQuery method to pick the correct CSS rule depending on the aspect ratio of the view port:
-
-            function resizeImg() {
-                var thisImg= $('.container');
-                var refH = thisImg.height();
-                var refW = thisImg.width();
-                var refRatio = refW/refH;
-
-                var imgH = thisImg.children("img").height();
-                var imgW = thisImg.children("img").width();
-
-                if ( (imgW/imgH) > refRatio ) { 
-                    thisImg.addClass("portrait");
-                    thisImg.removeClass("landscape");
-                } else {
-                    thisImg.addClass("landscape");
-                    thisImg.removeClass("portrait");
-                }
-            }
-
-            $(document).ready(resizeImg())
-
-            $(window).resize(function(){
-                resizeImg();
-            });
-
-
-
-            */
-
-
-            /*
-
-            предыдущий подвиг для анализа 
-
-            внешний css - надо запомнить
-      
-            // создаем картинку в формате png
-            function createImage() {
-                // сериализуем наш SVG XML в строку.
-                const source = (new XMLSerializer()).serializeToString(banner.board.svg.node());
-
-                // создаём файл - пузырь нашего SVG.
-                const blob = new Blob([ doctype + source], { type: 'image/svg+xml;charset=utf-8' });
-
-                const url = window.URL.createObjectURL(blob);
-
-                // Помещаем svg между тэгами картинки так, чтобы элемент Canvas мог его прочитать.
-                const img = banner.parent.append('img')
-                    .attr('width', banner.width)
-                    .attr('height', banner.height)
-                    .attr('id','img_1')
-                    .node();
-
-                img.onload = function(){
-                    // Когда картинка загружена помещаем картинку в элемент Canvas.
-                    const canvas = banner.parent.append('canvas').attr('id','canvas').node();
-                    canvas.width = banner.width;
-                    canvas.height = banner.height;
-                    
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    const canvasUrl = canvas.toDataURL('image/png');
-                    const img2 = banner.parent.append('img')
-                    .attr('width', banner.width)
-                    .attr('height', banner.height)
-                    .attr('id','img_2')
-                    .node();
-                    // И сейчас это base64 версия нашего PNG! Вы можете перенаправить её
-                    // пользователю для загрузки PNG, отправив ему ссылку 
-                    // `window.location.href= canvasUrl`.
-                    img2.src = canvasUrl; 
-                    // Прячем Canvas от посторонних глаз
-                    canvas.width = 0;
-                    canvas.height = 0;
-                }
-                // Начало загрузки картинки.
-                img.src = url;
-                
-                //// Прячем SVG и первую картинку
-                banner.parent.select('svg')
-                    .attr('width',0)
-                    .attr('height',0);
-                banner.parent.select('img#img_1')
-                    .attr('width',0)
-                    .attr('height',0);
-            }
-
-            */
 
             /*
             
@@ -1066,5 +1655,7 @@ function calcPositions() {
     </script>
 
 </body>
+
+</html>
 
 </html>
