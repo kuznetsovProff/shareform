@@ -500,6 +500,8 @@
         let Layer = (spec) => {
             let instance = {};
             let id, g;
+            let maxX,
+                maxY;
             let data, width, height, margin, fill, stroke;
             let parent;
 
@@ -510,6 +512,10 @@
                 margin = 0;
                 fill = 'white';
                 stroke = 'white';
+
+                // 1920x1080 / 10
+                maxX = 192;
+                maxY = 108;
             } else {
                 if (_.isEmpty(spec.id)) {
                     id = 'id_l_' + Date.now();
@@ -518,6 +524,16 @@
                 }
                 if (!_.isEmpty(spec.g)) g = spec.g;
                 if (!_.isEmpty(spec.data)) data = spec.data;
+                if (_.isEmpty(spec.maxX)) {
+                    maxX = 192;
+                } else {
+                    maxX = spec.maxX;
+                }
+                if (_.isEmpty(spec.maxY)) {
+                    maxY = 108;
+                } else {
+                    maxY = spec.maxY;
+                }
                 if (_.isEmpty(spec.width)) {
                     width = globalwidth;
                 } else {
@@ -570,6 +586,30 @@
                     return data;
                 }
                 data = d;
+                return instance;
+            };
+
+            // присваиваем или получаем maxX
+            instance.maxX = (x) => {
+                if (typeof(x) == 'number') {
+                    x = x.toString();
+                }
+                if (_.isEmpty(x)) {
+                    return maxX;
+                }
+                maxX = x;
+                return instance;
+            };
+
+            // присваиваем или получаем maxY
+            instance.maxY = (y) => {
+                if (typeof(y) == 'number') {
+                    y = y.toString();
+                }
+                if (_.isEmpty(y)) {
+                    return maxY;
+                }
+                maxY = y;
                 return instance;
             };
 
@@ -702,9 +742,9 @@
                 // длина оси Y = высота слоя - отступ сверху и снизу
                 yAxisLength = AxisLength(height, margin);
                 // функция интерполяции значений на ось X
-                scaleX = AxisScale(xAxisLength, [0, 192]); // 1920x1080
+                scaleX = AxisScale(xAxisLength, [0, maxX]); // 1920x1080
                 // функция интерполяции значений на ось Y
-                scaleY = AxisScale(yAxisLength, [109, 0]); // 1920x1080
+                scaleY = AxisScale(yAxisLength, [maxY, 0]); // 1920x1080
                 // расположение точек линии с учетом интерполяции
                 return LineDots(data, scaleX, scaleY, margin);
             };
@@ -723,6 +763,10 @@
             let m; // Ссылка на маску
 
             let id, g;
+
+            let maxX,
+                maxY;
+
             let defs; // Добавить ссылку на defs
             let rect;
             let data, width, height, margin, fill, stroke;
@@ -743,6 +787,10 @@
                 margin = 0;
                 fill = 'white';
                 stroke = 'white';
+
+                // 1920x1080 / 10
+                maxX = 192;
+                maxY = 108;
             } else {
                 if (_.isEmpty(spec.id)) {
                     id = 'id_l_' + Date.now();
@@ -753,6 +801,16 @@
                 if (!_.isEmpty(spec.defs)) defs = spec.defs;
                 if (!_.isEmpty(spec.rect)) rect = spec.rect;
                 if (!_.isEmpty(spec.data)) data = spec.data;
+                if (_.isEmpty(spec.maxX)) {
+                    maxX = 192;
+                } else {
+                    maxX = spec.maxX;
+                }
+                if (_.isEmpty(spec.maxY)) {
+                    maxY = 108;
+                } else {
+                    maxY = spec.maxY;
+                }
                 if (_.isEmpty(spec.width)) {
                     width = globalwidth;
                 } else {
@@ -826,6 +884,30 @@
                     return data;
                 }
                 data = d;
+                return instance;
+            };
+
+            // присваиваем или получаем maxX
+            instance.maxX = (x) => {
+                if (typeof(x) == 'number') {
+                    x = x.toString();
+                }
+                if (_.isEmpty(x)) {
+                    return maxX;
+                }
+                maxX = x;
+                return instance;
+            };
+
+            // присваиваем или получаем maxY
+            instance.maxY = (y) => {
+                if (typeof(y) == 'number') {
+                    y = y.toString();
+                }
+                if (_.isEmpty(y)) {
+                    return maxY;
+                }
+                maxY = y;
                 return instance;
             };
 
@@ -941,6 +1023,8 @@
                 m = Mask()
                     .append(defs); //defs - родитель для обычного слоя
                 layer = Layer()
+                    .maxX(maxX)
+                    .maxY(maxY)
                     .data(data)
                     .width(width).height(height)
                     .margin(margin)
@@ -1012,6 +1096,8 @@
                 let instance = {};
                 let headline, description;
                 let svg, defs, width, height;
+                let maxX = 192,
+                    maxY = 108; // 1920x1080 / 10
                 let data = {};
                 let margin = 0;
                 let pallete = [];
@@ -1023,6 +1109,7 @@
                 instance.newLayer = (data, width, height, margin, fill, stroke) => {
 
                     let layer = Layer()
+                        .maxX(maxX).maxY(maxY)
                         .data(data)
                         .width(width).height(height)
                         .margin(margin)
@@ -1045,6 +1132,7 @@
                         .append(defs);
 
                     let layer = Layer()
+                        .maxX(maxX).maxY(maxY)
                         .data(data)
                         .width(width).height(height)
                         .margin(margin)
@@ -1078,14 +1166,12 @@
                 instance.newExtendedLayerV2 = (data, width, height, margin, fill, stroke, maskfill, maskstroke, spec) => {
 
                     let extended = ExtendedLayer()
+                        .maxX(maxX).maxY(maxY)
                         .data(data)
-                        .width(width)
-                        .height(height)
+                        .width(width).height(height)
                         .margin(margin)
-                        .fill(fill)
-                        .stroke(stroke)
-                        .maskfill(maskfill)
-                        .maskstroke(maskstroke)
+                        .fill(fill).stroke(stroke)
+                        .maskfill(maskfill).maskstroke(maskstroke)
                         .defs(defs)
                         .append(svg);
                     if (_.isEmpty(spec)) {
@@ -1169,6 +1255,22 @@
                     height = h;
                     svg.attr("viewBox", "0 0 " + width + " " + height);
                     //.attr('height', win.innerHeight);
+                    return instance;
+                };
+
+                // устанавливаем или получаем maxX
+                instance.maxX = (x) => {
+                    if (!arguments.length) return maxX;
+                    maxX = x;
+
+                    return instance;
+                };
+
+                // устанавливаем или получаем maxX
+                instance.maxY = (y) => {
+                    if (!arguments.length) return maxY;
+                    maxY = Y;
+
                     return instance;
                 };
 
@@ -1309,7 +1411,6 @@
                         .appendDefs();
 
                     // canvas.showTextWidget();
-
 
                     // html цвета
                     // rapidtables.com/web/color/html-color-codes.html
@@ -1517,6 +1618,12 @@
                 }
             })(firstCloudsOn);
 
+            //   ####
+            //  ##  ##
+            //     ##
+            //   ##
+            //  ######
+
             const secondClouds = ((enabled) => {
                 if (enabled) {
                     // Создание картинки
@@ -1536,204 +1643,244 @@
                         .onresize(true)
                         .appendDefs();
 
-                    let BackData = [{
-                        x: 0,
-                        y: 0
-                    }, {
-                        x: 0,
-                        y: 109
-                    }, {
-                        x: 192,
-                        y: 109
-                    }, {
-                        x: 192,
-                        y: 0
-                    }];
+                    let BackOn = true;
+                    let Layer5On = true;
+                    let Layer4On = true;
+                    let Layer3On = true;
+                    let Layer2On = false;
+                    let Layer1On = false;
 
-                    // фон
-                    let GBack = Gradient();
-                    canvas.appendGradient(GBack);
-                    GBack.id('Back')
-                        .stop('0', 'darkblue', '1')
-                        .stop('1', 'lightblue', '1');
-                    let GBackurl = GBack.url();
-                    canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                    let Back = ((enabled) => {
+                        if (enabled) {
+                            let BackData = [{
+                                x: 0,
+                                y: 0
+                            }, {
+                                x: 0,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 0
+                            }];
+
+                            // Градиент
+                            let GBack = Gradient();
+                            canvas.appendGradient(GBack);
+                            GBack.id('Back')
+                                .stop('0', 'darkblue', '1')
+                                .stop('1', 'lightblue', '1');
+                            let GBackurl = GBack.url();
+
+
+                            canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                        }
+                    })(BackOn);
+
+
                     // слои
-                    // 5
-                    let Layer5Data = [{
-                        x: 83,
-                        y: 81,
-                        r: 10
-                    }];
-                    let G5 = Gradient();
-                    canvas.appendGradient(G5);
-                    G5.id('G5')
-                        .stop('0', p[16].toString(), '1')
-                        .stop('1', p[16].toString(), '1');
-                    let G5url = G5.url();
-                    canvas.newExtendedLayerV2(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
-                        line: false,
-                        area: false,
-                        dots: true
-                    });
-                    // 4
-                    let Layer4Data = [{
-                        x: 77,
-                        y: 76,
-                        r: 12
-                    }, {
-                        x: 83,
-                        y: 70,
-                        r: 11
-                    }, {
-                        x: 90,
-                        y: 55,
-                        r: 17
-                    }];
-                    let G4 = Gradient();
-                    canvas.appendGradient(G4);
-                    G4.id('G4')
-                        .stop('0', p[12].toString(), '1')
-                        .stop('1', p[12].toString(), '1');
-                    let G4url = G4.url();
-                    canvas.newExtendedLayerV2(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
-                        line: false,
-                        area: false,
-                        dots: true
-                    });
-                    // 3
-                    let Layer3Data = [{
-                        x: 46,
-                        y: 78,
-                        r: 15
-                    }, {
-                        x: 58,
-                        y: 80,
-                        r: 17
-                    }, {
-                        x: 60,
-                        y: 70,
-                        r: 15
-                    }, {
-                        x: 70,
-                        y: 70,
-                        r: 11
-                    }, {
-                        x: 75,
-                        y: 55,
-                        r: 13
-                    }, {
-                        x: 83,
-                        y: 60,
-                        r: 13
-                    }];
-                    let G3 = Gradient();
-                    canvas.appendGradient(G3);
-                    G3.id('G3')
-                        .stop('0', p[8].toString(), '1')
-                        .stop('1', p[8].toString(), '1');
-                    let G3url = G3.url();
-                    canvas.newExtendedLayerV2(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
-                        line: false,
-                        area: false,
-                        dots: true
-                    });
-                    // 2
-                    let Layer2Data = [{
-                        x: 10,
-                        y: 73,
-                        r: 18
-                    }, {
-                        x: 30,
-                        y: 70,
-                        r: 13
-                    }, {
-                        x: 45,
-                        y: 70,
-                        r: 17
-                    }, {
-                        x: 50,
-                        y: 60,
-                        r: 15
-                    }, {
-                        x: 60,
-                        y: 60,
-                        r: 13
-                    }, {
-                        x: 77,
-                        y: 35,
-                        r: 15
-                    }, {
-                        x: 85,
-                        y: 10,
-                        r: 17
-                    }, {
-                        x: 90,
-                        y: 5,
-                        r: 9
-                    }];
-                    let G2 = Gradient();
-                    canvas.appendGradient(G2);
-                    G2.id('G2')
-                        .stop('0', p[4].toString(), '1')
-                        .stop('1', p[4].toString(), '1');
-                    let G2url = G2.url();
-                    canvas.newExtendedLayerV2(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
-                        line: false,
-                        area: false,
-                        dots: true
-                    });
-                    // 1
-                    let Layer1Data = [{
-                        x: 30,
-                        y: 15,
-                        r: 45
-                    }, {
-                        x: 5,
-                        y: 57,
-                        r: 10
-                    }, {
-                        x: 15,
-                        y: 61,
-                        r: 13
-                    }, {
-                        x: 35,
-                        y: 55,
-                        r: 12
-                    }, {
-                        x: 50,
-                        y: 50,
-                        r: 15
-                    }, {
-                        x: 63,
-                        y: 42,
-                        r: 9
-                    }, {
-                        x: 71,
-                        y: 32,
-                        r: 12
-                    }, {
-                        x: 84,
-                        y: 20,
-                        r: 15
-                    }, {
-                        x: 76,
-                        y: 5,
-                        r: 13
-                    }];
-                    let G1 = Gradient();
-                    canvas.appendGradient(G1);
-                    G1.id('G1')
-                        .stop('0', p[0].toString(), '1')
-                        .stop('1', p[0].toString(), '1');
-                    let G1url = G1.url();
-                    canvas.newExtendedLayerV2(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
-                        line: false,
-                        area: false,
-                        dots: true
-                    });
 
+                    // 5
+                    let Layer5 = ((enabled) => {
+                        if (enabled) {
+                            let Layer5Data = [{
+                                x: 83,
+                                y: 81,
+                                r: 10
+                            }];
+                            let G5 = Gradient();
+                            canvas.appendGradient(G5);
+                            G5.id('G5')
+                                .stop('0', p[16].toString(), '1')
+                                .stop('1', p[16].toString(), '1');
+                            let G5url = G5.url();
+                            canvas.newExtendedLayerV2(Layer5Data, width, height, margin, G5url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer5On);
+
+                    // 4
+                    let Layer4 = ((enabled) => {
+                        if (enabled) {
+                            let Layer4Data = [{
+                                x: 77,
+                                y: 76,
+                                r: 12
+                            }, {
+                                x: 83,
+                                y: 70,
+                                r: 11
+                            }, {
+                                x: 90,
+                                y: 55,
+                                r: 17
+                            }];
+                            let G4 = Gradient();
+                            canvas.appendGradient(G4);
+                            G4.id('G4')
+                                .stop('0', p[12].toString(), '1')
+                                .stop('1', p[12].toString(), '1');
+                            let G4url = G4.url();
+                            canvas.newExtendedLayerV2(Layer4Data, width, height, margin, G4url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer4On);
+
+                    // 3
+                    let Layer3 = ((enabled) => {
+                        if (enabled) {
+                            let Layer3Data = [{
+                                x: 46,
+                                y: 78,
+                                r: 15
+                            }, {
+                                x: 58,
+                                y: 80,
+                                r: 17
+                            }, {
+                                x: 60,
+                                y: 70,
+                                r: 15
+                            }, {
+                                x: 70,
+                                y: 70,
+                                r: 11
+                            }, {
+                                x: 75,
+                                y: 55,
+                                r: 13
+                            }, {
+                                x: 83,
+                                y: 60,
+                                r: 13
+                            }];
+                            let G3 = Gradient();
+                            canvas.appendGradient(G3);
+                            G3.id('G3')
+                                .stop('0', p[8].toString(), '1')
+                                .stop('1', p[8].toString(), '1');
+                            let G3url = G3.url();
+                            canvas.newExtendedLayerV2(Layer3Data, width, height, margin, G3url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer3On);
+
+                    // 2
+                    let Layer2 = ((enabled) => {
+                        if (enabled) {
+                            let Layer2Data = [{
+                                x: 10,
+                                y: 73,
+                                r: 18
+                            }, {
+                                x: 30,
+                                y: 70,
+                                r: 13
+                            }, {
+                                x: 45,
+                                y: 70,
+                                r: 17
+                            }, {
+                                x: 50,
+                                y: 60,
+                                r: 15
+                            }, {
+                                x: 60,
+                                y: 60,
+                                r: 13
+                            }, {
+                                x: 77,
+                                y: 35,
+                                r: 15
+                            }, {
+                                x: 85,
+                                y: 10,
+                                r: 17
+                            }, {
+                                x: 90,
+                                y: 5,
+                                r: 9
+                            }];
+                            let G2 = Gradient();
+                            canvas.appendGradient(G2);
+                            G2.id('G2')
+                                .stop('0', p[4].toString(), '1')
+                                .stop('1', p[4].toString(), '1');
+                            let G2url = G2.url();
+                            canvas.newExtendedLayerV2(Layer2Data, width, height, margin, G2url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer2On);
+
+                    // 1
+                    let Layer1 = ((enabled) => {
+                        if (enabled) {
+                            let Layer1Data = [{
+                                x: 30,
+                                y: 15,
+                                r: 45
+                            }, {
+                                x: 5,
+                                y: 57,
+                                r: 10
+                            }, {
+                                x: 15,
+                                y: 61,
+                                r: 13
+                            }, {
+                                x: 35,
+                                y: 55,
+                                r: 12
+                            }, {
+                                x: 50,
+                                y: 50,
+                                r: 15
+                            }, {
+                                x: 63,
+                                y: 42,
+                                r: 9
+                            }, {
+                                x: 71,
+                                y: 32,
+                                r: 12
+                            }, {
+                                x: 84,
+                                y: 20,
+                                r: 15
+                            }, {
+                                x: 76,
+                                y: 5,
+                                r: 13
+                            }];
+                            let G1 = Gradient();
+                            canvas.appendGradient(G1);
+                            G1.id('G1')
+                                .stop('0', p[0].toString(), '1')
+                                .stop('1', p[0].toString(), '1');
+                            let G1url = G1.url();
+                            canvas.newExtendedLayerV2(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer1On);
                 }
+
             })(secondCloudsOn);
 
 
@@ -1826,6 +1973,8 @@ function calcPositions() {
     </script>
 
 </body>
+
+</html>
 
 </html>
 
