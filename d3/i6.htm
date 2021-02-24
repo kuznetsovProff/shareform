@@ -1976,6 +1976,7 @@
                             let _1stRadius = 20;
                             let _2ndRadius = 10;
                             let angle = 0;
+                            
                             _1deg = Math.PI/180;
                             _5deg = Math.PI/36;
                             _10deg = Math.PI/18;
@@ -1986,6 +1987,8 @@
                             _60deg = Math.PI/3;
                             _90deg = Math.PI/2;
                             _180deg = Math.PI;
+                            _360deg = 2*Math.PI;
+                            
                             angle = _45deg;
                             //angle = -Math.PI/4; // 90 deg
         
@@ -1993,8 +1996,10 @@
                             let Layer1Data = [];
                             
                             addDot(Layer1Data,firstDot);
+                            
                             let _2ndPos = getPositions(_1stRadius,angle);
                             addDot(Layer1Data,{x:50+_2ndPos.x,y:50+_2ndPos.y,r:_2ndRadius});
+                            
                             let G1 = Gradient();
                             canvas.appendGradient(G1);
                             G1.id('G1')
