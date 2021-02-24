@@ -1389,7 +1389,8 @@
             }
 
             let firstCloudsOn = false;
-            let secondCloudsOn = true;
+            let secondCloudsOn = false;
+            let thirdCloudsOn = true;
 
             const firstClouds = ((enabled) => {
                 if (enabled) {
@@ -1883,6 +1884,133 @@
 
             })(secondCloudsOn);
 
+            //  #####
+            //      ##
+            //   ####
+            //      ##
+            //  #####
+
+            const thirdClouds = ((enabled) => {
+                if (enabled) {
+                    // Создание картинки
+                    let canvas = Canvas({
+                            color: 'white', //'#6495ed',
+                            width: width
+                        })
+                        .generatePallete({
+                            'colors': ['white', 'darkblue']
+                        });
+                    let p = canvas.pallete();
+
+                    canvas
+                        .headline('Pallete')
+                        .description(JSON.stringify(p)) //palletejson)
+                        .appendSvg(width, height)
+                        .onresize(true)
+                        .appendDefs();
+
+                    // функции для работы с углами окружности
+                    // get angle of item 
+                    function angleByChord(this_radius, radius) {
+                        let a = (2*radius*radius - this_radius*this_radius) / (2 * radius);
+                              
+                        let chord = Math.sqrt(radius*radius - a*a) * 2;
+                              
+                        return Math.asin(chord / (2 * radius)) * 2;
+                    }
+        
+                    //start angle
+                    let startangle = -Math.PI / 2; // 90 deg
+        
+                    //angle steps between elements
+                    let step = Math.PI / 12; //15 deg
+        
+                    function getPositions(radius,angle) {
+                        //calculate positions
+                        let posX = radius * Math.cos(angle);
+                        let posY = radius * Math.sin(angle);
+                        return {x: posX, y: posY};
+                    }
+
+                    let BackOn = true;
+                    let Layer1On = true;
+
+                    let Back = ((enabled) => {
+                        if (enabled) {
+                            let BackData = [{
+                                x: 0,
+                                y: 0
+                            }, {
+                                x: 0,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 0
+                            }];
+
+                            // Градиент
+                            let GBack = Gradient();
+                            canvas.appendGradient(GBack);
+                            GBack.id('Back')
+                                .stop('0', 'darkblue', '1')
+                                .stop('1', 'lightblue', '1');
+                            let GBackurl = GBack.url();
+
+
+                            canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                        }
+                    })(BackOn);
+
+                    function addDot(arr,dot){
+                      arr.push(dot);
+                      return arr;
+                    };
+                    // слои
+
+                    // 1
+                    let Layer1 = ((enabled) => {
+                        if (enabled) {
+                            let _1stRadius = 20;
+                            let _2ndRadius = 10;
+                            let angle = 0;
+                            _5deg = Math.PI/36;
+                            _10deg = Math.PI/18;
+                            _15deg = Math.PI/12;
+                            _20deg = Math.PI/9;
+                            _30deg = Math.PI/6;
+                            _45deg = Math.PI/4;
+                            _60deg = Math.PI/3;
+                            _90deg = Math.PI/2;
+                            _180deg = Math.PI;
+                            angle = _45deg;
+                            //angle = -Math.PI/4; // 90 deg
+        
+                            let firstDot = {x:50,y:50,r:_1stRadius};
+                            let Layer1Data = [];
+                            
+                            addDot(Layer1Data,firstDot);
+                            let _2ndPos = getPositions(_1stRadius,angle);
+                            addDot(Layer1Data,{x:50+_2ndPos.x,y:50+_2ndPos.y,r:_2ndRadius});
+                            let G1 = Gradient();
+                            canvas.appendGradient(G1);
+                            G1.id('G1')
+                                .stop('0', p[0].toString(), '1')
+                                .stop('1', p[0].toString(), '1');
+                            let G1url = G1.url();
+                            canvas.newExtendedLayerV2(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+                        }
+                    })(Layer1On);
+                }
+
+            })(thirdCloudsOn);
+
 
             d3.select('#btnsavesvg').on('click', function() {
 
@@ -1916,6 +2044,147 @@
                 d3.select('#ModalTitle').text('Save Image as JPEG file');
                 $('#modalsave').modal('show');
             });
+
+
+
+
+            let TestModuleOn = false;
+            let TestModule = ((enabled) => {
+                if (enabled) {
+                    let container = $('.container');
+                    let radius = $('.container').height() / 2;
+                    let item = $('.item');
+
+                    let leftAngle = 0;
+
+                    //start angle
+                    let angle = -Math.PI / 2; // 90 deg
+
+                    //angle steps between elements
+                    let step = Math.PI / 12; //15 deg
+
+                    let multiplier = 1;
+
+                    function calcPositions() {
+                      //calculate left rotation angle 
+                      item.each(function() {
+                        //difference in sizes if item hovered
+                        let sizesDiff = $(this).attr('data-width') - $(this).attr('data-before');
+                      
+                        //if sizes are different, calc angle to rotate items to left
+                        if(sizesDiff != 0 && leftAngle == 0) {
+                          let thisradius = $(this).attr('data-width') / 2;
+                          leftAngle = angleByChord(thisradius, radius) / 4;
+                        }
+                      });
+                      
+                      //rotate items to left
+                      if(leftAngle != 0) {
+                        angle -= leftAngle;
+                      }
+                      
+                      leftAngle = 0;
+                      
+                      item.each(function(index) {
+                        
+                        //if first, no rotation
+                        if(index == 0) {
+                          multiplier = 0;
+                        } else {
+                          multiplier = 1;
+                        }
+                        
+                        //get container circle section angle
+                        let thisItemAngleSection = angleByChord($(this).attr('data-width') / 2, radius);
+                        
+                        //this aitem angle rotation
+                        angle += ((thisItemAngleSection / 2) + step) * multiplier;
+                        
+                        //calculate positions
+                        let posX = radius + radius * Math.cos(angle);
+                        let posY = radius + radius * Math.sin(angle);
+                        
+                        //set half of angle to next element
+                        multiplier = 1
+                        angle += ((thisItemAngleSection / 2) + step) * multiplier;
+                        
+                        $(this).css({
+                          left: posX + 'px',
+                          top: posY + 'px'
+                        });
+                      });
+                      
+                      //reset
+                      angle = -Math.PI / 2;
+                    }
+                    /*
+                    //get angle of item 
+                    function angleByChord(this_radius, radius) {
+                      let a = (2*radius*radius - this_radius*this_radius) / (2 * radius);
+                      
+                      let chord = Math.sqrt(radius*radius - a*a) * 2;
+                      
+                      return Math.asin(chord / (2 * radius)) * 2;
+                    }*/
+                    
+                    /*  actions  */
+                    $('.start').on('click', function() {
+                      calcPositions();
+                    });
+                    
+                    $('.item').hover(function() {
+                      $(this).attr('data-before', $(this).width());
+                      $(this).addClass('big');
+                      
+                      //update final widths (after transitions)
+                      $(this).attr('data-width', getFinalWidthOfElement($(this)));
+                      
+                      //recalsulate positions
+                      calcPositions();
+                    }, function() {
+                      $(this).removeClass('big');
+                      
+                      //return widths
+                      $(this).attr('data-width', 30);//getFinalWidthOfElement($(this)));
+                      $(this).attr('data-before', 30);//$(this).width());
+                      
+                      calcPositions();
+                      
+                      leftAngle = 0;
+                    });
+                    
+                    function getFinalWidthOfElement(element) {
+                    
+                      //clone current elem
+                      var clone = element.clone();
+                      
+                      //remove transitions to get final sizes
+                      clone.css('transition', 'none');
+                    
+                      //hide and change classes
+                      clone.hide();
+                      clone.removeClass('item');
+                    
+                      element.parent().append(clone);
+                      
+                      //our final sizes of item
+                      var endHeight = clone.height();
+                    
+                      //remove because we're already get sizes
+                      clone.remove();
+                    
+                      return endHeight;
+                    }
+                                      
+                }
+            })(TestModuleOn);
+            
+            let TemplateModule = ((enabled) => {
+                if (enabled) {
+                  
+                }
+            })(TemplateModuleOn);
+            
 
             /*
             <div class="container">
@@ -1973,9 +2242,5 @@ function calcPositions() {
     </script>
 
 </body>
-
-</html>
-
-</html>
 
 </html>
