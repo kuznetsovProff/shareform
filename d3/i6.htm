@@ -2045,8 +2045,11 @@
 
                             // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между 
                             // длина отрезка
-                            // Math.sqrt(((p2.x-p1.x)**2)+((p2.y-p1.y)**2))
-                            // Math.sqrt(Math.pow(Math.abs(x1-x2))+Math.pow(Math.abs(y1-y2)));
+                            // d = Math.sqrt(((p2.x-p1.x)**2)+((p2.y-p1.y)**2))
+                            // d = Math.sqrt(Math.pow(Math.abs(x1-x2))+Math.pow(Math.abs(y1-y2)));
+                            // координаты
+                            // x = R*cos(a)
+                            // y = R*sin(a)
 
                             let _2ndDot = nextDot(arr, _1stDot, 15, angle, -(15 / 6));
 
