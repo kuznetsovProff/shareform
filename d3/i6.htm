@@ -2014,8 +2014,6 @@
                             //
                             let Layer1Data = [];
 
-
-
                             // 1st
                             let _1stRadius = 20;
                             let firstDot = {
@@ -2030,17 +2028,8 @@
                             nextDot(Layer1Data, firstDot, 15, angle, -(15 / 6));
                             // 3rd
                             nextDot(Layer1Data, firstDot, 12, _45deg, -(12 / 4));
-
                             // 4th
-                            let _4thRadius = 14;
-
-                            let _4thPos = getPositions(_1stRadius - _4thRadius / 3, _180deg - _10deg);
-
-                            addDot(Layer1Data, {
-                                x: firstDot.x + _4thPos.x,
-                                y: firstDot.y + _4thPos.y,
-                                r: _4thRadius
-                            });
+                            nextDot(Layer1Data, firstDot, 14, _180deg - _10deg, -(14 / 3));
 
                             let G1 = Gradient();
                             canvas.appendGradient(G1);
