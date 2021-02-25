@@ -1936,69 +1936,80 @@
                             y: posY
                         };
                     }
-                    
-                    let getX = (r,a) => {
+
+                    let getX = (r, a) => {
                         // calculate x
                         // r - radius
                         // a - angle
-                        return r*Math.cos(a);
+                        return r * Math.cos(a);
                     };
-                    
-                    let getY = (r,a) => {
+
+                    let getY = (r, a) => {
                         // calculate y
                         // r - radius
                         // a - angle
-                        return r*Math.sin(a);
+                        return r * Math.sin(a);
                     };
-                    
+
                     let getXY = (r, a) => {
                         // calculate positions
                         // r - radius
                         // a - angle
                         return {
-                            x: r*Math.cos(a),
-                            y: r*Math.sin(a)
+                            x: r * Math.cos(a),
+                            y: r * Math.sin(a)
                         };
                     };
-                    
-                    let getChord = (r, a) => {
-                            // c - хорда
-                            // R - радиус
-                            // a - центральный угол
-                            // c = 2R*sin(a/2)
-                            return 2*r*Math.sin(a/2);
-                    };
-                    
-                    let getArcLength = (r,a) => {
-                      return r*a;
-                    };
-                    
-                    
-                            // Сегмент круга
-                            // c - хорда
-                            // L - длина дуги сегмента
-                            // R - радиус
-                            // a - центральный угол
-                            // h - высота сегмента
-                            // 
-                            // Площадь сегмента
-                            // S = 1/2*(R*R)(a-sin(a))
-                            // Длина дуги
-                            // L = a * R
-                            // Длина хорды
-                            // c = 2R*sin(a/2)
-                            // Высота сегмента
-                            // h = R(1-cos(a/2))
-                            // Угол
-                            // a = L/R
-                            // a = 2 * arcsin(c/(2*R))
-                            // a = arccos(1-2*((c/R)*(c/R)))
 
-                            // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между 
-                            // длина отрезка
-                            // d = Math.sqrt(((p2.x-p1.x)**2)+((p2.y-p1.y)**2))
-                            // d = Math.sqrt(Math.pow(Math.abs(x1-x2))+Math.pow(Math.abs(y1-y2)));
-                            // координаты
+                    let getChord = (r, a) => {
+                        // c - хорда
+                        // R - радиус
+                        // a - центральный угол
+                        // c = 2R*sin(a/2)
+                        return 2 * r * Math.sin(a / 2);
+                    };
+
+                    let getArc = (r, a) => {
+                        // L - длина дуги
+                        // R - радиус
+                        // a - центральный угол
+                        // L = r*a
+                        return r * a;
+                    };
+
+                    let getHeight = (r, a) => {
+                        // Высота сегмента
+                        // R - радиус
+                        // a - центральный угол
+                        // h = R(1-cos(a/2))
+                        return r * (1 - Math.cos(a / 2));
+                    };
+
+                    let getSegment = (r, a) => {
+                        //площадь сегмента
+                        //S = 1/2*(R*R)(a-sin(a))
+                        return 1 / 2 * (Math.pow(r)) * (a - Math.sin(a));
+                    }
+
+                    let getAngleByArc = (r, l) => {
+                        // угол по длине дуги
+                        return l / r;
+                    }
+
+                    let getAngleByChord = (r, c) => {
+                        // угол по длине хорды
+                        // a = 2 * arcsin(c/(2*R))
+                        return 2 * Math.asin(c / (2 * r));
+                    }
+
+                    let getDistance = (x1, y1, x2, y2) => {
+                        // длина отрезка между двумя точками
+                        return Math.sqrt(Math.pow(Math.abs(x1 - x2)) + Math.pow(Math.abs(y1 - y2)));
+                    }
+
+                    // площадь круга ?
+
+                    // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между
 
                     // рисование точек
                     function addDot(arr, dot) {
@@ -2035,13 +2046,13 @@
                     //angle = -Math.PI/4; // 90 deg
                     // слои
 
-                            // здесь начинается математика
+                    // здесь начинается математика
 
-                            // Длина хорды
-                            // L - хорда
-                            // R - радиус
-                            // a - центральный угол
-                            // L = 2R*sin(a/2)
+                    // Длина хорды
+                    // L - хорда
+                    // R - радиус
+                    // a - центральный угол
+                    // L = 2R*sin(a/2)
 
                     let BackOn = true;
                     let Layer1On = true;
