@@ -1936,39 +1936,67 @@
                             y: posY
                         };
                     }
+                    
+                    let getX = (r,a) => {
+                        // calculate x
+                        // r - radius
+                        // a - angle
+                        return r*Math.cos(a);
+                    };
+                    
+                    let getY = (r,a) => {
+                        // calculate y
+                        // r - radius
+                        // a - angle
+                        return r*Math.sin(a);
+                    };
+                    
+                    let getXY = (r, a) => {
+                        // calculate positions
+                        // r - radius
+                        // a - angle
+                        return {
+                            x: r*Math.cos(a),
+                            y: r*Math.sin(a)
+                        };
+                    };
+                    
+                    let getChord = (r, a) => {
+                            // c - хорда
+                            // R - радиус
+                            // a - центральный угол
+                            // c = 2R*sin(a/2)
+                            return 2*r*Math.sin(a/2);
+                    };
+                    
+                    
+                            // Сегмент круга
+                            // c - хорда
+                            // L - длина дуги сегмента
+                            // R - радиус
+                            // a - центральный угол
+                            // h - высота сегмента
+                            // 
+                            // Площадь сегмента
+                            // S = 1/2*(R*R)(a-sin(a))
+                            // Длина дуги
+                            // L = a * R
+                            // Длина хорды
+                            // c = 2R*sin(a/2)
+                            // Высота сегмента
+                            // h = R(1-cos(a/2))
+                            // Угол
+                            // a = L/R
+                            // a = 2 * arcsin(c/(2*R))
+                            // a = arccos(1-2*((c/R)*(c/R)))
 
-                    let BackOn = true;
-                    let Layer1On = true;
+                            // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между 
+                            // длина отрезка
+                            // d = Math.sqrt(((p2.x-p1.x)**2)+((p2.y-p1.y)**2))
+                            // d = Math.sqrt(Math.pow(Math.abs(x1-x2))+Math.pow(Math.abs(y1-y2)));
+                            // координаты
 
-                    let Back = ((enabled) => {
-                        if (enabled) {
-                            let BackData = [{
-                                x: 0,
-                                y: 0
-                            }, {
-                                x: 0,
-                                y: 109
-                            }, {
-                                x: 192,
-                                y: 109
-                            }, {
-                                x: 192,
-                                y: 0
-                            }];
-
-                            // Градиент
-                            let GBack = Gradient();
-                            canvas.appendGradient(GBack);
-                            GBack.id('Back')
-                                .stop('0', 'darkblue', '1')
-                                .stop('1', 'lightblue', '1');
-                            let GBackurl = GBack.url();
-
-
-                            canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
-                        }
-                    })(BackOn);
-
+                    // рисование точек
                     function addDot(arr, dot) {
                         arr.push(dot);
                         return arr;
@@ -2003,6 +2031,49 @@
                     //angle = -Math.PI/4; // 90 deg
                     // слои
 
+                            // здесь начинается математика
+
+                            // Длина хорды
+                            // L - хорда
+                            // R - радиус
+                            // a - центральный угол
+                            // L = 2R*sin(a/2)
+
+                    let BackOn = true;
+                    let Layer1On = true;
+
+                    let Back = ((enabled) => {
+                        if (enabled) {
+                            let BackData = [{
+                                x: 0,
+                                y: 0
+                            }, {
+                                x: 0,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 109
+                            }, {
+                                x: 192,
+                                y: 0
+                            }];
+
+                            // Градиент
+                            let GBack = Gradient();
+                            canvas.appendGradient(GBack);
+                            GBack.id('Back')
+                                .stop('0', 'darkblue', '1')
+                                .stop('1', 'lightblue', '1');
+                            let GBackurl = GBack.url();
+
+
+                            canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
+                        }
+                    })(BackOn);
+
+
+
+
                     // 1
                     let Layer1 = ((enabled) => {
                         if (enabled) {
@@ -2015,41 +2086,6 @@
 
                             addDot(arr, _1stDot);
 
-                            // здесь начинается математика
-
-                            // Длина хорды
-                            // L - хорда
-                            // R - радиус
-                            // a - центральный угол
-                            // L = 2R*sin(a/2)
-
-                            // Сегмент круга
-                            // L - хорда
-                            // с - длина дуги сегмента
-                            // R - радиус
-                            // a - центральный угол
-                            // h - высота сегмента
-                            // 
-                            // Площадь сегмента
-                            // S = 1/2*(R*R)(a-sin(a))
-                            // Длина дуги
-                            // c = a * R
-                            // Длина хорды
-                            // L = 2R*sin(a/2)
-                            // Высота сегмента
-                            // h = R(1-cos(a/2))
-                            // Угол
-                            // a = c/R
-                            // a = 2 * arcsin(L/(2*R))
-                            // a = arccos(1-2*((L/R)*(L/R)))
-
-                            // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между 
-                            // длина отрезка
-                            // d = Math.sqrt(((p2.x-p1.x)**2)+((p2.y-p1.y)**2))
-                            // d = Math.sqrt(Math.pow(Math.abs(x1-x2))+Math.pow(Math.abs(y1-y2)));
-                            // координаты
-                            // x = R*cos(a)
-                            // y = R*sin(a)
 
                             let _2ndDot = nextDot(arr, _1stDot, 15, angle, -(15 / 6));
 
