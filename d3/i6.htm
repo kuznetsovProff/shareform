@@ -1983,53 +1983,46 @@
                         addDot(arr, newDot);
                         return newDot;
                     }
+
+                    let _0deg = 0,
+                        _1deg = Math.PI / 180,
+                        _5deg = Math.PI / 36,
+                        _10deg = Math.PI / 18,
+                        _15deg = Math.PI / 12,
+                        _20deg = Math.PI / 9,
+                        _30deg = Math.PI / 6,
+                        _45deg = Math.PI / 4,
+                        _60deg = Math.PI / 3,
+                        _90deg = Math.PI / 2,
+                        _180deg = Math.PI,
+                        _360deg = 2 * Math.PI;
+
+                    let angle = 0;
+                    //angle = -Math.PI/4; // 90 deg
                     // слои
 
                     // 1
                     let Layer1 = ((enabled) => {
                         if (enabled) {
-
-                            let _0deg = 0,
-                                _1deg = Math.PI / 180,
-                                _5deg = Math.PI / 36,
-                                _10deg = Math.PI / 18,
-                                _15deg = Math.PI / 12,
-                                _20deg = Math.PI / 9,
-                                _30deg = Math.PI / 6,
-                                _45deg = Math.PI / 4,
-                                _60deg = Math.PI / 3,
-                                _90deg = Math.PI / 2,
-                                _180deg = Math.PI,
-                                _360deg = 2 * Math.PI;
-
-                            let angle = 0;
-                            //angle = -Math.PI/4; // 90 deg
-                            //входные данные:
-                            //массив куда сохранять точки
-                            //центр родителя
-                            //радиус родителя
-                            //радиус потомка
-                            //угол потомка по отношению к ценру родителя
-                            //смещение по радиусу родителя
-                            //
-                            let Layer1Data = [];
-
-                            // 1st
-                            let _1stRadius = 20;
-                            let firstDot = {
-                                x: 50,
-                                y: 50,
-                                r: _1stRadius
+                            let arr = [];
+                            let _1stDot = {
+                                x: 96,
+                                y: 54,
+                                r: 20
                             };
 
-                            addDot(Layer1Data, firstDot);
+                            addDot(arr, _1stDot);
 
-                            // 2nd
-                            let secondDot = nextDot(Layer1Data, firstDot, 15, angle, -(15 / 6));
-                            // 3rd
-                            nextDot(Layer1Data, firstDot, 12, _45deg, -(12 / 4));
-                            // 4th
-                            nextDot(Layer1Data, firstDot, 14, _180deg - _10deg, -(14 / 3));
+                            let _2ndDot = nextDot(arr, _1stDot, 15, angle, -(15 / 6));
+
+                            let _3rdDot = nextDot(arr, _1stDot, 12, _45deg, -(12 / 4));
+
+                            let _4thDot = nextDot(arr, _1stDot, 14, _180deg - _10deg, -(14 / 3));
+
+                            let _5thDot = nextDot(arr, _2ndDot, 11, -1 * _30deg, -(11 / 6));
+
+                            let _6thDot = nextDot(arr, _2ndDot, 9, _45deg, -(9 / 3));
+                            let _7thDot = nextDot(arr, _2ndDot, 10, -1 * _90deg, -(10 / 4));
 
                             let G1 = Gradient();
                             canvas.appendGradient(G1);
@@ -2037,7 +2030,7 @@
                                 .stop('0', p[0].toString(), '1')
                                 .stop('1', p[0].toString(), '1');
                             let G1url = G1.url();
-                            canvas.newExtendedLayerV2(Layer1Data, width, height, margin, G1url, 'white', 'white', 'white', {
+                            canvas.newExtendedLayerV2(arr, width, height, margin, G1url, 'white', 'white', 'white', {
                                 line: false,
                                 area: false,
                                 dots: true
