@@ -2007,6 +2007,71 @@
                         return Math.sqrt(Math.pow(Math.abs(x1 - x2)) + Math.pow(Math.abs(y1 - y2)));
                     }
 
+                    let intersection = (_1st, _2nd) => {
+                        let x0 = _1st.x,
+                            y0 = _1st.y,
+                            r0 = _1st.r;
+                        let x1 = _2nd.x,
+                            y1 = _2nd.y,
+                            r1 = _2nd.r;
+                        let a, dx, dy, d, h, rx, ry;
+                        let x2, y2;
+
+                        /* dx and dy are the vertical and horizontal distances between
+                         * the circle centers.
+                         */
+                        dx = x1 - x0;
+                        dy = y1 - y0;
+
+                        /* Determine the straight-line distance between the centers. */
+                        d = Math.sqrt((dy * dy) + (dx * dx));
+
+                        /* Check for solvability. */
+                        if (d > (r0 + r1)) {
+                            /* no solution. circles do not intersect. */
+                            return false;
+                        }
+                        if (d < Math.abs(r0 - r1)) {
+                            /* no solution. one circle is contained in the other */
+                            return 'contained';
+                        }
+
+                        /* 'point 2' is the point where the line through the circle
+                         * intersection points crosses the line between the circle
+                         * centers.  
+                         */
+
+                        /* Determine the distance from point 0 to point 2. */
+                        a = ((r0 * r0) - (r1 * r1) + (d * d)) / (2.0 * d);
+
+                        /* Determine the coordinates of point 2. */
+                        x2 = x0 + (dx * a / d);
+                        y2 = y0 + (dy * a / d);
+
+                        /* Determine the distance from point 2 to either of the
+                         * intersection points.
+                         */
+                        h = Math.sqrt((r0 * r0) - (a * a));
+
+                        /* Now determine the offsets of the intersection points from
+                         * point 2.
+                         */
+                        rx = -dy * (h / d);
+                        ry = dx * (h / d);
+
+                        /* Determine the absolute intersection points. */
+                        var xi = x2 + rx;
+                        var xi_prime = x2 - rx;
+                        var yi = y2 + ry;
+                        var yi_prime = y2 - ry;
+
+                        return {
+                            x0: xi,
+                            y0: yi,
+                            x1: xi_prime,
+                            y1: yi_prime
+                        };
+                    };
                     // площадь круга ?
 
                     // после добавления первого круга необходимо вычислить точки пересечения, угол между двумя точками для каждой окружности, а также угол от 0 градуса, проложить хорды между
@@ -2028,6 +2093,47 @@
                         addDot(arr, newDot);
                         return newDot;
                     }
+
+                    let addIntersectionDots = (arr, _1stDot, _2ndDot) => {
+                        let intersect = intersection(_1stDot, _2ndDot);
+                        let cross1 = {
+                            x: intersect.x0,
+                            y: intersect.y0,
+                            r: 0.5
+                        };
+                        arr.push(cross1);
+                        let cross2 = {
+                            x: intersect.x1,
+                            y: intersect.y1,
+                            r: 0.5
+                        };
+                        arr.push(cross2);
+                    };
+
+                    let findAllIntersections = (arr) => {
+                        // arr - dots
+                        // arr2 - intersections dots
+                        let arr2 = [];
+                        let arrFind1 = [],
+                            arrFind2 = [],
+                            i = 0;
+                        arr.forEach((item) => {
+                            if (i == 0) {
+                                arrFind1.push(item);
+                            } else {
+                                arrFind1.push(item);
+                                arrFind2.push(item);
+                            }
+                            i = i + 1;
+                        });
+                        arrFind1.forEach((i1) => {
+                            arrFind2.forEach((i2) => {
+                                addIntersectionDots(arr2, i1, i2);
+                            });
+                        });
+
+                        return arr2;
+                    };
 
                     let _0deg = 0,
                         _1deg = Math.PI / 180,
@@ -2081,18 +2187,15 @@
                                 .stop('1', 'lightblue', '1');
                             let GBackurl = GBack.url();
 
-
                             canvas.newExtendedLayerV2(BackData, width, height, margin, GBackurl, 'white', 'white', 'white');
                         }
                     })(BackOn);
-
-
-
 
                     // 1
                     let Layer1 = ((enabled) => {
                         if (enabled) {
                             let arr = [];
+                            let arr2 = [];
                             let _1stDot = {
                                 x: 96,
                                 y: 54,
@@ -2103,15 +2206,14 @@
 
 
                             let _2ndDot = nextDot(arr, _1stDot, 15, angle, -(15 / 6));
-
                             let _3rdDot = nextDot(arr, _1stDot, 12, _45deg, -(12 / 4));
-
                             let _4thDot = nextDot(arr, _1stDot, 14, _180deg - _10deg, -(14 / 3));
-
                             let _5thDot = nextDot(arr, _2ndDot, 11, -1 * _30deg, -(11 / 6));
-
                             let _6thDot = nextDot(arr, _2ndDot, 9, _45deg, -(9 / 3));
                             let _7thDot = nextDot(arr, _2ndDot, 10, -1 * _90deg, -(10 / 4));
+
+                            arr2 = findAllIntersections(arr);
+                            // надо найти углы или дуги без пересечений
 
                             let G1 = Gradient();
                             canvas.appendGradient(G1);
@@ -2120,6 +2222,18 @@
                                 .stop('1', p[0].toString(), '1');
                             let G1url = G1.url();
                             canvas.newExtendedLayerV2(arr, width, height, margin, G1url, 'white', 'white', 'white', {
+                                line: false,
+                                area: false,
+                                dots: true
+                            });
+
+                            let G2 = Gradient();
+                            canvas.appendGradient(G2);
+                            G2.id('G2')
+                                .stop('0', 'darkviolet', '1')
+                                .stop('1', 'darkviolet', '1');
+                            let G2url = G2.url();
+                            canvas.newExtendedLayerV2(arr2, width, height, margin, G2url, 'white', 'white', 'white', {
                                 line: false,
                                 area: false,
                                 dots: true
