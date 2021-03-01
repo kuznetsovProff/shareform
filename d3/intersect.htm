@@ -30,8 +30,8 @@
 
     <script>
         /*source from:
-                                                                                                https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci/#answer-12221389
-                                                                                                */
+                                                                                                                                                                                                                                                                                                                https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci/#answer-12221389
+                                                                                                                                                                                                                                                                                                                */
 
         function intersection(x0, y0, r0, x1, y1, r1) {
             var a, dx, dy, d, h, rx, ry;
@@ -88,7 +88,6 @@
             return [xi, xi_prime, yi, yi_prime];
         }
 
-
         var svg = d3.select("#tt");
         var drag = d3.drag()
             .on("drag", function() {
@@ -98,13 +97,29 @@
                 d.x = x;
                 d.y = y;
                 d3.select(this).attr("cx", x).attr("cy", y);
+                var dd = [];
 
-                var p = intersection.apply(this, c.getParam());
-                if (p) {
-                    var dd = [
-                        [p[0], p[2]],
-                        [p[1], p[3]]
-                    ];
+                var p = intersection(c.a.x, c.a.y, c.a.r, c.b.x, c.b.y, c.b.r);
+                var o = intersection(c.a.x, c.a.y, c.a.r, c.c.x, c.c.y, c.c.r);
+                var r = intersection(c.b.x, c.b.y, c.b.r, c.c.x, c.c.y, c.c.r);
+                if (p || o || r) {
+                    /*
+                      dd = [
+                          [p[0], p[2]],
+                          [p[1], p[3]]
+                      ];*/
+                    if (p) {
+                        dd.push([p[0], p[2]]);
+                        dd.push([p[1], p[3]]);
+                    }
+                    if (o) {
+                        dd.push([o[0], o[2]]);
+                        dd.push([o[1], o[3]]);
+                    }
+                    if (r) {
+                        dd.push([r[0], r[2]]);
+                        dd.push([r[1], r[3]]);
+                    }
                     d3.selectAll(".dot")
                         .data(dd)
                         .style("display", "block")
@@ -113,22 +128,24 @@
                 } else {
                     d3.selectAll(".dot").style("display", "none");
                 };
-
             });
 
         var c = {
             a: {
+                id: 'a',
                 x: 150,
                 y: 150,
                 r: 25
             },
             b: {
+                id: 'b',
                 x: 350,
                 y: 150,
                 r: 45
             },
             c: {
-                x: 450,
+                id: 'c',
+                x: 300,
                 y: 100,
                 r: 35
             },
@@ -140,7 +157,7 @@
         };
 
         svg.selectAll(".drag")
-            .data([c.a, c.b])
+            .data([c.a, c.b, c.c])
             .enter()
             .append("circle")
             .attr("class", "drag")
