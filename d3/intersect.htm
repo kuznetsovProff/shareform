@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <style>
+        svg {
+            outline: 1px solid gray;
+            display: block;
+            margin: 1em auto;
+        }
+        
+        .drag {
+            fill: rgba(100, 100, 100, 0.2);
+            stroke: black;
+            stroke-width: 1;
+            cursor: pointer;
+        }
+        
+        .dot {
+            fill: red;
+            r: 5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg id="tt" width="550" height="400"></svg>
+
+    <script>
+        /*source from:
+                                                                                                https://stackoverflow.com/questions/12219802/a-javascript-function-that-returns-the-x-y-points-of-intersection-between-two-ci/#answer-12221389
+                                                                                                */
+
+        function intersection(x0, y0, r0, x1, y1, r1) {
+            var a, dx, dy, d, h, rx, ry;
+            var x2, y2;
+
+            /* dx and dy are the vertical and horizontal distances between
+             * the circle centers.
+             */
+            dx = x1 - x0;
+            dy = y1 - y0;
+
+            /* Determine the straight-line distance between the centers. */
+            d = Math.sqrt((dy * dy) + (dx * dx));
+
+            /* Check for solvability. */
+            if (d > (r0 + r1)) {
+                /* no solution. circles do not intersect. */
+                return false;
+            }
+            if (d < Math.abs(r0 - r1)) {
+                /* no solution. one circle is contained in the other */
+                return false;
+            }
+
+            /* 'point 2' is the point where the line through the circle
+             * intersection points crosses the line between the circle
+             * centers.  
+             */
+
+            /* Determine the distance from point 0 to point 2. */
+            a = ((r0 * r0) - (r1 * r1) + (d * d)) / (2.0 * d);
+
+            /* Determine the coordinates of point 2. */
+            x2 = x0 + (dx * a / d);
+            y2 = y0 + (dy * a / d);
+
+            /* Determine the distance from point 2 to either of the
+             * intersection points.
+             */
+            h = Math.sqrt((r0 * r0) - (a * a));
+
+            /* Now determine the offsets of the intersection points from
+             * point 2.
+             */
+            rx = -dy * (h / d);
+            ry = dx * (h / d);
+
+            /* Determine the absolute intersection points. */
+            var xi = x2 + rx;
+            var xi_prime = x2 - rx;
+            var yi = y2 + ry;
+            var yi_prime = y2 - ry;
+
+            return [xi, xi_prime, yi, yi_prime];
+        }
+
+
+        var svg = d3.select("#tt");
+        var drag = d3.drag()
+            .on("drag", function() {
+                var x = d3.event.x,
+                    y = d3.event.y;
+                var d = d3.select(this).datum();
+                d.x = x;
+                d.y = y;
+                d3.select(this).attr("cx", x).attr("cy", y);
+
+                var p = intersection.apply(this, c.getParam());
+                if (p) {
+                    var dd = [
+                        [p[0], p[2]],
+                        [p[1], p[3]]
+                    ];
+                    d3.selectAll(".dot")
+                        .data(dd)
+                        .style("display", "block")
+                        .attr("cx", d => d[0])
+                        .attr("cy", d => d[1]);
+                } else {
+                    d3.selectAll(".dot").style("display", "none");
+                };
+
+            });
+
+        var c = {
+            a: {
+                x: 150,
+                y: 150,
+                r: 25
+            },
+            b: {
+                x: 350,
+                y: 150,
+                r: 45
+            },
+            c: {
+                x: 450,
+                y: 100,
+                r: 35
+            },
+            getParam: function() {
+                return [this.a.x, this.a.y, this.a.r,
+                    this.b.x, this.b.y, this.b.r
+                ];
+            }
+        };
+
+        svg.selectAll(".drag")
+            .data([c.a, c.b])
+            .enter()
+            .append("circle")
+            .attr("class", "drag")
+            .attr("r", d => d.r)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .call(drag);
+
+        svg.selectAll(".dot")
+            .data([
+                [0, 0],
+                [0, 0]
+            ])
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .style("display", "none");
+    </script>
+</body>
