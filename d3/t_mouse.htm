@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>D3.js SVG Clouds Generator</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        let r = 400;
+
+        let svg = d3.select('body')
+            .append('svg')
+            .attr('width', '800')
+            .attr('height', '600');
+
+        let positionLabel = svg.append('text')
+            .attr('x', 10)
+            .attr('y', 30);
+
+        svg.on('mousemove', () => {
+            printPosition();
+        });
+
+        let printPosition = () => {
+            let coords = d3.pointer(event);
+            positionLabel.text('x: ' + coords[0] + ' y: ' + coords[1]);
+        };
+
+        svg.on('click', () => {
+            for (let i = 1; i < 5; ++i) {
+                let coords = d3.pointer(event);
+
+                let circle = svg.append('circle')
+                    .attr('cx', coords[0])
+                    .attr('cy', coords[1])
+                    .attr('r', 0)
+                    .style('stroke-width', 5 / (i))
+                    .style('stroke', '#000')
+                    .style('fill', '#fff')
+                    //.style('opacity', 0.5)
+                    .transition()
+                    .delay(Math.pow(i, 2.5) * 50)
+                    .duration(2000)
+                    .ease(d3.easeQuadIn)
+                    .attr('r', r)
+                    .style('stroke-opacity', 0);
+                circle.on('end', function() {
+                    d3.select(this).remove();
+                });
+            }
+        });
+    </script>
+</body>
