@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>D3.js SVG Clouds Generator</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        const win = window;
+        const width = win.innerWidth;
+        const height = win.innerHeight;
+
+        let initR = 100,
+            r = 400,
+            thickness = 20;
+
+        let svg = d3.select('body')
+            .append('svg')
+            .attr('width', width)
+            .attr('height', height);
+
+        d3.select('body')
+            .on('touchstart', touch)
+            .on('touchend', touch);
+
+        function touch() {
+            d3.event.preventDefault();
+
+            let arc = d3.arc()
+                .outerRadius(initR)
+                .innerRadius(initR - thickness);
+
+            let g = svg.selectAll('g.touch')
+                .data(d3.touches(svg.node()), function(d, i) {
+                    return i;
+                });
+
+            g.enter()
+                .append('g')
+                .attr('class', 'touch')
+                .attr('transform', function(d) {
+                    return 'translate(' + d[0] + ',' + d[1] + ')';
+                })
+                .append('path')
+                .attr('class', 'arc')
+                .transition().duration(2000).ease(d3.easeLinear)
+                .attrTween('d', function(d) {
+                    let interpolate = d3.interpolate({
+                        startAngle: 0,
+                        endAngle: 0
+                    }, {
+                        startAngle: 0,
+                        endAngle: 2 * Math.PI
+                    });
+                    return function(t) {
+                        return arc(interpolate(t));
+                    };
+                })
+                .on('end', function(d) {
+                    if (complete(d))
+                        ripples(d);
+                    g.remove();
+                });
+
+            g.exit().remove().each(function(d) {
+                console.log('Animation stopped');
+                d[2] = 'stopped';
+            });
+        };
+
+        function complete(d) {
+            console.log('Animation completed? ' + (d.length < 3));
+            return d.length < 3;
+        }
+
+        function ripples(position) {
+            console.log('Producing ripple effect...');
+
+            for (let i = 1; i < 5; ++i) {
+                let circle = svg.append('circle')
+                    .attr('cx', position[0])
+                    .attr('cy', position[1])
+                    .attr('r', initR - (thickness / 2))
+                    .style('stroke-width', thickness / (i))
+                    .transition()
+                    .delay(Math.pow(i, 2.5) * 50)
+                    .duration(2000).ease(d3.easeQuadIn)
+                    .attr('r', r)
+                    .style('stroke-opacity', 0)
+                    .on('end', function() {
+                        d3.select(this).remove();
+                    });
+            }
+
+        }
+    </script>
+</body>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>D3.js SVG Clouds Generator</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <script>
+        const win = window;
+        const width = win.innerWidth / 2;
+        const height = win.innerHeight / 2;
+
+        let r = 50;
+
+        let data = [
+            [width / 2 - r, height / 2 - r],
+            [width / 2 - r, height / 2 + r],
+            [width / 2 + r, height / 2 - r],
+            [width / 2 + r, height / 2 + r]
+        ];
+
+        const svg = d3.select('body').append('svg')
+            //.attr('viewBox', [0, 0, width, height])
+            .style('border', '1px solid black')
+            .attr('width', width)
+            .attr('height', height);
+
+        const g = svg.append('g');
+
+        g.selectAll('circle')
+            .data(data)
+            .enter().append('circle')
+            .attr('r', r)
+            .attr('transform', function(d) {
+                return 'translate(' + d + ')';
+            });
+
+        svg.call(d3.zoom()
+            .extent([
+                [0, 0],
+                [width, height]
+            ])
+            .scaleExtent([1, 10])
+            .on('zoom', zoomed));
+
+        function zoomed({
+            transform
+        }) {
+            g.attr('transform', transform);
+        }
+    </script>
+</body>

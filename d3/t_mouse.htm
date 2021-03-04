@@ -44,8 +44,8 @@
 
         let svg = d3.select('body')
             .append('svg')
-            .attr('width', '800')
-            .attr('height', '600');
+            .attr('width', window.innerWidth)
+            .attr('height', window.innerHeight);
 
         let positionLabel = svg.append('text')
             .attr('x', 10)
@@ -69,11 +69,11 @@
                     .attr('cy', coords[1])
                     .attr('r', 0)
                     .style('stroke-width', 5 / (i))
-                    .style('stroke', '#000')
-                    .style('fill', '#fff')
+                    .style('stroke', 'rgba(256, 36, 0, 0.9)')
+                    .style('fill', 'rgba(255, 104, 0, 0.2)')
                     //.style('opacity', 0.5)
                     .transition()
-                    .delay(Math.pow(i, 2.5) * 50)
+                    .delay(Math.pow(i, 2.5) * 25)
                     .duration(2000)
                     .ease(d3.easeQuadIn)
                     .attr('r', r)
