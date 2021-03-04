@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>D3.js SVG Clouds Generator</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+        
+        circle {
+            fill: steelblue;
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div class="control-group">
+        <button onclick="noForce()">
+        No Force
+    </button>
+        <button onclick="repulsion()">
+        Repulsion
+    </button>
+        <button onclick="gravity()">
+        Gravity
+    </button>
+        <button onclick="positioningWithGravity()">
+        Positioning with Gravity
+    </button>
+        <button onclick="positioningWithRepulsion()">
+        Positioning with Repulsion
+    </button>
+    </div>
+
+    <script>
+        var w = 1280,
+            h = 800,
+            r = 7,
+            nodes = [],
+            force = d3.forceSimulation()
+            .velocityDecay(0.8)
+            .alphaDecay(0)
+            .force("collision", d3.forceCollide(r + 0.5).strength(1));
+
+        var svg = d3.select("body")
+            .append("svg")
+            .attr("width", w)
+            .attr("height", h);
+
+        force.on("tick", function() {
+            svg.selectAll("circle")
+                .attr("cx", function(d) {
+                    return d.x;
+                })
+                .attr("cy", function(d) {
+                    return d.y;
+                });
+        });
+
+        svg.on("mousemove", function() {
+            let coords = d3.pointer(event);
+            //var point = d3.mouse(this),
+            let node = {
+                x: coords[0],
+                y: coords[1]
+            }; // <-A
+
+            svg.append("circle")
+                .data([node])
+                .attr("class", "node")
+                .attr("cx", function(d) {
+                    return d.x;
+                })
+                .attr("cy", function(d) {
+                    return d.y;
+                })
+                .attr("r", 1e-6)
+                .transition()
+                .attr("r", r)
+                .transition()
+                .delay(10000)
+                .attr("r", 1e-6)
+                .on("end", function() {
+                    nodes.shift(); // <-B
+                    force.nodes(nodes);
+                })
+                .remove();
+
+            nodes.push(node); // <-C
+            force.nodes(nodes);
+        });
+
+        function noForce() {
+            force.force("charge", null);
+            force.force("x", null);
+            force.force("y", null);
+            force.restart();
+        }
+
+        function repulsion() {
+            force.force("charge", d3.forceManyBody().strength(-10));
+            force.force("x", null);
+            force.force("y", null);
+            force.restart();
+        }
+
+        function gravity() {
+            force.force("charge", d3.forceManyBody().strength(1));
+            force.force("x", null);
+            force.force("y", null);
+            force.restart();
+        }
+
+        function positioningWithGravity() {
+            force.force("charge", d3.forceManyBody().strength(0.5));
+            force.force("x", d3.forceX(w / 2));
+            force.force("y", d3.forceY(h / 2));
+            force.restart();
+        }
+
+        function positioningWithRepulsion() {
+            force.force("charge", d3.forceManyBody().strength(-20));
+            force.force("x", d3.forceX(w / 2));
+            force.force("y", d3.forceY(h / 2));
+            force.restart();
+        }
+    </script>
+</body>
