@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Intersection</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <style>
+        svg {
+            outline: 1px solid gray;
+            display: block;
+            margin: 1em auto;
+        }
+        
+        .drag {
+            fill: rgba(100, 100, 100, 0.2);
+            stroke: black;
+            stroke-width: 1;
+            cursor: pointer;
+        }
+        
+        .dot {
+            fill: red;
+            r: 5;
+        }
+    </style>
+</head>
+
+<body>
+
+    <svg id="tt" width="550" height="400"></svg>
+
+    <script>
+        let intersection = (_1st, _2nd) => {
+            let x0 = _1st.x,
+                y0 = _1st.y,
+                r0 = _1st.r;
+            let x1 = _2nd.x,
+                y1 = _2nd.y,
+                r1 = _2nd.r;
+            let a, dx, dy, d, h, rx, ry;
+            let x2, y2;
+
+            /* dx and dy are the vertical and horizontal distances between
+             * the circle centers.
+             */
+            dx = x1 - x0;
+            dy = y1 - y0;
+
+            /* Determine the straight-line distance between the centers. */
+            d = Math.sqrt((dy * dy) + (dx * dx));
+
+            /* Check for solvability. */
+            if (d > (r0 + r1)) {
+                /* no solution. circles do not intersect. */
+                return false;
+            }
+            if (d < Math.abs(r0 - r1)) {
+                /* no solution. one circle is contained in the other */
+                return 'contained';
+            }
+
+            /* 'point 2' is the point where the line through the circle
+             * intersection points crosses the line between the circle
+             * centers.  
+             */
+
+            /* Determine the distance from point 0 to point 2. */
+            a = ((r0 * r0) - (r1 * r1) + (d * d)) / (2.0 * d);
+
+            /* Determine the coordinates of point 2. */
+            x2 = x0 + (dx * a / d);
+            y2 = y0 + (dy * a / d);
+
+            /* Determine the distance from point 2 to either of the
+             * intersection points.
+             */
+            h = Math.sqrt((r0 * r0) - (a * a));
+
+            /* Now determine the offsets of the intersection points from
+             * point 2.
+             */
+            rx = -dy * (h / d);
+            ry = dx * (h / d);
+
+            /* Determine the absolute intersection points. */
+            var xi = x2 + rx;
+            var xi_prime = x2 - rx;
+            var yi = y2 + ry;
+            var yi_prime = y2 - ry;
+
+            return {
+                x0: xi,
+                y0: yi,
+                x1: xi_prime,
+                y1: yi_prime
+            };
+        };
+
+        let addIntersectionDots = (arr, _1stDot, _2ndDot) => {
+            let intersect = intersection(_1stDot, _2ndDot);
+            let cross1 = {
+                x: intersect.x0,
+                y: intersect.y0,
+                r: 0.5
+            };
+            arr.push(cross1);
+            let cross2 = {
+                x: intersect.x1,
+                y: intersect.y1,
+                r: 0.5
+            };
+            arr.push(cross2);
+        };
+
+        let findAllIntersections = (arr) => {
+            // arr - dots
+            // arr2 - intersections dots
+            let arr2 = [];
+            let arrFind1 = [],
+                arrFind2 = [],
+                i = 0;
+            arr.forEach((item) => {
+                if (i == 0) {
+                    arrFind1.push(item);
+                } else {
+                    arrFind1.push(item);
+                    arrFind2.push(item);
+                }
+                i = i + 1;
+            });
+            arrFind1.forEach((i1) => {
+                arrFind2.forEach((i2) => {
+                    addIntersectionDots(arr2, i1, i2);
+                });
+            });
+
+            return arr2;
+        };
+
+        let svg = d3.select("#tt");
+        let g = svg.append('g')
+            .attr('cursor', 'grab');
+        /*
+        var drag = d3.drag()
+            .on("drag", function(event) {
+                var x = event.x,
+                    y = event.y;
+                var d = d3.select(this).datum();
+                d.x = x;
+                d.y = y;
+                d3.select(this).attr("cx", x).attr("cy", y);
+                var dd = [];
+
+                var p = intersection(c.a.x, c.a.y, c.a.r, c.b.x, c.b.y, c.b.r);
+                var o = intersection(c.a.x, c.a.y, c.a.r, c.c.x, c.c.y, c.c.r);
+                var r = intersection(c.b.x, c.b.y, c.b.r, c.c.x, c.c.y, c.c.r);
+                if (p || o || r) {
+                   
+                    if (p) {
+                        dd.push([p[0], p[2]]);
+                        dd.push([p[1], p[3]]);
+                    }
+                    if (o) {
+                        dd.push([o[0], o[2]]);
+                        dd.push([o[1], o[3]]);
+                    }
+                    if (r) {
+                        dd.push([r[0], r[2]]);
+                        dd.push([r[1], r[3]]);
+                    }
+                    d3.selectAll(".dot")
+                        .data(dd)
+                        .style("display", "block")
+                        .attr("cx", d => d[0])
+                        .attr("cy", d => d[1]);
+                } else {
+                    d3.selectAll(".dot").style("display", "none");
+                };
+            });
+*/
+        var c = {
+            a: {
+                id: 'a',
+                x: 150,
+                y: 150,
+                r: 25
+            },
+            b: {
+                id: 'b',
+                x: 350,
+                y: 150,
+                r: 45
+            },
+            c: {
+                id: 'c',
+                x: 300,
+                y: 100,
+                r: 35
+            },
+            getParam: function() {
+                return [this.a.x, this.a.y, this.a.r,
+                    this.b.x, this.b.y, this.b.r
+                ];
+            }
+        };
+
+        let arr = [c.a, c.b, c.c];
+
+        g.selectAll(".drag")
+            .data(arr)
+            .enter()
+            .append("circle")
+            .attr("class", "drag")
+            .attr("id", d => d.id)
+            .attr("r", d => d.r)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .call(d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended));
+
+        function dragstarted(id) {
+            d3.select(this).raise();
+            g.attr('cursor', 'grabbing');
+        }
+
+        function dragged(event, d) {
+            //let id = d.id;
+            let dd = [];
+
+            d3.select(this)
+                .attr('cx', d.x = event.x)
+                .attr('cy', d.y = event.y);
+
+            arr.forEach((i) => {
+                if (i.id == d.id) {
+                    i.x = d.x;
+                    i.y = d.y;
+                };
+
+            });
+            // findAllIntersection
+            d3.selectAll(".dot")
+                .data(dd)
+                .style("display", "block")
+                .attr("cx", d => d[0])
+                .attr("cy", d => d[1]);
+
+        }
+
+        function dragended() {
+            g.attr('cursor', 'grab');
+        }
+
+        svg.selectAll(".dot")
+            .data([
+                [0, 0],
+                [0, 0]
+            ])
+            .enter()
+            .append("circle")
+            .attr("class", "dot")
+            .style("display", "none");
+    </script>
+</body>
