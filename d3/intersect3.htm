@@ -224,6 +224,12 @@
                 y: 100,
                 r: 35
             },
+            d: {
+                id: 'd',
+                x: 250,
+                y: 50,
+                r: 35
+            },
             getParam: function() {
                 return [this.a.x, this.a.y, this.a.r,
                     this.b.x, this.b.y, this.b.r
@@ -231,7 +237,7 @@
             }
         };
 
-        let arr = [c.a, c.b, c.c];
+        let arr = [c.a, c.b, c.c, c.d];
 
         g.selectAll(".drag")
             .data(arr)
@@ -268,6 +274,7 @@
 
             });
             // findAllIntersection
+            dd = findAllIntersections(arr);
             d3.selectAll(".dot")
                 .data(dd)
                 .style("display", "block")
