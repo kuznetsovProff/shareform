@@ -47,7 +47,7 @@
         
         .dot {
             fill: red;
-            r: 5;
+            r: 4;
         }
     </style>
 </head>
@@ -83,7 +83,7 @@
             }
             if (d < Math.abs(r0 - r1)) {
                 /* no solution. one circle is contained in the other */
-                return 'contained';
+                return false; //return 'contained';
             }
 
             /* 'point 2' is the point where the line through the circle
@@ -125,18 +125,20 @@
 
         let addIntersectionDots = (arr, _1stDot, _2ndDot) => {
             let intersect = intersection(_1stDot, _2ndDot);
-            let cross1 = {
-                x: intersect.x0,
-                y: intersect.y0,
-                r: 0.5
-            };
-            arr.push(cross1);
-            let cross2 = {
-                x: intersect.x1,
-                y: intersect.y1,
-                r: 0.5
-            };
-            arr.push(cross2);
+            if (intersect) {
+                let cross1 = {
+                    x: intersect.x0,
+                    y: intersect.y0,
+                    r: 1
+                };
+                if (!_.isNaN(cross1.x) && !_.isNaN(cross1.y)) arr.push(cross1);
+                let cross2 = {
+                    x: intersect.x1,
+                    y: intersect.y1,
+                    r: 1
+                };
+                if (!_.isNaN(cross2.x) && !_.isNaN(cross2.y)) arr.push(cross2);
+            }
         };
 
         let findAllIntersections = (arr) => {
@@ -167,44 +169,8 @@
         let svg = d3.select("#tt");
         let g = svg.append('g')
             .attr('cursor', 'grab');
-        /*
-        var drag = d3.drag()
-            .on("drag", function(event) {
-                var x = event.x,
-                    y = event.y;
-                var d = d3.select(this).datum();
-                d.x = x;
-                d.y = y;
-                d3.select(this).attr("cx", x).attr("cy", y);
-                var dd = [];
+        let gdots = svg.append('g').attr("id", "dots");
 
-                var p = intersection(c.a.x, c.a.y, c.a.r, c.b.x, c.b.y, c.b.r);
-                var o = intersection(c.a.x, c.a.y, c.a.r, c.c.x, c.c.y, c.c.r);
-                var r = intersection(c.b.x, c.b.y, c.b.r, c.c.x, c.c.y, c.c.r);
-                if (p || o || r) {
-                   
-                    if (p) {
-                        dd.push([p[0], p[2]]);
-                        dd.push([p[1], p[3]]);
-                    }
-                    if (o) {
-                        dd.push([o[0], o[2]]);
-                        dd.push([o[1], o[3]]);
-                    }
-                    if (r) {
-                        dd.push([r[0], r[2]]);
-                        dd.push([r[1], r[3]]);
-                    }
-                    d3.selectAll(".dot")
-                        .data(dd)
-                        .style("display", "block")
-                        .attr("cx", d => d[0])
-                        .attr("cy", d => d[1]);
-                } else {
-                    d3.selectAll(".dot").style("display", "none");
-                };
-            });
-*/
         var c = {
             a: {
                 id: 'a',
@@ -230,6 +196,12 @@
                 y: 50,
                 r: 35
             },
+            e: {
+                id: 'e',
+                x: 75,
+                y: 80,
+                r: 45
+            },
             getParam: function() {
                 return [this.a.x, this.a.y, this.a.r,
                     this.b.x, this.b.y, this.b.r
@@ -237,7 +209,7 @@
             }
         };
 
-        let arr = [c.a, c.b, c.c, c.d];
+        let arr = [c.a, c.b, c.c, c.d, c.e];
 
         g.selectAll(".drag")
             .data(arr)
@@ -273,13 +245,31 @@
                 };
 
             });
-            // findAllIntersection
+
             dd = findAllIntersections(arr);
-            d3.selectAll(".dot")
+
+            let dots = gdots.selectAll(".dot")
                 .data(dd)
+                .attr("cx", n => n.x)
+                .attr("cy", n => n.y)
+                .attr("r", n => n.r);
+            dots
+                .enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("r", n => n.r)
+                .attr("cx", n => n.x)
+                .attr("cy", n => n.y);
+
+
+            dots.exit().remove();
+
+            /*d3.selectAll(".dot")
+                .data(dd)
+                .attr("class", "dot")
                 .style("display", "block")
-                .attr("cx", d => d[0])
-                .attr("cy", d => d[1]);
+                .attr("cx", n => n.x)
+                .attr("cy", n => n.y);*/
 
         }
 
@@ -287,14 +277,21 @@
             g.attr('cursor', 'grab');
         }
 
-        svg.selectAll(".dot")
-            .data([
-                [0, 0],
-                [0, 0]
-            ])
+        dd = findAllIntersections(arr);
+
+        let dots = gdots.selectAll(".dot")
+            .data(dd)
+            .attr("cx", n => n.x)
+            .attr("cy", n => n.y)
+            .attr("r", n => n.r);
+        dots
             .enter()
             .append("circle")
             .attr("class", "dot")
-            .style("display", "none");
+            .attr("r", n => n.r)
+            .attr("cx", n => n.x)
+            .attr("cy", n => n.y);
+
+        dots.exit().remove();
     </script>
 </body>
