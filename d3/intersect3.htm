@@ -45,10 +45,7 @@
             cursor: pointer;
         }
         
-        .dot {
-            fill: red;
-            r: 4;
-        }
+        .dot {}
     </style>
 </head>
 
@@ -129,13 +126,13 @@
                 let cross1 = {
                     x: intersect.x0,
                     y: intersect.y0,
-                    r: 1
+                    r: 3
                 };
                 if (!_.isNaN(cross1.x) && !_.isNaN(cross1.y)) arr.push(cross1);
                 let cross2 = {
                     x: intersect.x1,
                     y: intersect.y1,
-                    r: 1
+                    r: 3
                 };
                 if (!_.isNaN(cross2.x) && !_.isNaN(cross2.y)) arr.push(cross2);
             }
@@ -252,14 +249,14 @@
                 .data(dd)
                 .attr("cx", n => n.x)
                 .attr("cy", n => n.y)
-                .attr("r", n => n.r);
+                .attr("r", n => n.r).style("fill", "red");
             dots
                 .enter()
                 .append("circle")
                 .attr("class", "dot")
                 .attr("r", n => n.r)
                 .attr("cx", n => n.x)
-                .attr("cy", n => n.y);
+                .attr("cy", n => n.y).style("fill", "red");
 
 
             dots.exit().remove();
@@ -283,14 +280,16 @@
             .data(dd)
             .attr("cx", n => n.x)
             .attr("cy", n => n.y)
-            .attr("r", n => n.r);
+            .attr("r", n => n.r)
+            .style("fill", "red");
         dots
             .enter()
             .append("circle")
             .attr("class", "dot")
             .attr("r", n => n.r)
             .attr("cx", n => n.x)
-            .attr("cy", n => n.y);
+            .attr("cy", n => n.y)
+            .style("fill", "red");
 
         dots.exit().remove();
     </script>
