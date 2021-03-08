@@ -199,14 +199,18 @@
                 y: 80,
                 r: 45
             },
-            getParam: function() {
-                return [this.a.x, this.a.y, this.a.r,
-                    this.b.x, this.b.y, this.b.r
-                ];
+            f: {
+                id: 'f',
+                x: 135,
+                y: 115,
+                r: 35
+            },
+            getArr: function() {
+                return [this.a, this.b, this.c, this.d, this.e, this.f];
             }
         };
 
-        let arr = [c.a, c.b, c.c, c.d, c.e];
+        let arr = c.getArr();
 
         g.selectAll(".drag")
             .data(arr)
@@ -245,28 +249,25 @@
 
             dd = findAllIntersections(arr);
 
-            let dots = gdots.selectAll(".dot")
+            let dots = gdots
+                .selectAll(".dot")
                 .data(dd)
                 .attr("cx", n => n.x)
                 .attr("cy", n => n.y)
-                .attr("r", n => n.r).style("fill", "red");
+                .attr("r", n => n.r)
+                .style("fill", "red");
             dots
                 .enter()
                 .append("circle")
                 .attr("class", "dot")
                 .attr("r", n => n.r)
                 .attr("cx", n => n.x)
-                .attr("cy", n => n.y).style("fill", "red");
+                .attr("cy", n => n.y)
+                .style("fill", "red");
+            dots
+                .exit()
+                .remove();
 
-
-            dots.exit().remove();
-
-            /*d3.selectAll(".dot")
-                .data(dd)
-                .attr("class", "dot")
-                .style("display", "block")
-                .attr("cx", n => n.x)
-                .attr("cy", n => n.y);*/
 
         }
 
@@ -276,7 +277,8 @@
 
         dd = findAllIntersections(arr);
 
-        let dots = gdots.selectAll(".dot")
+        let dots = gdots
+            .selectAll(".dot")
             .data(dd)
             .attr("cx", n => n.x)
             .attr("cy", n => n.y)
@@ -290,7 +292,8 @@
             .attr("cx", n => n.x)
             .attr("cy", n => n.y)
             .style("fill", "red");
-
-        dots.exit().remove();
+        dots
+            .exit()
+            .remove();
     </script>
 </body>
