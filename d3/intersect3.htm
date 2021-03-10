@@ -321,6 +321,21 @@
             //https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle#18473154
 //https://jsbin.com/quhujowota/1/edit?html,js,output
 
+//
+an_rad = Math.atan2(b.y-a.y, b.x-a.x);
+deg_an = an_rad * 180 / Math.Pi
+
+// A first point
+// B center point
+// C second point
+
+function find_angle(A,B,C) {
+  var AB = Math.sqrt(Math.pow(B.x-A.x,2)+Math.pow(B.y-A.y,2));
+  var BC = Math.sqrt(Math.pow(B.x-C.x,2)+Math.pow(B.y-A.y,2));
+  var AC = Math.sqrt(Math.pow(C.x-A.x,2)+Math.pow(C.y-A.y,2));
+  return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB));
+}
+
 // 2
 
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
