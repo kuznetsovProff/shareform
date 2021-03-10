@@ -35,7 +35,7 @@
         svg {
             outline: 1px solid gray;
             display: block;
-            margin: 1em auto;
+            /*margin: 1em auto;*/
         }
         
         .drag {
@@ -51,7 +51,7 @@
 
 <body>
 
-    <svg id="tt" width="550" height="400"></svg>
+    <svg id="tt"></svg>
 
     <script>
         let intersection = (_1st, _2nd) => {
@@ -113,25 +113,30 @@
             var yi_prime = y2 - ry;
 
             return {
-                x0: xi,
-                y0: yi,
-                x1: xi_prime,
-                y1: yi_prime
-            };
+                cx0: xi,
+                cy0: yi,
+                cx1: xi_prime,
+                cy1: yi_prime,
+                circles: {
+                    circle1: _1st,
+                    circle2: _2nd
+                }
+            }
+
         };
 
         let addIntersectionDots = (arr, _1stDot, _2ndDot) => {
             let intersect = intersection(_1stDot, _2ndDot);
             if (intersect) {
                 let cross1 = {
-                    x: intersect.x0,
-                    y: intersect.y0,
+                    x: intersect.cx0,
+                    y: intersect.cy0,
                     r: 3
                 };
                 if (!_.isNaN(cross1.x) && !_.isNaN(cross1.y)) arr.push(cross1);
                 let cross2 = {
-                    x: intersect.x1,
-                    y: intersect.y1,
+                    x: intersect.cx1,
+                    y: intersect.cy1,
                     r: 3
                 };
                 if (!_.isNaN(cross2.x) && !_.isNaN(cross2.y)) arr.push(cross2);
@@ -163,7 +168,48 @@
             return arr2;
         };
 
-        let svg = d3.select("#tt");
+        let polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+            let angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+
+            return {
+                x: centerX + (radius * Math.cos(angleInRadians)),
+                y: centerY + (radius * Math.sin(angleInRadians))
+            };
+        };
+
+        let pathPie = (x, y, startx, starty, radius1, radius2, largeArcFlag, endx, endy) => {
+            return [
+                "M", x, y,
+                "L", startx, starty,
+                "A", radius1, radius2, 0, largeArcFlag, 0, endx, endy,
+                "L", x, y
+            ].join(" ");
+
+            // "A", radius1, radius2, angle, largeArcFlag, sweepFlag, endx, endy
+        };
+
+        let describePie = (x, y, radius, radius, startAngle, endAngle) => {
+
+            let start = polarToCartesian(x, y, radius, endAngle);
+            let end = polarToCartesian(x, y, radius, startAngle);
+
+            let largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+            let d = [
+                "M", x, y,
+                "L", start.x, start.y,
+                "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+                "L", x, y
+            ].join(" ");
+            //let d = pathPie(x, y, start.x, start.y, radius, radius, startAngle, endAngle);
+
+            return d;
+        };
+
+
+
+
+        let svg = d3.select("#tt").attr("width", window.innerWidth).attr("height", window.innerHeight);
         let g = svg.append('g')
             .attr('cursor', 'grab');
         let gdots = svg.append('g').attr("id", "dots");
@@ -264,9 +310,59 @@
                 .attr("cx", n => n.x)
                 .attr("cy", n => n.y)
                 .style("fill", "red");
+            //dots.append("path").attr("d", pathPie(centerx, centery, dot1x, dot1y, radius1, radius2, largeArcFlag, dot2x, dot2y));
             dots
                 .exit()
                 .remove();
+
+
+
+            /*
+            //https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle#18473154
+//https://jsbin.com/quhujowota/1/edit?html,js,output
+
+function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+  var angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+
+  return {
+    x: centerX + (radius * Math.cos(angleInRadians)),
+    y: centerY + (radius * Math.sin(angleInRadians))
+  };
+}
+
+function describeArc(x, y, radius, startAngle, endAngle){
+
+    var start = polarToCartesian(x, y, radius, endAngle);
+    var end = polarToCartesian(x, y, radius, startAngle);
+
+    var largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+    var d = [
+        "M", x, y,
+        "L", start.x, start.y, 
+        "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+        "L", x, y
+    ].join(" ");
+
+    return d;       
+}
+
+window.onload = function() {
+  document.getElementById("arc1").setAttribute("d", describeArc(150, 150, 100, 360-45,0));
+};
+
+
+
+
+                    svg.append("g")
+                        .append("path")
+                        .attr("d", function() {
+                            return "M" + interPoints[0] + "," + interPoints[2] + "A" + r + "," + r +
+                                " 0 0,1 " + interPoints[1] + "," + interPoints[3] + "A" + r + "," + r +
+                                " 0 0,1 " + interPoints[0] + "," + interPoints[2];
+                        })
+                        .style('fill', 'red');
+            */
 
 
         }
