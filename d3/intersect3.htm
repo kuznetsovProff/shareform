@@ -125,7 +125,8 @@
 
         };
 
-        let addIntersectionDots = (arr, _1stDot, _2ndDot) => {
+        // Get Intersection Dots
+        let getIntersectionDots = (arr, _1stDot, _2ndDot) => {
             let intersect = intersection(_1stDot, _2ndDot);
             if (intersect) {
                 let cross1 = {
@@ -143,7 +144,33 @@
             }
         };
 
-        let findAllIntersections = (arr) => {
+        // Get Intersection Dots with Circles
+        let getIntersection = (arr, _1stDot, _2ndDot) => {
+            let intersect = intersection(_1stDot, _2ndDot);
+            if (intersect) {
+                let _1stCross = {
+                    x: intersect.cx0,
+                    y: intersect.cy0,
+                    r: 3
+                };
+                let _2ndCross = {
+                    x: intersect.cx1,
+                    y: intersect.cy1,
+                    r: 3
+                };
+                if (!_.isNaN(_1stCross.x) && !_.isNaN(_1stCross.y) && !_.isNaN(_2ndCross.x) && !_.isNaN(_2ndCross.y)) {
+                    arr.push({
+                        "cross1": _1stCross,
+                        "cross2": _2ndCross,
+                        "circle1": intersect.circles.circle1,
+                        "circle2": intersect.circles.circle2
+                    });
+                };
+
+            }
+        };
+
+        let findAllIntersectionDots = (arr) => {
             // arr - dots
             // arr2 - intersections dots
             let arr2 = [];
@@ -161,13 +188,39 @@
             });
             arrFind1.forEach((i1) => {
                 arrFind2.forEach((i2) => {
-                    addIntersectionDots(arr2, i1, i2);
+                    getIntersectionDots(arr2, i1, i2);
                 });
             });
 
             return arr2;
         };
 
+        let findAllIntersections = (arr) => {
+            // arr - dots
+            // arr2 - intersections - complex data
+            let arr2 = [];
+            let arrFind1 = [],
+                arrFind2 = [],
+                i = 0;
+            arr.forEach((item) => {
+                if (i == 0) {
+                    arrFind1.push(item);
+                } else {
+                    arrFind1.push(item);
+                    arrFind2.push(item);
+                }
+                i = i + 1;
+            });
+            arrFind1.forEach((i1) => {
+                arrFind2.forEach((i2) => {
+                    getIntersection(arr2, i1, i2);
+                });
+            });
+
+            return arr2;
+        };
+
+        // переписать, см. внизу коммент
         let polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
             let angleInRadians = (angleInDegrees) * Math.PI / 180.0;
 
@@ -177,6 +230,7 @@
             };
         };
 
+        // переписать, см. внизу коммент
         let pathPie = (x, y, startx, starty, radius1, radius2, largeArcFlag, endx, endy) => {
             return [
                 "M", x, y,
@@ -188,17 +242,18 @@
             // "A", radius1, radius2, angle, largeArcFlag, sweepFlag, endx, endy
         };
 
-        let describePie = (x, y, radius, radius, startAngle, endAngle) => {
+        // переписать, см. внизу коммент
+        let describePie = (x, y, radius1, radius2, startAngle, endAngle) => {
 
-            let start = polarToCartesian(x, y, radius, endAngle);
-            let end = polarToCartesian(x, y, radius, startAngle);
+            let start = polarToCartesian(x, y, radius1, endAngle);
+            let end = polarToCartesian(x, y, radius2, startAngle);
 
             let largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
 
             let d = [
                 "M", x, y,
                 "L", start.x, start.y,
-                "A", radius, radius, 0, largeArcFlag, 0, end.x, end.y,
+                "A", radius1, radius2, 0, largeArcFlag, 0, end.x, end.y,
                 "L", x, y
             ].join(" ");
             //let d = pathPie(x, y, start.x, start.y, radius, radius, startAngle, endAngle);
@@ -293,7 +348,7 @@
 
             });
 
-            dd = findAllIntersections(arr);
+            dd = findAllIntersectionDots(arr);
 
             let dots = gdots
                 .selectAll(".dot")
@@ -302,15 +357,15 @@
                 .attr("cy", n => n.y)
                 .attr("r", n => n.r)
                 .style("fill", "red");
-            dots
-                .enter()
+
+            let dotsenter = dots.enter();
+            dotsenter
                 .append("circle")
                 .attr("class", "dot")
                 .attr("r", n => n.r)
                 .attr("cx", n => n.x)
                 .attr("cy", n => n.y)
                 .style("fill", "red");
-            //dots.append("path").attr("d", pathPie(centerx, centery, dot1x, dot1y, radius1, radius2, largeArcFlag, dot2x, dot2y));
             dots
                 .exit()
                 .remove();
@@ -423,18 +478,21 @@ window.onload = function() {
 
         let dots = gdots
             .selectAll(".dot")
-            .data(dd)
-            .attr("cx", n => n.x)
-            .attr("cy", n => n.y)
-            .attr("r", n => n.r)
-            .style("fill", "red");
-        dots
-            .enter()
+            .data(dd);
+        let dotsenter = dots.enter();
+        dotsenter
             .append("circle")
             .attr("class", "dot")
-            .attr("r", n => n.r)
-            .attr("cx", n => n.x)
-            .attr("cy", n => n.y)
+            .attr("r", n => n.cross1.r)
+            .attr("cx", n => n.cross1.x)
+            .attr("cy", n => n.cross1.y)
+            .style("fill", "red");
+        dotsenter
+            .append("circle")
+            .attr("class", "dot")
+            .attr("r", n => n.cross2.r)
+            .attr("cx", n => n.cross2.x)
+            .attr("cy", n => n.cross2.y)
             .style("fill", "red");
         dots
             .exit()
