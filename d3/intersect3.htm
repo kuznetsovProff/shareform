@@ -117,10 +117,10 @@
                 cy0: yi,
                 cx1: xi_prime,
                 cy1: yi_prime,
-                circles: {
-                    circle1: _1st,
-                    circle2: _2nd
-                }
+                circles: [
+                    _1st,
+                    _2nd
+                ]
             }
 
         };
@@ -160,10 +160,8 @@
                 };
                 if (!_.isNaN(_1stCross.x) && !_.isNaN(_1stCross.y) && !_.isNaN(_2ndCross.x) && !_.isNaN(_2ndCross.y)) {
                     arr.push({
-                        "cross1": _1stCross,
-                        "cross2": _2ndCross,
-                        "circle1": intersect.circles.circle1,
-                        "circle2": intersect.circles.circle2
+                        "dots": [ _1stCross, _2ndCross ],
+                        "circles": [ intersect.circles[0], intersect.circles[1]]
                     });
                 };
 
@@ -476,6 +474,11 @@ window.onload = function() {
 
         dd = findAllIntersections(arr);
 
+        // 2
+              
+        
+        
+        // 1
         let dots = gdots
             .selectAll(".dot")
             .data(dd);
@@ -483,16 +486,16 @@ window.onload = function() {
         dotsenter
             .append("circle")
             .attr("class", "dot")
-            .attr("r", n => n.cross1.r)
-            .attr("cx", n => n.cross1.x)
-            .attr("cy", n => n.cross1.y)
+            .attr("r", n => n.dots[0].r)
+            .attr("cx", n => n.dots[0].x)
+            .attr("cy", n => n.dots[0].y)
             .style("fill", "red");
         dotsenter
             .append("circle")
             .attr("class", "dot")
-            .attr("r", n => n.cross2.r)
-            .attr("cx", n => n.cross2.x)
-            .attr("cy", n => n.cross2.y)
+            .attr("r", n => n.dots[1].r)
+            .attr("cx", n => n.dots[1].x)
+            .attr("cy", n => n.dots[1].y)
             .style("fill", "red");
         dots
             .exit()
