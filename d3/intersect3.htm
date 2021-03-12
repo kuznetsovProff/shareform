@@ -475,9 +475,14 @@ window.onload = function() {
         dd = findAllIntersections(arr);
 
         // 2
-              
+        let groups = gdots
+          .selectAll(".group")
+          .data(dd)
+          .enter()
+          .append("g")
+          .attr("class","group");
         
-        
+        /*
         // 1
         let dots = gdots
             .selectAll(".dot")
@@ -500,5 +505,6 @@ window.onload = function() {
         dots
             .exit()
             .remove();
+            */
     </script>
 </body>
