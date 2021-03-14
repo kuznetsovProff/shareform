@@ -297,13 +297,13 @@
             var start = polarToCartesian(x, y, radius, endAngle);
             var end = polarToCartesian(x, y, radius, startAngle);
 
-            var arcSweep = startAngle < endAngle ? "0" : "1";
-
+            var arcSweep;
+            arcSweep = startAngle < endAngle ? "0" : "1";
             var arcLong;
+            arcLong = endAngle - startAngle <= 180 ? "0" : "1";
+
             if (startAngle < 0 && endAngle > 0) {
-                arcLong = 0;
-            } else {
-                arcLong = endAngle - startAngle <= 180 ? "0" : "1";
+                // arcLong = endAngle - startAngle <= 180 ? "1" : "0";
             }
 
             return [
@@ -329,40 +329,41 @@
                 id: 'a',
                 x: 150,
                 y: 150,
-                r: 25
+                r: 35
             },
             b: {
                 id: 'b',
-                x: 350,
-                y: 150,
-                r: 45
+                x: 317,
+                y: 118,
+                r: 55
             },
             c: {
                 id: 'c',
                 x: 300,
                 y: 100,
-                r: 35
+                r: 45
             },
             d: {
                 id: 'd',
                 x: 250,
                 y: 50,
-                r: 35
+                r: 45
             },
             e: {
                 id: 'e',
                 x: 75,
                 y: 80,
-                r: 45
+                r: 55
             },
             f: {
                 id: 'f',
                 x: 135,
                 y: 115,
-                r: 35
+                r: 45
             },
             getArr: function() {
-                return [this.a, this.b, this.c, this.d, this.e, this.f];
+                //return [this.a, this.b, this.c, this.d, this.e, this.f];
+                return [this.a, this.b, this.c];
             }
         };
 
