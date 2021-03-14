@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>Intersection 3</title>
+    <title>Intersection 4</title>
     <script src='/js/d3.v6.min.js'></script>
     <script src='/js/chroma.min.js'></script>
     <script src='/js/lodash.min.js'></script>
@@ -58,79 +58,108 @@
 </head>
 
 <body>
-
     <svg id="tt"></svg>
 
     <script>
-        //
-        //
-        //
+        // force
+        // https://gist.run/?id=fee5ce57c3fc3e94c3332577d1415df4
+        // transition collision
+        // http://bl.ocks.org/ahmohamed/c1804b03b71d8a17bd37
+
+        // убить d3.transition
+        // сделать на нативном javascript с requestAnimationFrame
+        // взять полность код из Intersection 3
+        // добавить requestAnimationFrame
+
+
+
+        let arr = [];
+        var numCircles = rnd(50),
+            width = window.innerWidth,
+            height = window.innerHeight,
+            maxRadius = 50;
+
+        function rnd(x) {
+            return Math.floor(Math.random() * x);
+        }
+
+        function randomise() {
+            arr = [];
+            numCircles = rnd(50);
+            for (var i = 0; i < numCircles; i++) {
+                arr.push({
+                    id: 'rnd_' + i,
+                    x: rnd(width),
+                    y: rnd(height),
+                    r: rnd(maxRadius) + 20
+                });
+            }
+        }
         let svg = d3.select("#tt").attr("width", window.innerWidth).attr("height", window.innerHeight);
-        let d1Text = svg.append("text").attr("x", "0").attr("y", "10");
-        let d2Text = svg.append("text").attr("x", "0").attr("y", "20");
+        svg.on('click', function() {
+            update();
+        });
         let g = svg.append('g')
             .attr('cursor', 'grab');
         let gdots = svg.append('g').attr("id", "dots");
 
-        var c = {
-            a: {
-                id: 'a',
-                x: 150,
-                y: 150,
-                r: 35
-            },
-            b: {
-                id: 'b',
-                x: 273,
-                y: 84,
-                r: 55
-            },
-            c: {
-                id: 'c',
-                x: 300,
-                y: 100,
-                r: 45
-            },
-            d: {
-                id: 'd',
-                x: 250,
-                y: 50,
-                r: 45
-            },
-            e: {
-                id: 'e',
-                x: 75,
-                y: 80,
-                r: 55
-            },
-            f: {
-                id: 'f',
-                x: 135,
-                y: 115,
-                r: 45
-            },
-            getArr: function() {
-                return [this.a, this.b, this.c, this.d, this.e, this.f];
-                //return [this.a, this.b, this.c];
-            }
-        };
+        function update() {
+            randomise();
 
-        let arr = c.getArr();
 
-        g.selectAll(".drag")
-            .data(arr)
-            .enter()
-            .append("circle")
-            .attr("class", "drag")
-            .style("z-index", "100")
-            .attr("id", d => d.id)
-            .attr("r", d => d.r)
-            .attr("cx", d => d.x)
-            .attr("cy", d => d.y)
-            .call(d3.drag()
-                .on('start', dragstarted)
-                .on('drag', dragged)
-                .on('end', dragended));
+
+            var u = g
+                .selectAll('.drag')
+                .data(arr);
+            /*
+                        .attr("id", d => d.id)
+                        .attr("r", d => d.r)
+                        .attr("cx", d => d.x)
+                        .attr("cy", d => d.y)
+                        .call(d3.drag()
+                            .on('start', dragstarted)
+                            .on('drag', dragged)
+                            .on('end', dragended));*/
+
+
+            // Enter
+            u.enter()
+                .append('circle')
+                .attr("class", "drag")
+                .attr('id', d => d.id)
+                .attr('r', 0)
+                .attr('cx', width / 2)
+                .attr('cy', height / 2)
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended))
+                //.style('opacity', '0.9')
+                .merge(u)
+                .transition()
+                .duration(2500)
+                .attr('cx', function(d) {
+                    return d.x;
+                })
+                .attr('cy', function(d) {
+                    return d.y;
+                })
+                .attr('r', function(d) {
+                    return d.r;
+                });
+
+            // Exit
+            u.exit()
+                .transition()
+                .duration(2500)
+                .attr('r', 0)
+                //.style('opacity', '0')
+                .each('end', function() {
+                    d3.select(this).remove();
+                });
+        }
+
+        update();
 
         function dragstarted(id) {
             d3.select(this).raise();
@@ -208,48 +237,5 @@
         function dragended() {
             g.attr('cursor', 'grab');
         }
-
-        dd = findAllIntersections(arr);
-
-        // 2
-        let groups = gdots
-            .selectAll(".group")
-            .data(dd);
-
-        let groupsenter = groups.enter()
-            .append("g")
-            .attr("class", "group");
-        groupsenter.append("path")
-            .attr("d", returnd)
-            .attr("class", "pie")
-            .style("stroke-width", "1px")
-            .style("fill", "red")
-            .style("fill-opacity", "0.1")
-            .style("stroke", "red").style("z-index", "1");
-
-        function returnd(n) {
-            return describeArcIntersection(n);
-        };
-
-        let dots = groupsenter.selectAll(".dot")
-            .data(function(d) {
-                return d.dots;
-            });
-
-        let dotsenter = dots.enter()
-            .append("circle")
-            .attr("class", "dot")
-            .attr("r", n => n.r)
-            .attr("cx", n => n.x)
-            .attr("cy", n => n.y)
-            .style("fill", "red");
-
-        dots
-            .exit()
-            .remove();
-
-        groups
-            .exit()
-            .remove();
     </script>
 </body>

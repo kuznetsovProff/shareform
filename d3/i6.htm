@@ -11,6 +11,7 @@
     <script src='/js/chroma.min.js'></script>
     <script src='/js/lodash.min.js'></script>
 
+
     <!--<link rel='stylesheet' href='/css/null.css' />-->
 
     <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
@@ -84,6 +85,7 @@
     <script src='/js/bootstrap4-toggle.min.js'></script>
 
     <script src='js/lib.js'></script>
+    <script src='./js/geometry.js'></script>
     <script src='c.js'></script>
 
     <script type="text/javascript">
@@ -1926,17 +1928,17 @@
 
                     //angle steps between elements
                     let step = Math.PI / 12; //15 deg
-
-                    function getPositions(radius, angle) {
-                        //calculate positions
-                        let posX = radius * Math.cos(angle);
-                        let posY = radius * Math.sin(angle);
-                        return {
-                            x: posX,
-                            y: posY
-                        };
-                    }
-
+                    /*
+                        function getPositions(radius, angle) {
+                            //calculate positions
+                            let posX = radius * Math.cos(angle);
+                            let posY = radius * Math.sin(angle);
+                            return {
+                                x: posX,
+                                y: posY
+                            };
+                        }
+                    
                     let getX = (r, a) => {
                         // calculate x
                         // r - radius
@@ -1960,7 +1962,7 @@
                             y: r * Math.sin(a)
                         };
                     };
-
+                    
                     let getChord = (r, a) => {
                         // c - хорда
                         // R - радиус
@@ -2006,7 +2008,7 @@
                         // длина отрезка между двумя точками
                         return Math.sqrt(Math.pow(Math.abs(x1 - x2)) + Math.pow(Math.abs(y1 - y2)));
                     }
-
+                    */
                     let intersection = (_1st, _2nd) => {
                         let x0 = _1st.x,
                             y0 = _1st.y,
@@ -2118,12 +2120,12 @@
                             arrFind2 = [],
                             i = 0;
                         arr.forEach((item) => {
-                            if (i == 0) {
-                                arrFind1.push(item);
-                            } else {
-                                arrFind1.push(item);
-                                arrFind2.push(item);
-                            }
+                            //if (i == 0) {
+                            //    arrFind1.push(item);
+                            //} else {
+                            arrFind1.push(item);
+                            arrFind2.push(item);
+                            //}
                             i = i + 1;
                         });
                         arrFind1.forEach((i1) => {
