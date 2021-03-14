@@ -160,8 +160,8 @@
                 };
                 if (!_.isNaN(_1stCross.x) && !_.isNaN(_1stCross.y) && !_.isNaN(_2ndCross.x) && !_.isNaN(_2ndCross.y)) {
                     arr.push({
-                        "dots": [ _1stCross, _2ndCross ],
-                        "circles": [ intersect.circles[0], intersect.circles[1]]
+                        "dots": [_1stCross, _2ndCross],
+                        "circles": [intersect.circles[0], intersect.circles[1]]
                     });
                 };
 
@@ -218,50 +218,107 @@
             return arr2;
         };
 
-        // переписать, см. внизу коммент
-        let polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
-            let angleInRadians = (angleInDegrees) * Math.PI / 180.0;
+
+        let findAngleByTwoDots = (a, b) => {
+            //an_rad = Math.atan2(b.y-a.y, b.x-a.x);
+            return Math.atan2(b.y - a.y, b.x - a.x);
+        };
+
+        let findAngleByThreeDots = (a, b, c) => {
+            // A first point
+            // B center point
+            // C second point
+            var ab = Math.sqrt(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2));
+            var bc = Math.sqrt(Math.pow(b.x - c.x, 2) + Math.pow(b.y - a.y, 2));
+            var ac = Math.sqrt(Math.pow(c.x - a.x, 2) + Math.pow(c.y - a.y, 2));
+            return Math.acos((bc * bc + ab * ab - ac * ac) / (2 * bc * ab));
+        };
+
+        let getAngleInDegrees = (an_rad) => {
+            //deg_an = an_rad * 180 / Math.Pi
+            return ((an_rad) * 180) / Math.PI;
+        };
+
+        function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
+            var angleInRadians = ((angleInDegrees) * Math.PI) / 180.0;
 
             return {
                 x: centerX + (radius * Math.cos(angleInRadians)),
                 y: centerY + (radius * Math.sin(angleInRadians))
             };
-        };
+        }
 
-        // переписать, см. внизу коммент
-        let pathPie = (x, y, startx, starty, radius1, radius2, largeArcFlag, endx, endy) => {
+        let pathPie = (x, y, startx, starty, radius1, radius2, longArcFlag, sweepArcFlag, endx, endy) => {
             return [
                 "M", x, y,
                 "L", startx, starty,
-                "A", radius1, radius2, 0, largeArcFlag, 0, endx, endy,
+                "A", radius1, radius2, 0, longArcFlag, sweepArcFlag, endx, endy,
                 "L", x, y
             ].join(" ");
 
-            // "A", radius1, radius2, angle, largeArcFlag, sweepFlag, endx, endy
         };
 
-        // переписать, см. внизу коммент
-        let describePie = (x, y, radius1, radius2, startAngle, endAngle) => {
+        function describeArc(x, y, radius, startAngle, endAngle) {
+            var start = polarToCartesian(x, y, radius, endAngle);
+            var end = polarToCartesian(x, y, radius, startAngle);
 
-            let start = polarToCartesian(x, y, radius1, endAngle);
-            let end = polarToCartesian(x, y, radius2, startAngle);
+            var arcSweep = startAngle < endAngle ? "0" : "1";
 
-            let largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+            var arcLong = endAngle - startAngle <= 180 ? "0" : "1";
 
-            let d = [
-                "M", x, y,
-                "L", start.x, start.y,
-                "A", radius1, radius2, 0, largeArcFlag, 0, end.x, end.y,
-                "L", x, y
+            return [
+                "M", start.x, start.y,
+                "A", radius, radius, 0, arcLong, arcSweep, end.x, end.y,
+                "L", x, y,
+                "L", start.x, start.y
             ].join(" ");
-            //let d = pathPie(x, y, start.x, start.y, radius, radius, startAngle, endAngle);
+        }
 
-            return d;
-        };
+        function describeArcIntersection(n) {
+            var x = n.circles[0].x;
+            var y = n.circles[0].y;
+            var a = {
+                x: x,
+                y: y
+            };
+            var b = {
+                x: n.dots[0].x,
+                y: n.dots[0].y
+            };
+            var c = {
+                x: n.dots[1].x,
+                y: n.dots[1].y
+            };
+            var radius = n.circles[0].r;
+            var startAngleRad = findAngleByTwoDots(a, b);
+            var startAngle = getAngleInDegrees(startAngleRad);
+            var endAngleRad = findAngleByTwoDots(a, c);
+            var endAngle = getAngleInDegrees(endAngleRad);
+            var start = polarToCartesian(x, y, radius, endAngle);
+            var end = polarToCartesian(x, y, radius, startAngle);
+
+            var arcSweep = startAngle < endAngle ? "0" : "1";
+
+            var arcLong;
+            if (startAngle < 0 && endAngle > 0) {
+                arcLong = 0;
+            } else {
+                arcLong = endAngle - startAngle <= 180 ? "0" : "1";
+            }
+
+            return [
+                "M", start.x, start.y,
+                "A", radius, radius, 0, arcLong, arcSweep, end.x, end.y,
+                "L", x, y,
+                "L", start.x, start.y
+            ].join(" ");
+        }
 
 
 
-
+        //
+        //
+        //
         let svg = d3.select("#tt").attr("width", window.innerWidth).attr("height", window.innerHeight);
         let g = svg.append('g')
             .attr('cursor', 'grab');
@@ -331,7 +388,6 @@
         }
 
         function dragged(event, d) {
-            //let id = d.id;
             let dd = [];
 
             d3.select(this)
@@ -346,77 +402,68 @@
 
             });
 
-            dd = findAllIntersectionDots(arr);
+            function returnd(n) {
+                return describeArcIntersection(n);
+            };
 
-            let dots = gdots
-                .selectAll(".dot")
-                .data(dd)
-                .attr("cx", n => n.x)
+            dd = findAllIntersections(arr);
+            let groups = gdots
+                .selectAll(".group")
+                .data(dd);
+
+            groups.selectAll(".pie").remove();
+
+            let groupsenter = groups.enter()
+                .append("g")
+                .attr("class", "group");
+
+            let paths = groups.selectAll(".pie")
+                .attr("d", returnd);
+
+            groups.append("path")
+                .attr("d", returnd)
+                .attr("class", "pie")
+                .style("stroke-width", "1px")
+                .style("fill", "rgb(100,100,100,0.3)")
+                .style("stroke", "red");
+
+
+
+            let dots = groups.selectAll(".dot").data(function(d) {
+                    return d.dots;
+                }).attr("cx", n => n.x)
                 .attr("cy", n => n.y)
                 .attr("r", n => n.r)
                 .style("fill", "red");
 
-            let dotsenter = dots.enter();
-            dotsenter
+            let dotsenter = dots.enter()
                 .append("circle")
                 .attr("class", "dot")
                 .attr("r", n => n.r)
                 .attr("cx", n => n.x)
                 .attr("cy", n => n.y)
                 .style("fill", "red");
+
             dots
                 .exit()
                 .remove();
 
+            paths.exit().remove();
+
+            groups
+                .exit()
+                .remove();
 
 
             /*
             //https://stackoverflow.com/questions/5736398/how-to-calculate-the-svg-path-for-an-arc-of-a-circle#18473154
 //https://jsbin.com/quhujowota/1/edit?html,js,output
 
-//
-an_rad = Math.atan2(b.y-a.y, b.x-a.x);
-deg_an = an_rad * 180 / Math.Pi
 
-// A first point
-// B center point
-// C second point
-
-function find_angle(A,B,C) {
-  var AB = Math.sqrt(Math.pow(B.x-A.x,2)+Math.pow(B.y-A.y,2));
-  var BC = Math.sqrt(Math.pow(B.x-C.x,2)+Math.pow(B.y-A.y,2));
-  var AC = Math.sqrt(Math.pow(C.x-A.x,2)+Math.pow(C.y-A.y,2));
-  return Math.acos((BC*BC+AB*AB-AC*AC)/(2*BC*AB));
-}
 
 // 2
 
-function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
-	var angleInRadians = ((angleInDegrees) * Math.PI) / 180.0;
 
-	return {
-		x: centerX + (radius * Math.cos(angleInRadians)),
-		y: centerY + (radius * Math.sin(angleInRadians))
-	};
-}
-
-function describeArc(x, y, radius, startAngle, endAngle) {
-	var start = polarToCartesian(x, y, radius, endAngle);
-	var end = polarToCartesian(x, y, radius, startAngle);
-	
-  var arcSweep = startAngle < endAngle ? "0" : "1";
-	
-	
-	var arcLarge = endAngle - startAngle <= 180 ? "0" : "1";
-	
-
-	return [
-		"M", start.x, start.y,
-		"A", radius, radius, 0, arcLarge, arcSweep, end.x, end.y,
-		"L", x, y,
-		"L", start.x, start.y
-	].join(" ");
-}
 
 document.getElementById("theSvgArc").setAttribute("d", describeArc(150, 150, 100, 0, 190));
 document.getElementById("theSvgArc2").setAttribute("d", describeArc(300, 150, 100, 90, 45));
@@ -476,35 +523,42 @@ window.onload = function() {
 
         // 2
         let groups = gdots
-          .selectAll(".group")
-          .data(dd)
-          .enter()
-          .append("g")
-          .attr("class","group");
-        
-        /*
-        // 1
-        let dots = gdots
-            .selectAll(".dot")
+            .selectAll(".group")
             .data(dd);
-        let dotsenter = dots.enter();
-        dotsenter
+
+        let groupsenter = groups.enter()
+            .append("g")
+            .attr("class", "group");
+        groupsenter.append("path")
+            .attr("d", returnd)
+            .attr("class", "pie")
+            .style("stroke-width", "1px")
+            .style("fill", "rgb(100,100,100,0.3)")
+            .style("stroke", "red");
+
+        function returnd(n) {
+            return describeArcIntersection(n);
+        };
+
+        let dots = groupsenter.selectAll(".dot")
+            .data(function(d) {
+                return d.dots;
+            });
+
+        let dotsenter = dots.enter()
             .append("circle")
             .attr("class", "dot")
-            .attr("r", n => n.dots[0].r)
-            .attr("cx", n => n.dots[0].x)
-            .attr("cy", n => n.dots[0].y)
+            .attr("r", n => n.r)
+            .attr("cx", n => n.x)
+            .attr("cy", n => n.y)
             .style("fill", "red");
-        dotsenter
-            .append("circle")
-            .attr("class", "dot")
-            .attr("r", n => n.dots[1].r)
-            .attr("cx", n => n.dots[1].x)
-            .attr("cy", n => n.dots[1].y)
-            .style("fill", "red");
+
         dots
             .exit()
             .remove();
-            */
+
+        groups
+            .exit()
+            .remove();
     </script>
 </body>
