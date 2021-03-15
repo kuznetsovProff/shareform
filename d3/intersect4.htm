@@ -74,18 +74,22 @@
 
 
         let arr = [];
-        var numCircles = rnd(50),
+        let cnt = 45;
+        
+        let rnd = (x) => {
+            return Math.floor(Math.random() * x);
+        };
+        
+        let numCircles = rnd(cnt),
             width = window.innerWidth,
             height = window.innerHeight,
             maxRadius = 50;
 
-        function rnd(x) {
-            return Math.floor(Math.random() * x);
-        }
+        
 
-        function randomise() {
+        let randomise = () => {
             arr = [];
-            numCircles = rnd(50);
+            numCircles = rnd(cnt);
             for (var i = 0; i < numCircles; i++) {
                 arr.push({
                     id: 'rnd_' + i,
@@ -94,15 +98,171 @@
                     r: rnd(maxRadius) + 20
                 });
             }
-        }
+        };
+        
+        
+        
         let svg = d3.select("#tt").attr("width", window.innerWidth).attr("height", window.innerHeight);
         svg.on('click', function() {
             update();
         });
-        let g = svg.append('g')
-            .attr('cursor', 'grab');
+        let g = svg.append('g').attr('cursor', 'grab');
         let gdots = svg.append('g').attr("id", "dots");
 
+        function update() {
+          d3.selectAll(".path").remove();
+          d3.selectAll(".dot").remove();
+          d3.selectAll(".group").remove();
+          d3.selectAll(".drag").remove();
+          randomise();
+          let drags = g.selectAll(".drag")
+            .data(arr);
+          let dragenter = drags.enter();
+          
+          dragenter.append("circle")
+            .attr("class", "drag")
+            .style("z-index", "100")
+            .attr("id", d => d.id)
+            .attr("r", d => d.r)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y)
+            .call(d3.drag()
+                .on('start', dragstarted)
+                .on('drag', dragged)
+                .on('end', dragended));
+            
+          
+          
+          function dragstarted(id) {
+            d3.select(this).raise();
+            g.attr('cursor', 'grabbing');
+          }
+          
+          function dragged(event, d) {
+            let dd = [];
+            
+            d3.select(this)
+                .attr('cx', d.x = event.x)
+                .attr('cy', d.y = event.y);
+
+            arr.forEach((i) => {
+                if (i.id == d.id) {
+                    i.x = d.x;
+                    i.y = d.y;
+                };
+
+            });
+            
+            function returnd(n) {
+                return describeArcIntersection(n);
+            };
+
+            dd = findAllIntersections(arr);
+            let groups = gdots
+                .selectAll(".group")
+                .data(dd);
+
+            groups.selectAll(".pie").remove();
+
+            let groupsenter = groups.enter()
+                .append("g")
+                .attr("class", "group");
+
+            let paths = groups.selectAll(".pie")
+                .attr("d", returnd);
+                
+            groups.append("path")
+                .attr("d", returnd)
+                .attr("class", "pie")
+                .style("stroke-width", "1px")
+                .style("fill", "red")
+                .style("fill-opacity", "0.1")
+                .style("stroke", "red").style("z-index", "1");
+
+            let dots = groups.selectAll(".dot").data(function(d) {
+                    return d.dots;
+                }).attr("cx", n => n.x)
+                .attr("cy", n => n.y)
+                .attr("r", n => n.r)
+                .style("fill", "red");
+
+            let dotsenter = dots.enter()
+                .append("circle")
+                .attr("class", "dot")
+                .attr("r", n => n.r)
+                .attr("cx", n => n.x)
+                .attr("cy", n => n.y)
+                .style("fill", "red");
+
+            dots
+                .exit()
+                .remove();
+
+            paths.exit().remove();
+
+            groups
+                .exit()
+                .remove();
+            
+          }
+          
+          function dragended() {
+            g.attr('cursor', 'grab');
+          }
+        
+        prepareWithIntersections();
+        
+        function prepareWithIntersections() {
+          dd = findAllIntersections(arr);
+
+          // 2
+          let groups = gdots
+            .selectAll(".group")
+            .data(dd);
+
+          let paths = groups.selectAll(".pie")
+                .attr("d", returnd);
+  paths.exit().remove();
+          let groupsenter = groups.enter()
+            .append("g")
+            .attr("class", "group");
+          groupsenter.append("path")
+            .attr("d", returnd)
+            .attr("class", "pie")
+            .style("stroke-width", "1px")
+            .style("fill", "red")
+            .style("fill-opacity", "0.1")
+            .style("stroke", "red").style("z-index", "1");
+
+          function returnd(n) {
+            return describeArcIntersection(n);
+          };
+        
+          let dots = groupsenter.selectAll(".dot")
+            .data(function(d) {
+                return d.dots;
+            });
+
+          let dotsenter = dots.enter()
+            .append("circle")
+            .attr("class", "dot")
+            .attr("r", n => n.r)
+            .attr("cx", n => n.x)
+            .attr("cy", n => n.y)
+            .style("fill", "red");
+
+          dots
+            .exit()
+            .remove();
+
+          groups
+            .exit()
+            .remove();
+        }
+        }
+        
+        update();
+/*
         function update() {
             randomise();
 
@@ -111,15 +271,7 @@
             var u = g
                 .selectAll('.drag')
                 .data(arr);
-            /*
-                        .attr("id", d => d.id)
-                        .attr("r", d => d.r)
-                        .attr("cx", d => d.x)
-                        .attr("cy", d => d.y)
-                        .call(d3.drag()
-                            .on('start', dragstarted)
-                            .on('drag', dragged)
-                            .on('end', dragended));*/
+      
 
 
             // Enter
@@ -237,5 +389,6 @@
         function dragended() {
             g.attr('cursor', 'grab');
         }
+        */
     </script>
 </body>
