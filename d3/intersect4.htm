@@ -110,10 +110,11 @@
         let gdots = svg.append('g').attr("id", "dots");
 
         function update() {
-          d3.selectAll(".path").remove();
-          d3.selectAll(".dot").remove();
+          //d3.selectAll(".path").remove();
+          //d3.selectAll(".dot").remove();
           d3.selectAll(".group").remove();
           d3.selectAll(".drag").remove();
+          
           randomise();
           let drags = g.selectAll(".drag")
             .data(arr);
@@ -215,30 +216,35 @@
         function prepareWithIntersections() {
           dd = findAllIntersections(arr);
 
+          function returnd(n) {
+            return describeArcIntersection(n);
+          };
+
           // 2
           let groups = gdots
             .selectAll(".group")
             .data(dd);
 
-          let paths = groups.selectAll(".pie")
-                .attr("d", returnd);
-  paths.exit().remove();
+          //let paths = groups.selectAll(".pie")
+                //.attr("d", returnd);
+          //paths.exit().remove();
+          
           let groupsenter = groups.enter()
             .append("g")
             .attr("class", "group");
-          groupsenter.append("path")
+            
+          let path = groupsenter
+            .append("path")
             .attr("d", returnd)
             .attr("class", "pie")
             .style("stroke-width", "1px")
             .style("fill", "red")
             .style("fill-opacity", "0.1")
-            .style("stroke", "red").style("z-index", "1");
-
-          function returnd(n) {
-            return describeArcIntersection(n);
-          };
+            .style("stroke", "red")
+            .style("z-index", "1");
         
-          let dots = groupsenter.selectAll(".dot")
+          let dots = groupsenter
+            .selectAll(".dot")
             .data(function(d) {
                 return d.dots;
             });
@@ -258,7 +264,7 @@
           groups
             .exit()
             .remove();
-        }
+          }
         }
         
         update();
