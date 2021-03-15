@@ -245,9 +245,7 @@
             
           
 
-          //let paths = groups.selectAll(".pie")
-                //.attr("d", returnd);
-          //paths.exit().remove();
+          
           
           let groupsenter = groups
             .enter()
@@ -256,6 +254,11 @@
             .attr("id", function(n) {
               return "intersect_"+n.circles[0].id+"_"+n.circles[1].id;
             });
+            
+            
+          let paths = groups.select(".pie")
+                .attr("d", returnd);
+          //paths.exit().remove();
             
           let path = groupsenter
             .append("path")
