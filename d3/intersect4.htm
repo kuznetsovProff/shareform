@@ -112,15 +112,19 @@
         function update() {
           //d3.selectAll(".path").remove();
           //d3.selectAll(".dot").remove();
-          d3.selectAll(".group").remove();
-          d3.selectAll(".drag").remove();
+          //d3.selectAll(".drag").remove();
+          //d3.selectAll(".group").remove();
           
           randomise();
-          let drags = g.selectAll(".drag")
-            .data(arr);
-          let dragenter = drags.enter();
           
-          dragenter.append("circle")
+          let drags = g.selectAll(".drag")
+            .data(arr)
+            .attr("id", d => d.id)
+            .attr("r", d => d.r)
+            .attr("cx", d => d.x)
+            .attr("cy", d => d.y);
+            
+          let dragenter = drags.enter().append("circle")
             .attr("class", "drag")
             .style("z-index", "100")
             .attr("id", d => d.id)
@@ -131,8 +135,10 @@
                 .on('start', dragstarted)
                 .on('drag', dragged)
                 .on('end', dragended));
-            
           
+          drags
+            .exit()
+            .remove();
           
           function dragstarted(id) {
             d3.select(this).raise();
@@ -140,6 +146,7 @@
           }
           
           function dragged(event, d) {
+            //при перемещении
             let dd = [];
             
             d3.select(this)
@@ -159,9 +166,13 @@
             };
 
             dd = findAllIntersections(arr);
+            
             let groups = gdots
                 .selectAll(".group")
-                .data(dd);
+                .data(dd)
+                .attr("id", function(n) {
+                  return "intersect_"+n.circles[0].id+"_"+n.circles[1].id;
+                });
 
             groups.selectAll(".pie").remove();
 
@@ -199,7 +210,9 @@
                 .exit()
                 .remove();
 
-            paths.exit().remove();
+            paths
+            .exit()
+            .remove();
 
             groups
                 .exit()
@@ -211,9 +224,11 @@
             g.attr('cursor', 'grab');
           }
         
-        prepareWithIntersections();
+        d3.selectAll(".group").remove();
+          
+        intersectionsOnUpdate();
         
-        function prepareWithIntersections() {
+        function intersectionsOnUpdate() {
           dd = findAllIntersections(arr);
 
           function returnd(n) {
@@ -223,15 +238,24 @@
           // 2
           let groups = gdots
             .selectAll(".group")
-            .data(dd);
+            .data(dd)
+            .attr("id", function(n) {
+              return "intersect_"+n.circles[0].id+"_"+n.circles[1].id;
+            });
+            
+          
 
           //let paths = groups.selectAll(".pie")
                 //.attr("d", returnd);
           //paths.exit().remove();
           
-          let groupsenter = groups.enter()
+          let groupsenter = groups
+            .enter()
             .append("g")
-            .attr("class", "group");
+            .attr("class", "group")
+            .attr("id", function(n) {
+              return "intersect_"+n.circles[0].id+"_"+n.circles[1].id;
+            });
             
           let path = groupsenter
             .append("path")
