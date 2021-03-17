@@ -34,7 +34,7 @@
     <script src='./js/intersection.js'></script>
     <script src='./js/geometry.js'></script>
     <script src='./js/path.js'></script>
-    <script src='./js/gsap.min.js'></script>
+    <script src='/js/gsap.min.js'></script>
     <style>
         svg {
             outline: 1px solid gray;
@@ -277,8 +277,14 @@
                 groups
                     .exit()
                     .remove();
+                    
+                
             }
-        }
+            
+//gsap.to('.pie, .dot',{duration: 2, fill: "green", stroke:"blue",fillOpacity: "0.1"});
+       
+    
+             }
 
         update();
         /*
