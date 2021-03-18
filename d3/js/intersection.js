@@ -106,12 +106,13 @@ let getIntersection = (arr, _1stDot, _2ndDot) => {
             y: intersect.cy1,
             r: 3
         };
+        // в отличие от getIntersectionDots к результату добавляются сравниваемые окружностм
         if (!_.isNaN(_1stCross.x) && !_.isNaN(_1stCross.y) && !_.isNaN(_2ndCross.x) && !_.isNaN(_2ndCross.y)) {
             arr.push({
                 "dots": [_1stCross, _2ndCross],
                 "circles": [intersect.circles[0], intersect.circles[1]]
             });
-        };
+        }
 
     }
 };
@@ -142,6 +143,7 @@ let findAllIntersectionDots = (arr) => {
 };
 
 let findAllIntersections = (arr) => {
+    // пересечение всех элементов массива между собой
     // arr - dots
     // arr2 - intersections - complex data
     let arr2 = [];
@@ -164,4 +166,28 @@ let findAllIntersections = (arr) => {
     });
 
     return arr2;
+};
+
+let findAllIntersectionsWith = (arr,  a) => {
+  // пересечение массива окружностей с конкретной окружностью
+  
+  let arrFind = [];
+  let result = [];
+  
+  // чтобы не получить в итоге бесконечную структуру ссылок
+  // используется функция getIntersectionDots
+  arrFind.forEach((i) => {
+    getIntersectionDots(result, i, a);
+  });
+  
+  return result;
+};
+
+let findAllIntersectionsWithArr = (arr) => {
+  // ищем все пересечения для каждой окружностм
+  // с добавлением результатов поиска во вложенный массив
+  arr.forEach((n,i)=>{
+    let result = findAllIntersectionsWith(arr,n);
+    arr[i].intersections = result;
+  });
 };

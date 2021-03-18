@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Intersection 4</title>
+    <script src='/js/d3.v6.min.js'></script>
+    <script src='/js/chroma.min.js'></script>
+    <script src='/js/lodash.min.js'></script>
+
+    <!--<link rel='stylesheet' href='/css/null.css' />-->
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="/css/jquery.mCustomScrollbar.css">
+
+    <script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>
+
+    <script src="/js/jquery.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/popper.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <script src="/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <script src='./js/intersection.js'></script>
+    <script src='./js/geometry.js'></script>
+    <script src='./js/path.js'></script>
+    <script src='/js/gsap.min.js'></script>
+    <style>
+        svg {
+            outline: 1px solid gray;
+            display: block;
+            /*margin: 1em auto;*/
+        }
+        
+        .drag {
+            fill: rgba(100, 100, 100, 0.2);
+            stroke: black;
+            stroke-width: 1;
+            cursor: pointer;
+            z-index: -100;
+        }
+        
+        .group {
+            z-index: 100;
+        }
+        
+        .dot {}
+    </style>
+</head>
+
+<body>
+    <svg id="tt"></svg>
+
+    <script>
+        // force
+        // https://gist.run/?id=fee5ce57c3fc3e94c3332577d1415df4
+        // transition collision
+        // http://bl.ocks.org/ahmohamed/c1804b03b71d8a17bd37
+
+        // убить d3.transition
+        // сделать на нативном javascript с requestAnimationFrame
+        // взять полность код из Intersection 3
+        // добавить requestAnimationFrame
+
+
+
+        let arr = [];
+        let cnt = 45;
+
+        let rnd = (x) => {
+            return Math.floor(Math.random() * x);
+        };
+
+        let numCircles = rnd(cnt),
+            width = window.innerWidth,
+            height = window.innerHeight,
+            maxRadius = 50;
+
+        let randomise = () => {
+            arr = [];
+            numCircles = rnd(cnt);
+            for (var i = 0; i < numCircles; i++) {
+                arr.push({
+                    id: 'rnd_' + i,
+                    x: rnd(width),
+                    y: rnd(height),
+                    r: rnd(maxRadius) + 20
+                });
+            }
+        };
+
+        let svg = d3.select("#tt").attr("width", window.innerWidth).attr("height", window.innerHeight);
+        svg.on('click', function() {
+            update();
+        });
+        let g = svg.append('g').attr('cursor', 'grab');
+        let gdots = svg.append('g').attr("id", "dots");
+
+        function update() {
+
+            randomise();
+
+            let drags = g.selectAll(".drag")
+                .data(arr)
+                .attr("id", d => d.id)
+                .attr("r", d => d.r)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            let dragenter = drags.enter().append("circle")
+                .attr("class", "drag")
+                .style("z-index", "100")
+                .attr("id", d => d.id)
+                .attr("r", d => d.r)
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y)
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            drags
+                .exit()
+                .remove();
+
+            function dragstarted(id) {
+                d3.select(this).raise();
+                g.attr('cursor', 'grabbing');
+            }
+
+            function dragged(event, d) {
+                //при перемещении
+                let dd = [];
+
+                d3.select(this)
+                    .attr('cx', d.x = event.x)
+                    .attr('cy', d.y = event.y);
+
+                arr.forEach((i) => {
+                    if (i.id == d.id) {
+                        i.x = d.x;
+                        i.y = d.y;
+                    };
+
+                });
+
+                function returnd(n) {
+                    return describeArcIntersection(n);
+                };
+
+                dd = findAllIntersections(arr);
+
+                let groups = gdots
+                    .selectAll(".group")
+                    .data(dd)
+                    .attr("id", function(n) {
+                        return "intersect_" + n.circles[0].id + "_" + n.circles[1].id;
+                    });
+
+                groups.selectAll(".pie").remove();
+
+                let groupsenter = groups.enter()
+                    .append("g")
+                    .attr("class", "group");
+
+                let paths = groups.selectAll(".pie")
+                    .attr("d", returnd);
+
+                groups.append("path")
+                    .attr("d", returnd)
+                    .attr("class", "pie")
+                    .style("stroke-width", "1px")
+                    .style("fill", "red")
+                    .style("fill-opacity", "0.1")
+                    .style("stroke", "red").style("z-index", "1");
+
+                let dots = groups.selectAll(".dot").data(function(d) {
+                        return d.dots;
+                    }).attr("cx", n => n.x)
+                    .attr("cy", n => n.y)
+                    .attr("r", n => n.r)
+                    .style("fill", "red");
+
+                let dotsenter = dots.enter()
+                    .append("circle")
+                    .attr("class", "dot")
+                    .attr("r", n => n.r)
+                    .attr("cx", n => n.x)
+                    .attr("cy", n => n.y)
+                    .style("fill", "red");
+
+                dots
+                    .exit()
+                    .remove();
+
+                paths
+                    .exit()
+                    .remove();
+
+                groups
+                    .exit()
+                    .remove();
+
+            }
+
+            function dragended() {
+                g.attr('cursor', 'grab');
+            }
+
+
+
+            intersectionsOnUpdate();
+
+            function intersectionsOnUpdate() {
+                dd = findAllIntersections(arr);
+
+                function returnd(n) {
+                    return describeArcIntersection(n);
+                };
+
+
+                d3.selectAll(".group").remove();
+
+                let groups = gdots
+                    .selectAll(".group")
+                    .data(dd);
+
+                let groupsenter = groups
+                    .enter()
+                    .append("g")
+                    .attr("class", "group")
+                    .attr("id", function(n) {
+                        return "intersect_" + n.circles[0].id + "_" + n.circles[1].id;
+                    });
+
+
+                let pie = groupsenter
+                    .append("path")
+                    .attr("d", returnd)
+                    .attr("class", "pie")
+                    .style("stroke-width", "1px")
+                    .style("fill", "red")
+                    .style("fill-opacity", "0.1")
+                    .style("stroke", "red")
+                    .style("z-index", "1");
+
+
+                let dots = groupsenter
+                    .selectAll(".dot")
+                    .data(function(d) {
+                        return d.dots;
+                    })
+                    .attr("class", "dot")
+                    .attr("r", n => n.r)
+                    .attr("cx", n => n.x)
+                    .attr("cy", n => n.y)
+                    .style("fill", "red");
+
+                dots.enter()
+                    .append("circle")
+                    .attr("class", "dot")
+                    .attr("r", n => n.r)
+                    .attr("cx", n => n.x)
+                    .attr("cy", n => n.y)
+                    .style("fill", "red");
+
+                groups
+                    .exit()
+                    .remove();
+                    
+                
+            }
+            
+//gsap.to('.pie, .dot',{duration: 2, fill: "green", stroke:"blue",fillOpacity: "0.1"});
+       
+    
+             }
+
+        update();
+        /*
+                function update() {
+                    randomise();
+
+
+
+                    var u = g
+                        .selectAll('.drag')
+                        .data(arr);
+              
+
+
+                    // Enter
+                    u.enter()
+                        .append('circle')
+                        .attr("class", "drag")
+                        .attr('id', d => d.id)
+                        .attr('r', 0)
+                        .attr('cx', width / 2)
+                        .attr('cy', height / 2)
+                        .call(d3.drag()
+                            .on('start', dragstarted)
+                            .on('drag', dragged)
+                            .on('end', dragended))
+                        //.style('opacity', '0.9')
+                        .merge(u)
+                        .transition()
+                        .duration(2500)
+                        .attr('cx', function(d) {
+                            return d.x;
+                        })
+                        .attr('cy', function(d) {
+                            return d.y;
+                        })
+                        .attr('r', function(d) {
+                            return d.r;
+                        });
+
+                    // Exit
+                    u.exit()
+                        .transition()
+                        .duration(2500)
+                        .attr('r', 0)
+                        //.style('opacity', '0')
+                        .each('end', function() {
+                            d3.select(this).remove();
+                        });
+                }
+
+                update();
+
+                function dragstarted(id) {
+                    d3.select(this).raise();
+                    g.attr('cursor', 'grabbing');
+                }
+
+                function dragged(event, d) {
+                    let dd = [];
+
+                    d3.select(this)
+                        .attr('cx', d.x = event.x)
+                        .attr('cy', d.y = event.y);
+
+                    arr.forEach((i) => {
+                        if (i.id == d.id) {
+                            i.x = d.x;
+                            i.y = d.y;
+                        };
+
+                    });
+
+                    function returnd(n) {
+                        return describeArcIntersection(n);
+                    };
+
+                    dd = findAllIntersections(arr);
+                    let groups = gdots
+                        .selectAll(".group")
+                        .data(dd);
+
+                    groups.selectAll(".pie").remove();
+
+                    let groupsenter = groups.enter()
+                        .append("g")
+                        .attr("class", "group");
+
+                    let paths = groups.selectAll(".pie")
+                        .attr("d", returnd);
+
+                    groups.append("path")
+                        .attr("d", returnd)
+                        .attr("class", "pie")
+                        .style("stroke-width", "1px")
+                        .style("fill", "red")
+                        .style("fill-opacity", "0.1")
+                        .style("stroke", "red").style("z-index", "1");
+
+                    let dots = groups.selectAll(".dot").data(function(d) {
+                            return d.dots;
+                        }).attr("cx", n => n.x)
+                        .attr("cy", n => n.y)
+                        .attr("r", n => n.r)
+                        .style("fill", "red");
+
+                    let dotsenter = dots.enter()
+                        .append("circle")
+                        .attr("class", "dot")
+                        .attr("r", n => n.r)
+                        .attr("cx", n => n.x)
+                        .attr("cy", n => n.y)
+                        .style("fill", "red");
+
+                    dots
+                        .exit()
+                        .remove();
+
+                    paths.exit().remove();
+
+                    groups
+                        .exit()
+                        .remove();
+
+                }
+
+                function dragended() {
+                    g.attr('cursor', 'grab');
+                }
+                */
+    </script>
+</body>
