@@ -38,38 +38,41 @@
     <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
     <link rel='stylesheet' href='/css/print.css' media='print' />
 
-	<script src="/js/d3.v6.min.js"></script>
-	<script src="/js/papaparse.min.js"></script>
-	<script src="/js/anime.min.js"></script>
+    <script src="/js/d3.v6.min.js"></script>
+    <script src="/js/papaparse.min.js"></script>
+    <script src="/js/anime.min.js"></script>
 
     <script type='module'>
 
     </script>
-	<style>
-	.square,
-	.circle {
-	  pointer-events: none;
-	  position: relative;
-	  width: 28px;
-	  height: 28px;
-	  margin: 1px;
-	  background-color: currentColor;
-	  font-size: 14px;
-	}
-	</style>
+    <style>
+        .square {
+            pointer-events: none;
+            position: relative;
+            width: 28px;
+            height: 2px;
+            margin: 1px;
+            background-color: currentColor;
+            font-size: 14px;
+        }
+    </style>
 </head>
 
 <body>
     <div id="container" class="container-fluid">
-	
-		<div class="square el" style=""></div>
-		<div id="tt" class="container">
-		</div>
-		<table id="ll">
-			<thead><tr><td></td></tr></thead>
-			<tbody></tbody>
-		</table>
-	</div>
+
+        <div class="square el" style=""></div>
+        <div id="tt" class="container">
+        </div>
+        <table id="ll">
+            <thead>
+                <tr>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
     <!-- The Modals -->
     <!-- 1 -->
     <div class="modal fade" id="modallink">
@@ -147,142 +150,238 @@
         </div>
     </div>
 
-	<script>
-	/*
-		const inputElement = document.getElementById("input");
-		inputElement.addEventListener("change", handleFiles, false);
-		function handleFiles() {
-		  const fileList = this.files; // now you can work with the file list 
-		  
-		  var numFiles = fileList.length;
-		  var compareByRegionCode = function (a, b) { // <-G
-				return a[0] < b[0]?-1:1;
-			};
-		  
-		  for (var i = 0, numFiles = fileList.length; i < numFiles; i++) {
-			  var file = fileList[i];
-			  
-				Papa.parse(file, {
-					complete: displayCSV
-				});//Papa.parse
+    <script>
+        // promisify(f, true), чтобы получить массив результатов
+        function promisify(f, manyArgs = false) {
+            return function(...args) {
+                return new Promise((resolve, reject) => {
+                    function callback(err, ...results) { // наш специальный колбэк для f
+                        if (err) {
+                            return reject(err);
+                        } else {
+                            // делаем resolve для всех results колбэка, если задано manyArgs
+                            resolve(manyArgs ? results : results[0]);
+                        }
+                    }
 
-			}
-		  
-		}*/
-		//Перечень управлений
-		//https://opendata.fssp.gov.ru/7709576929-tolist
-		//Перечень отделов
-		//https://opendata.fssp.gov.ru/7709576929-osp
-		//https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
-		
-    var tween = anime({
-			targets: '.el',
-			translateX: window.innerWidth-28,
-			delay: function(el, i) { return i * 200; },
-			direction: 'alternate',
-			loop: true,
-			easing: 'easeInOutSine'
-		});
-		
-		
-		(async ()=>{
-		  
-		  let f = "https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv";
-		  let f2 = "new.csv";
-		  
-		  try {
-		    let response = await fetch(f2);
-		    let text = await response.text();
-		    //alert(text.slice(0,80));
-		    Papa.parse(text,{
-		      complete: displayCSV
-		    });
-		  } catch(err) {
-		    alert(err);
-		  }
-		})()
-		
-		
-		/*
-		Papa.parse("./new.csv", {
-					download: true,
-					complete: emptyFunc
-				});
-		*/
-		function emptyFunc(results){}
-		function displayCSV(results) {
-tween.pause();
-		  anime.set({
-		    targets: ".el",
-		    backgroundColor: "#777"
-		  });
-		  
-						var titles = [
-						"код региона",
-						"код подразделения",
-						"наименование подразделения",
-						"почтовый адрес",
-						"ФИО начальника",
-						"телефон",
-						"факс",
-						"телефон для справок",
-						"телефон для справок 2",
-						"время работы",
-						"территория обслуживания"
-						];
-						var data = results.data;
-						
-						d3.selectAll(".line").remove();
-						
-						d3.select("table").attr("class","table table-striped");
-						d3.select("table thead").attr("class","table table-dark");
-						
-						d3.select("thead tr").selectAll("td").data(titles).text((d)=>d);
-						d3.select("thead tr").selectAll("td").data(titles).enter().append("td").text((d)=>d);
-						d3.select("thead tr").selectAll("td").data(titles).exit().remove();
-						var lines = [];
-						data.forEach((line,i)=>{
-							if (i!=0 && line[0]!="") {
-								lines.push(line);
-							}
-						});
-						
-						function compareNumericByRegionCode(a, b, i=0) {
-							if (Number(a[i]) > Number(b[i])) return 1;
-							if (Number(a[i]) == Number(b[i])) return 0;
-							if (Number(a[i]) < Number(b[i])) return -1;
-						}
-						function compareNumericByTerritorialAgency(a, b, i=1) {
-							if (Number(a[i]) > Number(b[i])) return 1;
-							if (Number(a[i]) == Number(b[i])) return 0;
-							if (Number(a[i]) < Number(b[i])) return -1;
-						}
+                    args.push(callback);
+
+                    f.call(this, ...args);
+                });
+            };
+        };
+
+        //Перечень управлений
+        //https://opendata.fssp.gov.ru/7709576929-tolist
+        //Перечень отделов
+        //https://opendata.fssp.gov.ru/7709576929-osp
+        //https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
+
+        var tween = anime({
+            targets: '.el',
+            translateX: window.innerWidth - 28 * 2,
+            delay: function(el, i) {
+                return i * 200;
+            },
+            direction: 'alternate',
+            loop: true,
+            easing: 'easeInOutSine'
+        });
 
 
-						var lines = lines.sort(compareNumericByTerritorialAgency);
-						lines = lines.sort(compareNumericByRegionCode);
-						
+        (async() => {
+
+            let f = "https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv";
+            let f2 = "osp.csv";
+
+            try {
+                let response = await fetch(f2);
+                let text = await response.text();
+
+                Papa.parse(text, {
+                    complete: ResultsPrepare
+                });
+            } catch (err) {
+                alert(err);
+            }
+        })()
+
+        var lines = [];
+
+        let displayOSPTitlesPromise = promisify(displayOSPTitles);
+        let displayOSPEntriesPromise = promisify(displayOSPEntries);
+        let getLinesPromise = promisify(getLines);
+
+        let displayLogPromise = promisify(displayLog);
+
+        function displayLog(d) {
+            console.log(d);
+        }
+
+        function ResultsPrepare(data) {
+            getLinesPromise(data)
+                .then(displayOSPTitlesPromise())
+                .then(displayOSPEntriesPromise(data));
+        }
+
+        function getLines(results) {
+            var data = results.data;
+
+            data.forEach((line, i) => {
+                if (i != 0 && line[0] != "") {
+                    lines.push(line);
+                }
+            });
+        }
+
+        function displayOSPTitles() {
+            anime.set({
+                targets: '.el',
+                backgroundColor: '#FFF'
+            });
 
 
-						var rows = d3.select("tbody")
-							.selectAll("tr").data(lines);
-							
-										
-						var rows_enter = rows	
-							.enter().append("tr");
-						
-						rows.exit().remove();
-						
-						var entries = rows_enter.selectAll("td");
-						var entries_data = entries.data( function(d, i) { return d; })
-						var dataenter = entries_data.enter();
-						dataenter.append("td").text((d)=>d);
-						
-						tween.pause();
+            var titles = [
+                "код региона",
+                "код подразделения",
+                "наименование подразделения",
+                "почтовый адрес",
+                "ФИО начальника",
+                "телефон",
+                "факс",
+                "телефон для справок",
+                "телефон для справок 2",
+                "время работы",
+                "территория обслуживания"
+            ];
 
 
-		}
-	</script>
+            d3.selectAll(".line").remove();
+
+            d3.select("table").attr("class", "table table-striped");
+            d3.select("table thead").attr("class", "table table-dark");
+
+            d3.select("thead tr").selectAll("td").data(titles).text((d) => d);
+            d3.select("thead tr").selectAll("td").data(titles).enter().append("td").text((d) => d);
+            d3.select("thead tr").selectAll("td").data(titles).exit().remove();
+
+        }
+
+        function displayOSPEntries(results) {
+
+            function compareNumericByRegionCode(a, b, i = 0) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+            function compareNumericByTerritorialAgency(a, b, i = 1) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+
+            lines = lines.sort(compareNumericByTerritorialAgency);
+            lines = lines.sort(compareNumericByRegionCode);
+
+
+
+            var rows = d3.select("tbody")
+                .selectAll("tr").data(lines);
+
+
+            var rows_enter = rows
+                .enter().append("tr");
+
+            rows.exit().remove();
+
+            var entries = rows_enter.selectAll("td");
+            var entries_data = entries.data(function(d, i) {
+                return d;
+            })
+            var dataenter = entries_data.enter();
+            dataenter.append("td").text((d) => d);
+
+            //tween.pause();
+        }
+
+        function displayOSP(results) {
+
+            anime.set({
+                targets: '.el',
+                backgroundColor: '#FFF'
+            });
+
+            var titles = [
+                "код региона",
+                "код подразделения",
+                "наименование подразделения",
+                "почтовый адрес",
+                "ФИО начальника",
+                "телефон",
+                "факс",
+                "телефон для справок",
+                "телефон для справок 2",
+                "время работы",
+                "территория обслуживания"
+            ];
+            var data = results.data;
+
+            d3.selectAll(".line").remove();
+
+            d3.select("table").attr("class", "table table-striped");
+            d3.select("table thead").attr("class", "table table-dark");
+
+            d3.select("thead tr").selectAll("td").data(titles).text((d) => d);
+            d3.select("thead tr").selectAll("td").data(titles).enter().append("td").text((d) => d);
+            d3.select("thead tr").selectAll("td").data(titles).exit().remove();
+            var lines = [];
+            data.forEach((line, i) => {
+                if (i != 0 && line[0] != "") {
+                    lines.push(line);
+                }
+            });
+
+            function compareNumericByRegionCode(a, b, i = 0) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+            function compareNumericByTerritorialAgency(a, b, i = 1) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+
+            var lines = lines.sort(compareNumericByTerritorialAgency);
+            lines = lines.sort(compareNumericByRegionCode);
+
+
+
+            var rows = d3.select("tbody")
+                .selectAll("tr").data(lines);
+
+
+            var rows_enter = rows
+                .enter().append("tr");
+
+            rows.exit().remove();
+
+            var entries = rows_enter.selectAll("td");
+            var entries_data = entries.data(function(d, i) {
+                return d;
+            })
+            var dataenter = entries_data.enter();
+            dataenter.append("td").text((d) => d);
+
+            //tween.pause();
+
+
+        }
+    </script>
 </body>
 
 
