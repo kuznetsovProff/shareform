@@ -65,11 +65,7 @@
         <div id="tt" class="container">
         </div>
         <table id="ll">
-            <thead>
-                <tr>
-                    <td></td>
-                </tr>
-            </thead>
+            <thead></thead>
             <tbody></tbody>
         </table>
     </div>
@@ -212,12 +208,6 @@
         let displayOSPEntriesPromise = promisify(displayOSPEntries);
         let getLinesPromise = promisify(getLines);
 
-        let displayLogPromise = promisify(displayLog);
-
-        function displayLog(d) {
-            console.log(d);
-        }
-
         function ResultsPrepare(data) {
             getLinesPromise(data)
                 .then(displayOSPTitlesPromise())
@@ -233,6 +223,61 @@
                 }
             });
         }
+
+ // добавление строки со значениями из массива в таблицу
+ //
+ // @param {arr - массив, parent - ссылка d3}
+ // @returns {Promise}
+ //
+  function addRow(arr, parent, delay = 1000)
+  {
+	  //объект "обещание"
+	  return new Promise(function(resolve, reject)
+	  {
+      setTimeout(() => {
+	      try{
+	        let row = parent.append("tr");
+	        row.selectAll("td").data(arr).text((d) => d);
+          row.selectAll("td").data(arr).enter().append("td").text((d) => d);
+          row.selectAll("td").data(arr).exit().remove();
+          // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
+	        return resolve({array: arr, parent: parent, row: row});
+	      } catch (err) {
+	        // в случае ошибки возвращает массив ссылку d3 на родителя и ошибку
+	        return reject({array: arr,  parent: parent,  error: err});
+	      }
+      }, delay);
+  	});
+  }
+
+
+ // последовательная рекурсивная подгрузка и показ изображений
+ // 
+ // @param arr - массив строк
+ // @param parent - d3 ссылка на родителя
+ //
+function addEntries(arr,  parent, delay = 100)
+{
+	var entry = arr.shift(); // проходим по массиву с изображениями
+	if (!entry) {
+	  alert("entries ok!");
+	  return;
+	}; //если в результате рекурсии прошлись по всему массиву
+
+	//если в массиве еще есть изображение, загружаем его
+	return addRow(entry, parent, delay)
+	.then(function(result)
+	{
+		console.log("entry ok!");
+		return addEntries(arr, parent, delay); //рекурсия
+	})
+	.catch(function(result)
+	{
+		//если какая-то строка не добавлена переходим к следующему
+		console.log('ошибка: ', result.error);
+		return addEntries(arr, parent, delay); //рекурсия
+	});
+}
 
         function displayOSPTitles() {
             anime.set({
@@ -259,11 +304,10 @@
             d3.selectAll(".line").remove();
 
             d3.select("table").attr("class", "table table-striped");
-            d3.select("table thead").attr("class", "table table-dark");
+            let thead = d3.select("table thead").attr("class", "table table-dark");
 
-            d3.select("thead tr").selectAll("td").data(titles).text((d) => d);
-            d3.select("thead tr").selectAll("td").data(titles).enter().append("td").text((d) => d);
-            d3.select("thead tr").selectAll("td").data(titles).exit().remove();
+            addRow(titles,thead, 0)
+              .then(console.log("titles ok!"));
 
         }
 
@@ -285,8 +329,10 @@
             lines = lines.sort(compareNumericByTerritorialAgency);
             lines = lines.sort(compareNumericByRegionCode);
 
-
-
+            var tbody = d3.select("tbody");
+            addEntries(lines, tbody, 0);
+            
+/*
             var rows = d3.select("tbody")
                 .selectAll("tr").data(lines);
 
@@ -304,83 +350,63 @@
             dataenter.append("td").text((d) => d);
 
             //tween.pause();
+            */
         }
 
-        function displayOSP(results) {
 
-            anime.set({
-                targets: '.el',
-                backgroundColor: '#FFF'
-            });
+        
+/**
+ *
+ * подгружаем изображение по указанному url
+ *
+ * @param url
+ * @returns {Promise}
+ */
+function loadImage(url)
+{
+	//объект "обещание"
+	return new Promise(function(resolve, reject)
+	{
+		var img = new Image();
+		img.onload = function()
+		{
+			//в случае успешной загрузки изображения, результат "обещания" будет url этого изображения
+			return resolve(url);
+		}
+		img.onerror = function()
+		{
+			//в случае не успешной загрузки изображения, результат "обещания" будет url этого изображения
+			return reject(url);
+		}
+		img.src = url;
+	});
+}
 
-            var titles = [
-                "код региона",
-                "код подразделения",
-                "наименование подразделения",
-                "почтовый адрес",
-                "ФИО начальника",
-                "телефон",
-                "факс",
-                "телефон для справок",
-                "телефон для справок 2",
-                "время работы",
-                "территория обслуживания"
-            ];
-            var data = results.data;
+/**
+ * последовательная рекурсивная подгрузка и показ изображений
+ * 
+ * @param images - массив с url
+ */
+function displayImages(images)
+{
+	var imgSrc = images.shift(); // проходим по массиву с изображениями
+	if (!imgSrc) return; //если в результате рекурсии прошлись по всему массиву
 
-            d3.selectAll(".line").remove();
-
-            d3.select("table").attr("class", "table table-striped");
-            d3.select("table thead").attr("class", "table table-dark");
-
-            d3.select("thead tr").selectAll("td").data(titles).text((d) => d);
-            d3.select("thead tr").selectAll("td").data(titles).enter().append("td").text((d) => d);
-            d3.select("thead tr").selectAll("td").data(titles).exit().remove();
-            var lines = [];
-            data.forEach((line, i) => {
-                if (i != 0 && line[0] != "") {
-                    lines.push(line);
-                }
-            });
-
-            function compareNumericByRegionCode(a, b, i = 0) {
-                if (Number(a[i]) > Number(b[i])) return 1;
-                if (Number(a[i]) == Number(b[i])) return 0;
-                if (Number(a[i]) < Number(b[i])) return -1;
-            }
-
-            function compareNumericByTerritorialAgency(a, b, i = 1) {
-                if (Number(a[i]) > Number(b[i])) return 1;
-                if (Number(a[i]) == Number(b[i])) return 0;
-                if (Number(a[i]) < Number(b[i])) return -1;
-            }
-
-
-            var lines = lines.sort(compareNumericByTerritorialAgency);
-            lines = lines.sort(compareNumericByRegionCode);
-
-
-
-            var rows = d3.select("tbody")
-                .selectAll("tr").data(lines);
-
-
-            var rows_enter = rows
-                .enter().append("tr");
-
-            rows.exit().remove();
-
-            var entries = rows_enter.selectAll("td");
-            var entries_data = entries.data(function(d, i) {
-                return d;
-            })
-            var dataenter = entries_data.enter();
-            dataenter.append("td").text((d) => d);
-
-            //tween.pause();
-
-
-        }
+	//если в массиве еще есть изображение, загружаем его
+	return loadImage(imgSrc)
+	.then(function(url)
+	{
+		$('#images').append('<img src="'+url+'" style="width: 200px;"/>');
+		return displayImages(images); //рекурсия
+	})
+	.catch(function(url)
+	{
+		//если какое-то из изображений не загрузилось, переходим к следующему изображению
+		console.log('не удалось загрузить изображение по указанному пути: ', url);
+		return displayImages(images); //рекурсия
+	});
+}
+        
     </script>
 </body>
 
