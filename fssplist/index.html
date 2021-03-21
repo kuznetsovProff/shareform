@@ -38,6 +38,7 @@
     <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
     <link rel='stylesheet' href='/css/print.css' media='print' />
 
+    <script src="/js/lodash.min.js"></script>
     <script src="/js/d3.v6.min.js"></script>
     <script src="/js/papaparse.min.js"></script>
     <script src="/js/anime.min.js"></script>
@@ -147,6 +148,10 @@
     </div>
 
     <script>
+        let ufssp = [];
+
+        let osp = [];
+
         // promisify(f, true), чтобы получить массив результатов
         function promisify(f, manyArgs = false) {
             return function(...args) {
@@ -167,12 +172,47 @@
             };
         };
 
+        //Исполнительные производства в отношении юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-iplegallist
+        //Оконченные
+        //https://opendata.fssp.gov.ru/7709576929-iplegallistcomplete
+        //Телефоны
+        //https://opendata.fssp.gov.ru/7709576929-phonelist
+        //Справочник видов документов (постановлений)
+        //https://opendata.fssp.gov.ru/7709576929-doctypelist
+        //Перечень международных договоров (конвенций, соглашений)
+        //https://opendata.fssp.gov.ru/7709576929-treaties
+        //План-график размещения заказов ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-purchases
+        //Сведения об обращениях граждан
+        //https://opendata.fssp.gov.ru/7709576929-appeals
+        //Приказы по основной деятельности, изданные ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-regulations
+        //Перечень информационных систем
+        //https://opendata.fssp.gov.ru/7709576929-infosys
+        //Сведения об имущественном положении и доходах руководства ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-dohodrukfssp
+        //Сведения об имущественном положении и доходах руководителя организации, подведомственной ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-dohodruksanatorij
+        //Ежегодный план проведения плановых проверок юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-planproverokul
+        //Информация об организованных конференциях, творческих конкурсах
+        //https://opendata.fssp.gov.ru/7709576929-contests
+        //График личного приема граждан
+        //https://opendata.fssp.gov.ru/7709576929-grafiklpg
+        //Государственный реестр юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-gosreestrul
+        //Справочник видов документов (запросов)
+        //https://opendata.fssp.gov.ru/7709576929-doctypelistzapross
+
+
         //Перечень управлений
         //https://opendata.fssp.gov.ru/7709576929-tolist
         //Перечень отделов
         //https://opendata.fssp.gov.ru/7709576929-osp
         //https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
 
+        /*
         var tween = anime({
             targets: '.el',
             translateX: window.innerWidth - 28 * 2,
@@ -182,102 +222,186 @@
             direction: 'alternate',
             loop: true,
             easing: 'easeInOutSine'
-        });
+        });*/
 
 
+        //управления
+        let fssptitles = [
+            "Полное наименование",
+            "Сокращенное наименование",
+            "ФИО Руководителя",
+            "Должность",
+            "Описание задача и функций",
+            "Почтовый адрес",
+            "Часы работы",
+            "ОКТМО",
+            "ОКАТО",
+            "ОКПО",
+            "ОГРН",
+            "ИНН",
+            "Телефоны для справок",
+            "Другие телефоны",
+            "Факс",
+            "Ссылка",
+            "Электронная почта"
+        ];
         (async() => {
 
-            let f = "https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv";
-            let f2 = "osp.csv";
+            let f = "ufssp.csv";
 
             try {
-                let response = await fetch(f2);
+                let response = await fetch(f);
                 let text = await response.text();
 
                 Papa.parse(text, {
-                    complete: ResultsPrepare
+                    complete: UfsspPrepare
                 });
             } catch (err) {
                 alert(err);
             }
         })()
 
-        var lines = [];
+        let getUfsspPromise = promisify(getUfssp);
 
-        let displayOSPTitlesPromise = promisify(displayOSPTitles);
-        let displayOSPEntriesPromise = promisify(displayOSPEntries);
-        let getLinesPromise = promisify(getLines);
+        function UfsspPrepare(data) {
+            getUfsspPromise(data).then(console.log("ufssp list loaded!"));
 
-        function ResultsPrepare(data) {
-            getLinesPromise(data)
-                .then(displayOSPTitlesPromise())
-                .then(displayOSPEntriesPromise(data));
         }
 
-        function getLines(results) {
-            var data = results.data;
+        function getUfssp(results) {
+            let data = results.data;
 
-            data.forEach((line, i) => {
-                if (i != 0 && line[0] != "") {
-                    lines.push(line);
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    //https://r87.fssp.gov.ru
+                    let code = item[15];
+                    code = Number(code.slice(9, 11)).toString();
+
+                    item.push(code);
+                    ufssp.push(item);
+                    //console.log(item[17]);
                 }
             });
         }
 
- // добавление строки со значениями из массива в таблицу
- //
- // @param {arr - массив, parent - ссылка d3}
- // @returns {Promise}
- //
-  function addRow(arr, parent, delay = 1000)
-  {
-	  //объект "обещание"
-	  return new Promise(function(resolve, reject)
-	  {
-      setTimeout(() => {
-	      try{
-	        let row = parent.append("tr");
-	        row.selectAll("td").data(arr).text((d) => d);
-          row.selectAll("td").data(arr).enter().append("td").text((d) => d);
-          row.selectAll("td").data(arr).exit().remove();
-          // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
-	        return resolve({array: arr, parent: parent, row: row});
-	      } catch (err) {
-	        // в случае ошибки возвращает массив ссылку d3 на родителя и ошибку
-	        return reject({array: arr,  parent: parent,  error: err});
-	      }
-      }, delay);
-  	});
-  }
+        //отделы
+        let osptitles = [
+            "код региона",
+            "код подразделения",
+            "наименование подразделения",
+            "почтовый адрес",
+            "ФИО начальника",
+            "телефон",
+            "факс",
+            "телефон для справок",
+            "телефон для справок 2",
+            "время работы",
+            "территория обслуживания",
+            "региональное подразделение"
+        ];
+        (async() => {
+
+            let f = "osp.csv";
+
+            try {
+                let response = await fetch(f);
+                let text = await response.text();
+
+                Papa.parse(text, {
+                    complete: OspPrepare
+                });
+            } catch (err) {
+                alert(err);
+            }
+        })()
+
+        let displayOSPTitlesPromise = promisify(displayOSPTitles);
+        let displayOSPEntriesPromise = promisify(displayOSPEntries);
+        let getOspPromise = promisify(getOsp);
+
+        function OspPrepare(data) {
+            getOspPromise(data)
+                .then(displayOSPTitlesPromise())
+                .then(displayOSPEntriesPromise(data));
+        }
+
+        function getOsp(results) {
+            var data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    try {
+                        let f = _.find(ufssp, function(i) {
+
+                            return i[17] === item[0].toString();
+                        });
+                        item.push(f[1]);
+                    } catch (err) {
+
+                    }
+                    //console.log(f[1]);
+                    osp.push(item);
+                }
+            });
+        }
+
+        // добавление строки со значениями из массива в таблицу
+        //
+        // @param {arr - массив, parent - ссылка d3}
+        // @returns {Promise}
+        //
+        function addRow(arr, parent, delay = 1000) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                setTimeout(() => {
+                    try {
+                        let row = parent.append("tr");
+                        row.selectAll("td").data(arr).text((d) => d);
+                        row.selectAll("td").data(arr).enter().append("td").text((d) => d);
+                        row.selectAll("td").data(arr).exit().remove();
+                        // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
+                        return resolve({
+                            array: arr,
+                            parent: parent,
+                            row: row
+                        });
+                    } catch (err) {
+                        // в случае ошибки возвращает массив ссылку d3 на родителя и ошибку
+                        return reject({
+                            array: arr,
+                            parent: parent,
+                            error: err
+                        });
+                    }
+                }, delay);
+            });
+        }
 
 
- // последовательная рекурсивная подгрузка и показ изображений
- // 
- // @param arr - массив строк
- // @param parent - d3 ссылка на родителя
- //
-function addEntries(arr,  parent, delay = 100)
-{
-	var entry = arr.shift(); // проходим по массиву с изображениями
-	if (!entry) {
-	  alert("entries ok!");
-	  return;
-	}; //если в результате рекурсии прошлись по всему массиву
+        // последовательная рекурсивная подгрузка и показ изображений
+        // 
+        // @param arr - массив строк
+        // @param parent - d3 ссылка на родителя
+        //
+        function addEntries(arr, parent, delay = 100) {
+            var entry = arr.shift(); // проходим по массиву с изображениями
+            if (!entry) {
+                alert("entries ok!");
+                return;
+            }; //если в результате рекурсии прошлись по всему массиву
 
-	//если в массиве еще есть изображение, загружаем его
-	return addRow(entry, parent, delay)
-	.then(function(result)
-	{
-		console.log("entry ok!");
-		return addEntries(arr, parent, delay); //рекурсия
-	})
-	.catch(function(result)
-	{
-		//если какая-то строка не добавлена переходим к следующему
-		console.log('ошибка: ', result.error);
-		return addEntries(arr, parent, delay); //рекурсия
-	});
-}
+            //если в массиве еще есть изображение, загружаем его
+            return addRow(entry, parent, delay)
+                .then(function(result) {
+                    console.log("entry ok!");
+                    return addEntries(arr, parent, delay); //рекурсия
+                })
+                .catch(function(result) {
+                    //если какая-то строка не добавлена переходим к следующему
+                    console.log('ошибка: ', result.error);
+                    return addEntries(arr, parent, delay); //рекурсия
+                });
+        }
 
         function displayOSPTitles() {
             anime.set({
@@ -285,29 +409,13 @@ function addEntries(arr,  parent, delay = 100)
                 backgroundColor: '#FFF'
             });
 
-
-            var titles = [
-                "код региона",
-                "код подразделения",
-                "наименование подразделения",
-                "почтовый адрес",
-                "ФИО начальника",
-                "телефон",
-                "факс",
-                "телефон для справок",
-                "телефон для справок 2",
-                "время работы",
-                "территория обслуживания"
-            ];
-
-
             d3.selectAll(".line").remove();
 
             d3.select("table").attr("class", "table table-striped");
             let thead = d3.select("table thead").attr("class", "table table-dark");
 
-            addRow(titles,thead, 0)
-              .then(console.log("titles ok!"));
+            addRow(osptitles, thead, 0)
+                .then(console.log("titles ok!"));
 
         }
 
@@ -325,88 +433,13 @@ function addEntries(arr,  parent, delay = 100)
                 if (Number(a[i]) < Number(b[i])) return -1;
             }
 
+            osp = osp.sort(compareNumericByTerritorialAgency);
+            osp = osp.sort(compareNumericByRegionCode);
 
-            lines = lines.sort(compareNumericByTerritorialAgency);
-            lines = lines.sort(compareNumericByRegionCode);
+            let tbody = d3.select("tbody");
+            addEntries(osp, tbody, 0);
 
-            var tbody = d3.select("tbody");
-            addEntries(lines, tbody, 0);
-            
-/*
-            var rows = d3.select("tbody")
-                .selectAll("tr").data(lines);
-
-
-            var rows_enter = rows
-                .enter().append("tr");
-
-            rows.exit().remove();
-
-            var entries = rows_enter.selectAll("td");
-            var entries_data = entries.data(function(d, i) {
-                return d;
-            })
-            var dataenter = entries_data.enter();
-            dataenter.append("td").text((d) => d);
-
-            //tween.pause();
-            */
         }
-
-
-        
-/**
- *
- * подгружаем изображение по указанному url
- *
- * @param url
- * @returns {Promise}
- */
-function loadImage(url)
-{
-	//объект "обещание"
-	return new Promise(function(resolve, reject)
-	{
-		var img = new Image();
-		img.onload = function()
-		{
-			//в случае успешной загрузки изображения, результат "обещания" будет url этого изображения
-			return resolve(url);
-		}
-		img.onerror = function()
-		{
-			//в случае не успешной загрузки изображения, результат "обещания" будет url этого изображения
-			return reject(url);
-		}
-		img.src = url;
-	});
-}
-
-/**
- * последовательная рекурсивная подгрузка и показ изображений
- * 
- * @param images - массив с url
- */
-function displayImages(images)
-{
-	var imgSrc = images.shift(); // проходим по массиву с изображениями
-	if (!imgSrc) return; //если в результате рекурсии прошлись по всему массиву
-
-	//если в массиве еще есть изображение, загружаем его
-	return loadImage(imgSrc)
-	.then(function(url)
-	{
-		$('#images').append('<img src="'+url+'" style="width: 200px;"/>');
-		return displayImages(images); //рекурсия
-	})
-	.catch(function(url)
-	{
-		//если какое-то из изображений не загрузилось, переходим к следующему изображению
-		console.log('не удалось загрузить изображение по указанному пути: ', url);
-		return displayImages(images); //рекурсия
-	});
-}
-        
     </script>
 </body>
 
