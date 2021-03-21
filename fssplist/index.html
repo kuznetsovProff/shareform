@@ -175,7 +175,7 @@
 		//https://opendata.fssp.gov.ru/7709576929-osp
 		//https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
 		
-		var tween = anime({
+    var tween = anime({
 			targets: '.el',
 			translateX: window.innerWidth-28,
 			delay: function(el, i) { return i * 200; },
@@ -184,12 +184,39 @@
 			easing: 'easeInOutSine'
 		});
 		
+		
+		(async ()=>{
+		  
+		  let f = "https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv";
+		  let f2 = "new.csv";
+		  
+		  try {
+		    let response = await fetch(f2);
+		    let text = await response.text();
+		    //alert(text.slice(0,80));
+		    Papa.parse(text,{
+		      complete: displayCSV
+		    });
+		  } catch(err) {
+		    alert(err);
+		  }
+		})()
+		
+		
+		/*
 		Papa.parse("./new.csv", {
 					download: true,
-					complete: displayCSV
+					complete: emptyFunc
 				});
-		
+		*/
+		function emptyFunc(results){}
 		function displayCSV(results) {
+tween.pause();
+		  anime.set({
+		    targets: ".el",
+		    backgroundColor: "#777"
+		  });
+		  
 						var titles = [
 						"код региона",
 						"код подразделения",
