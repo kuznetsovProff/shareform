@@ -156,7 +156,7 @@
 
         // version 1
         // promisify(f, true), чтобы получить массив результатов
-        function promisify(f, manyArgs = false) {
+        /*function promisify(f, manyArgs = false) {
             return function(...args) {
                 return new Promise((resolve, reject) => {
                     function callback(err, ...results) { // наш специальный колбэк для f
@@ -173,15 +173,33 @@
                     f.call(this, ...args);
                 });
             };
-        };
+        };*/
 
         // version 2
-        /*
-				const promisify = function(callbackBasedApi){
-					
-				}
+        /**/
+        const promisify = function(callbackBasedApi) {
+            return function promisified() {
+                const args = [].slice.call(arguments);
+                console.log('args: ', args);
 
-        */
+                return new Promise((resolve, reject) => {
+                    args.push((err, result) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        if (arguments.length <= 2) {
+                            resolve(result);
+                        } else {
+                            resolve([].slice.call(arguments, 1));
+                        }
+                    });
+                    callbackBasedApi.apply(null, args);
+                });
+
+            }
+        };
+
+        /**/
 
         //Исполнительные производства в отношении юридических лиц
         //https://opendata.fssp.gov.ru/7709576929-iplegallist
@@ -437,7 +455,7 @@
 
             d3.selectAll(".line").remove();
 
-            d3.select("table").attr("class", "table table-striped");
+            d3.select("table").attr("class", "table table-striped small");
             let thead = d3.select("table thead").attr("class", "table table-dark");
 
             addRow(osptitles, thead, 0)
