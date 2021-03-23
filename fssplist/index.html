@@ -50,11 +50,15 @@
         .square {
             pointer-events: none;
             position: relative;
-            width: 28px;
+            width: 14px;
             height: 2px;
             margin: 1px;
-            background-color: currentColor;
+            background-color: #ff0000;
             font-size: 14px;
+        }
+        
+        .unselected {
+            display: none;
         }
     </style>
 </head>
@@ -62,7 +66,10 @@
 <body>
     <div id="container" class="container-fluid">
 
-        <div class="square el" style=""></div>
+        <div class="square el lamp_regions"></div>
+        <div class="square el lamp_ufssp"></div>
+        <div class="square el lamp_osp"></div>
+        <div class="square el lamp_phones"></div>
         <div id="tt" class="container">
         </div>
         <table id="ll">
@@ -154,6 +161,8 @@
 
         let osp = [];
 
+        let phones = [];
+
         // version 1
         // promisify(f, true), чтобы получить массив результатов
         /*function promisify(f, manyArgs = false) {
@@ -205,8 +214,7 @@
         //https://opendata.fssp.gov.ru/7709576929-iplegallist
         //Оконченные
         //https://opendata.fssp.gov.ru/7709576929-iplegallistcomplete
-        //Телефоны
-        //https://opendata.fssp.gov.ru/7709576929-phonelist
+
         //Справочник видов документов (постановлений)
         //https://opendata.fssp.gov.ru/7709576929-doctypelist
         //Перечень международных договоров (конвенций, соглашений)
@@ -240,6 +248,8 @@
         //Перечень отделов
         //https://opendata.fssp.gov.ru/7709576929-osp
         //https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
+        //Телефоны
+        //https://opendata.fssp.gov.ru/7709576929-phonelist
 
         /*
         var tween = anime({
@@ -287,9 +297,7 @@
                     Papa.parse(text, {
                         complete: callback
                     });
-                } catch (err) {
-                    alert(err);
-                }
+                } catch (err) {}
             })()
         };
 
@@ -299,9 +307,19 @@
 
         function RegionsPrepare(data) {
             getRegionsPromise(data)
-                .then(console.log("regions list loaded! "))
+                .then(RegionsLoaded())
                 .catch((err) => console.log("regions list loaded error: " + err));
         }
+
+        function RegionsLoaded() {
+
+            anime({
+                targets: '.lamp_regions',
+                backgroundColor: '#008000'
+            });
+            console.log("regions list loaded! ");
+
+        };
 
         function getRegions(results) {
             let data = results.data;
@@ -319,9 +337,19 @@
 
         function UfsspPrepare(data) {
             getUfsspPromise(data)
-                .then(console.log("ufssp list loaded!"))
+                .then(UfsspLoaded())
                 .catch((err) => console.log("ufssp list loaded error: " + err));
         }
+
+        function UfsspLoaded() {
+
+            anime({
+                targets: '.lamp_ufssp',
+                backgroundColor: '#008000'
+            });
+            console.log("ufssp list loaded!")
+
+        };
 
         function getUfssp(results) {
             let data = results.data;
@@ -341,8 +369,8 @@
 
         //отделы
         let osptitles = [
-            "код региона",
-            "код подразделения",
+            "регион",
+            "код",
             "наименование подразделения",
             "почтовый адрес",
             "ФИО начальника",
@@ -352,7 +380,7 @@
             "телефон для справок 2",
             "время работы",
             "территория обслуживания",
-            "региональное подразделение"
+            "код региона"
         ];
 
         loadCsv("osp.csv", OspPrepare);
@@ -363,11 +391,21 @@
 
         function OspPrepare(data) {
             getOspPromise(data)
-                .then(console.log("osp list loaded!"))
+                .then(OspLoaded())
                 .catch((err) => console.log("osp list loaded error: " + err))
                 .then(displayOSPTitlesPromise())
                 .then(displayOSPEntriesPromise(data));
         }
+
+        function OspLoaded() {
+
+            anime({
+                targets: '.lamp_osp',
+                backgroundColor: '#008000'
+            });
+            console.log("osp list loaded!")
+
+        };
 
         function getOsp(results) {
             var data = results.data;
@@ -375,16 +413,52 @@
             data.forEach((item, i) => {
                 if (i != 0 && item[0] != "") {
                     try {
+                        let r = _.find(regions, function(i) {
+
+                            return i[0] === item[0];
+                        });
+                        item.push(r[0]);
+                        item[0] = r[2];
+                        //item.push(r[2]);
+                        /*
                         let f = _.find(ufssp, function(i) {
 
                             return i[17] === item[0].toString();
                         });
-                        item.push(f[1]);
+                        item.push(f[1]);*/
                     } catch (err) {
 
                     }
                     //console.log(f[1]);
                     osp.push(item);
+                }
+            });
+        }
+
+        loadCsv("phones.csv", PhonesPrepare);
+
+        let getPhonesPromise = promisify(getPhones);
+
+        function PhonesPrepare(data) {
+            getPhonesPromise(data)
+                .then(PhonesLoaded())
+                .catch((err) => console.log("phones list loaded error: " + err));
+        }
+
+        function PhonesLoaded() {
+            anime({
+                targets: '.lamp_phones',
+                backgroundColor: '#008000'
+            });
+            console.log("phones list loaded!")
+        };
+
+        function getPhones(results) {
+            let data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    phones.push(item);
                 }
             });
         }
@@ -465,7 +539,7 @@
 
         function displayOSPEntries(results) {
 
-            function compareNumericByRegionCode(a, b, i = 0) {
+            function compareNumericByRegionCode(a, b, i = 11) {
                 if (Number(a[i]) > Number(b[i])) return 1;
                 if (Number(a[i]) == Number(b[i])) return 0;
                 if (Number(a[i]) < Number(b[i])) return -1;
@@ -480,10 +554,29 @@
             osp = osp.sort(compareNumericByTerritorialAgency);
             osp = osp.sort(compareNumericByRegionCode);
 
+
+
+
+
+
             let tbody = d3.select("tbody");
-            addEntries(osp, tbody, 0);
+            //отфильтровать массив
+            addEntries(tableFilter(osp, 11, 1), tbody, 0);
 
         }
+
+        // фильтрация таблицы
+        function tableFilter(arr, col, val) {
+            // arr - массив из массивов
+            // col - столбец
+            // val - значение
+            // подумать над поиском части строки, если строковая переменная
+            let res = [];
+            arr.forEach((i) => {
+                if (i[col] == val) res.push(i);
+            });
+            return res;
+        };
     </script>
 </body>
 
