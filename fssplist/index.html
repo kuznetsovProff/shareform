@@ -554,14 +554,9 @@
             osp = osp.sort(compareNumericByTerritorialAgency);
             osp = osp.sort(compareNumericByRegionCode);
 
-
-
-
-
-
             let tbody = d3.select("tbody");
             //отфильтровать массив
-            addEntries(tableFilter(osp, 11, 1), tbody, 0);
+            addEntries(tableFilter(osp, 11, 77), tbody, 0);
 
         }
 
