@@ -148,34 +148,13 @@
     </div>
 
     <script>
- /*   
-let url = 'https://fssp.gov.ru';
+        let regions = [];
 
-function status(response) {  
-  if (response.status >= 200 && response.status < 300) {  
-    return Promise.resolve(response)  
-  } else {  
-    return Promise.reject(new Error(response.statusText))  
-  }  
-}
-
-
-fetch(url,{
-  mode:'cors',
-  credentials:'include'
-})  
-  .then(status)  
-  .then(function(data) {  
-    alert('Request succeeded', data);  
-  }).catch(function(error) {  
-    alert('Request failed', error);  
-  });
- */
-    
         let ufssp = [];
 
         let osp = [];
 
+        // version 1
         // promisify(f, true), чтобы получить массив результатов
         function promisify(f, manyArgs = false) {
             return function(...args) {
@@ -195,6 +174,14 @@ fetch(url,{
                 });
             };
         };
+
+        // version 2
+        /*
+				const promisify = function(callbackBasedApi){
+					
+				}
+
+        */
 
         //Исполнительные производства в отношении юридических лиц
         //https://opendata.fssp.gov.ru/7709576929-iplegallist
@@ -269,27 +256,53 @@ fetch(url,{
             "Ссылка",
             "Электронная почта"
         ];
-        (async() => {
 
-            let f = "ufssp.csv";
+        let loadCsv = (url, callback) => {
+            (async() => {
 
-            try {
-                let response = await fetch(f);
-                let text = await response.text();
+                let f = url;
 
-                Papa.parse(text, {
-                    complete: UfsspPrepare
-                });
-            } catch (err) {
-                alert(err);
-            }
-        })()
+                try {
+                    let response = await fetch(f);
+                    let text = await response.text();
+
+                    Papa.parse(text, {
+                        complete: callback
+                    });
+                } catch (err) {
+                    alert(err);
+                }
+            })()
+        };
+
+        loadCsv("regions.csv", RegionsPrepare);
+
+        let getRegionsPromise = promisify(getRegions);
+
+        function RegionsPrepare(data) {
+            getRegionsPromise(data)
+                .then(console.log("regions list loaded! "))
+                .catch((err) => console.log("regions list loaded error: " + err));
+        }
+
+        function getRegions(results) {
+            let data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    regions.push(item);
+                }
+            });
+        }
+
+        loadCsv("ufssp.csv", UfsspPrepare);
 
         let getUfsspPromise = promisify(getUfssp);
 
         function UfsspPrepare(data) {
-            getUfsspPromise(data).then(console.log("ufssp list loaded!"));
-
+            getUfsspPromise(data)
+                .then(console.log("ufssp list loaded!"))
+                .catch((err) => console.log("ufssp list loaded error: " + err));
         }
 
         function getUfssp(results) {
@@ -323,21 +336,8 @@ fetch(url,{
             "территория обслуживания",
             "региональное подразделение"
         ];
-        (async() => {
 
-            let f = "osp.csv";
-
-            try {
-                let response = await fetch(f);
-                let text = await response.text();
-
-                Papa.parse(text, {
-                    complete: OspPrepare
-                });
-            } catch (err) {
-                alert(err);
-            }
-        })()
+        loadCsv("osp.csv", OspPrepare);
 
         let displayOSPTitlesPromise = promisify(displayOSPTitles);
         let displayOSPEntriesPromise = promisify(displayOSPEntries);
@@ -345,6 +345,8 @@ fetch(url,{
 
         function OspPrepare(data) {
             getOspPromise(data)
+                .then(console.log("osp list loaded!"))
+                .catch((err) => console.log("osp list loaded error: " + err))
                 .then(displayOSPTitlesPromise())
                 .then(displayOSPEntriesPromise(data));
         }
