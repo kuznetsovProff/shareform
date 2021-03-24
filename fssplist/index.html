@@ -474,9 +474,20 @@
                 setTimeout(() => {
                     try {
                         let row = parent.append("tr");
+                        let datarow = row.selectAll("td").data(arr);
+                        datarow.text((d) => d);
+                        datarow.enter().append("td").text((d) => d);
+                        datarow.exit().remove();
+                       row.selectAll("td").filter((d,i)=>{
+                         console.log(d);
+                         if (d!="0") {return d;} else return "";
+                         
+                       });
+                        /*
                         row.selectAll("td").data(arr).text((d) => d);
                         row.selectAll("td").data(arr).enter().append("td").text((d) => d);
                         row.selectAll("td").data(arr).exit().remove();
+                        */
                         // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
                         return resolve({
                             array: arr,
