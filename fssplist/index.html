@@ -197,7 +197,7 @@
         const promisify = function(callbackBasedApi) {
             return function promisified() {
                 const args = [].slice.call(arguments);
-                console.log('args: ', args);
+                //console.log('args: ', args);
 
                 return new Promise((resolve, reject) => {
                     args.push((err, result) => {
@@ -313,13 +313,7 @@
 
         let getRegionsPromise = promisify(getRegions);
 
-        function RegionsPrepare(data) {
-            getRegionsPromise(data)
-                .then(RegionsLoaded())
-                .catch((err) => console.log("regions list loaded error: " + err));
-        }
-
-        function RegionsLoaded() {
+        let RegionsLoaded = () => {
 
             anime({
                 targets: '.lamp_regions',
@@ -329,6 +323,14 @@
             displayRegionsListPromise();
         };
 
+        function RegionsPrepare(data) {
+            let p = getRegionsPromise(data);
+            p.then(RegionsLoaded());
+            p.catch((err) => console.log("regions list loaded error: " + err));
+        }
+
+
+
         function getRegions(results) {
             let data = results.data;
 
@@ -337,6 +339,8 @@
                     regions.push(item);
                 }
             });
+
+            return "test";
         }
 
         let displayRegionsListPromise = promisify(displayRegionsList);
@@ -344,6 +348,34 @@
         function displayRegionsList() {
             let titles = regions.shift();
 
+            function compareNumericByCode(a, b, i = 0) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+            regions = regions.sort(compareNumericByCode);
+
+            regions = makeRegionsAsObjects(regions);
+
+            let container = d3.select("#regions");
+            //отфильтровать массив
+            //addEntries(tableFilter(osp, 11, 77), tbody, 0);
+        }
+
+        function makeRegionsAsObjects(arr) {
+            // преобразуем вложенные массивы в объекты
+            // для большей гибкости при выводе информации
+            let result = [];
+            arr.forEach((item, i) => {
+                let obj = {};
+                obj.code = item[0]; //код
+                obj.name = item[1]; //наименование подразделения
+                obj.region = item[2]; //регион
+                //сюда можно добавить функции
+                result.push(obj);
+            });
+            return result;
         }
 
         loadCsv("ufssp.csv", UfsspPrepare);
@@ -380,6 +412,11 @@
                     //console.log(item[17]);
                 }
             });
+        }
+
+        function makeUfsspAsObjects(arr) {
+            let result = [];
+            return result;
         }
 
         //отделы
@@ -495,7 +532,7 @@
                         datarow.exit().remove();
                         row.selectAll("td")
                             .filter((d, i) => {
-                                console.log(d);
+                                //console.log(d);
                                 if (d == "0") return d;
 
                             }).attr("class", "text-danger");
