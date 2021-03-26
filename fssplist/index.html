@@ -171,6 +171,25 @@
 
         let phones = [];
 
+        //шаблон функции с обещанием
+        function foo(prop) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+
+                try {
+                    let result = prop;
+
+                    // сюда вставить основной код
+
+                    return resolve(result);
+                } catch (err) {
+
+                    return reject(err);
+                }
+
+            });
+        }
+
         // version 1
         // promisify(f, true), чтобы получить массив результатов
         /*function promisify(f, manyArgs = false) {
@@ -531,17 +550,15 @@
                         datarow.text((d) => d);
                         datarow.enter().append("td").text((d) => d);
                         datarow.exit().remove();
+
+                        //test filter
                         row.selectAll("td")
                             .filter((d, i) => {
                                 //console.log(d);
                                 if (d == "0") return d;
 
                             }).attr("class", "text-danger");
-                        /*
-                        row.selectAll("td").data(arr).text((d) => d);
-                        row.selectAll("td").data(arr).enter().append("td").text((d) => d);
-                        row.selectAll("td").data(arr).exit().remove();
-                        */
+
                         // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
                         return resolve({
                             array: arr,
