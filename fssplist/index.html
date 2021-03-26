@@ -197,7 +197,7 @@
         const promisify = function(callbackBasedApi) {
             return function promisified() {
                 const args = [].slice.call(arguments);
-                //console.log('args: ', args);
+                console.log('args: ', args);
 
                 return new Promise((resolve, reject) => {
                     args.push((err, result) => {
@@ -313,7 +313,16 @@
 
         let getRegionsPromise = promisify(getRegions);
 
-        let RegionsLoaded = () => {
+        function RegionsPrepare(data) {
+            getRegionsPromise(data)
+                .then((value) => {
+                    console.log(value);
+                    RegionsLoaded();
+                })
+                .catch((err) => console.log("regions list loaded error: " + err));
+        }
+
+        function RegionsLoaded() {
 
             anime({
                 targets: '.lamp_regions',
@@ -322,14 +331,6 @@
             console.log("regions list loaded! ");
             displayRegionsListPromise();
         };
-
-        function RegionsPrepare(data) {
-            let p = getRegionsPromise(data);
-            p.then(RegionsLoaded());
-            p.catch((err) => console.log("regions list loaded error: " + err));
-        }
-
-
 
         function getRegions(results) {
             let data = results.data;
