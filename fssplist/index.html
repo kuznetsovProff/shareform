@@ -70,9 +70,11 @@
         <div class="square el lamp_ufssp"></div>
         <div class="square el lamp_osp"></div>
         <div class="square el lamp_phones"></div>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
+        </div>
         <div id="regions" class="container-fluid table table-striped small">
             <div class="row table-dark">
-                <div class="col">код</div>
                 <div class="col">подразделение</div>
                 <div class="col">регион</div>
             </div>
@@ -330,12 +332,41 @@
 
         loadCsv("regions.csv", RegionsPrepare);
 
-        let getRegionsPromise = promisify(getRegions);
+        //let getRegionsPromise = promisify(getRegions);
+        //в функции с промисом надо проследить всю цепочку
+        //загрузку fssp начинать после загрузки регионов
+        //загрузку osp начинать после загрузки fssp
+        //загрузку телефонов начинать после загрузки osp
+        function getRegionsPromise(prop) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                try {
+                    // главная логика
+                    let data = prop.data;
+                    let arr = [];
+                    data.forEach((item, i) => {
+                        if (i != 0 && item[0] != "") {
+                            arr.push(item);
+                        }
+                    });
+                    return resolve(arr); // в случае успеха
+                    //
+                } catch (err) {
+                    return reject(err); // в случае ошибки
+                }
+            });
+        }
 
         function RegionsPrepare(data) {
             getRegionsPromise(data)
-                .then((value) => {
-                    console.log(value);
+                .then((results) => {
+                    //console.log(results); // Тест прошел успешно - регионы передаются
+                    regions = results; //передаем результ загрузки в глобальную переменную
+
+                    return regions;
+                })
+                .then((results) => {
+                    console.log(results);
                     RegionsLoaded();
                 })
                 .catch((err) => console.log("regions list loaded error: " + err));
@@ -348,22 +379,65 @@
                 backgroundColor: '#008000'
             });
             console.log("regions list loaded! ");
-            displayRegionsListPromise();
+            displayRegionsListPromise(regions);
         };
 
-        function getRegions(results) {
-            let data = results.data;
+        /*
+                function getRegions(results) {
+                    let data = results.data;
 
-            data.forEach((item, i) => {
-                if (i != 0 && item[0] != "") {
-                    regions.push(item);
+                    data.forEach((item, i) => {
+                        if (i != 0 && item[0] != "") {
+                            regions.push(item);
+                        }
+                    });
+
+                    return "test";
+                }*/
+
+        //let displayRegionsListPromise = promisify(displayRegionsList);
+
+        function displayRegionsListPromise(regions) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+
+                try {
+                    let titles = regions.shift();
+
+                    function compareNumericByCode(a, b, i = 0) {
+                        if (Number(a[i]) > Number(b[i])) return 1;
+                        if (Number(a[i]) == Number(b[i])) return 0;
+                        if (Number(a[i]) < Number(b[i])) return -1;
+                    }
+
+                    regions = regions.sort(compareNumericByCode);
+
+                    regions = makeRegionsAsObjects(regions);
+
+                    let container = d3.select("#regions");
+                    //отфильтровать массив
+                    //addEntries(tableFilter(osp, 11, 77), tbody, 0);
+                    //container.append("div").text("regions");
+                    let dataregions = container.selectAll("div .row").data(regions);
+                    dataregions.attr("id", (d) => "region_" + d.code);
+                    let dataenter = dataregions.enter()
+                        .append("div")
+                        .attr("class", "row")
+                        .attr("id", (d) => "region_" + d.code);
+                    //dataenter.append("div").attr("class", "col").text(d => d.code);
+                    dataenter.append("div").attr("class", "col").text(d => d.name);
+                    dataenter.append("div").attr("class", "col").text(d => d.region);
+                    dataregions.exit().remove();
+
+
+                    return resolve(regions);
+                } catch (err) {
+
+                    return reject(err);
                 }
+
             });
-
-            return "test";
         }
-
-        let displayRegionsListPromise = promisify(displayRegionsList);
 
         function displayRegionsList() {
             let titles = regions.shift();
