@@ -70,11 +70,14 @@
         <div class="square el lamp_ufssp"></div>
         <div class="square el lamp_osp"></div>
         <div class="square el lamp_phones"></div>
+        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalregions">
+            Москва
+        </button>
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
         </div>
         <div id="regions" class="container-fluid table table-striped small">
-            <div class="row table-dark">
+            <div class="row table-dark mb-3">
                 <div class="col">подразделение</div>
                 <div class="col">регион</div>
             </div>
@@ -89,23 +92,22 @@
     </div>
     <!-- The Modals -->
     <!-- 1 -->
-    <div class="modal fade" id="modallink">
+    <div class="modal fade" id="modalregions">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Копировать ссылку</h4>
+                    <h4 class="modal-title">Выбрать регион</h4>
                     <button type="button" class="close" data-dismiss="modal">?</button>
                 </div>
 
                 <!-- Modal body -->
                 <div id="link" class="modal-body text-center container">
                     <div class="form-group">
-                        <label for="link">Ссылка:</label>
-                        <textarea class="form-control" rows="5" id="link" disabled="disabled"></textarea>
+                        <!-- вставлять сюда -->
                     </div>
-                    <button id="btncopylink" type="button" class="btn btn-primary">Копировать</button>
+                    <button id="btncopylink" type="button" class="btn btn-primary">Выбрать</button>
                 </div>
 
                 <!-- Modal footer -->
@@ -173,6 +175,10 @@
 
         let phones = [];
 
+        //d3.select('#btn_regions').on('click',(d)=>{
+        //  alert('кнопка');
+        //});
+        
         //шаблон функции с обещанием
         function foo(prop) {
             //объект "обещание"
