@@ -60,6 +60,15 @@
         .unselected {
             display: none;
         }
+        
+        .even-row {
+          
+        }
+        
+        .odd-row {
+          
+        }
+        
     </style>
 </head>
 
@@ -174,6 +183,13 @@
         let osp = [];
 
         let phones = [];
+
+        // true / false
+        const even = n => !(n % 2); // четный
+        const odd = n => (n % 2); // не четный
+        
+        // "even" / "odd"
+        const even_odd = n => n % 2 === 0 ? "odd" : "even";
 
         //d3.select('#btn_regions').on('click',(d)=>{
         //  alert('кнопка');
