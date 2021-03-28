@@ -61,6 +61,14 @@
             display: none;
         }
         
+        .row {
+            cursor: pointer;
+        }
+        
+        .selected-row {
+            background-color: lightgray;
+        }
+        
         .regions-list {
             max-height: 200px;
             overflow-y: scroll;
@@ -111,9 +119,6 @@
                         <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
                     </div>
                     <div class="container-fluid pl-0 pr-0">
-                        <div class="row table-dark p-2" style="margin-left: 0px; margin-right: 0px;">
-                            <div class="col">подразделение</div>
-                        </div>
                         <div id="regions" class="small regions-list" style="margin-left: 0px; margin-right: 0px;">
                         </div>
                     </div>
@@ -121,8 +126,8 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-dark" data-dismiss="modal">Выбрать</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                 </div>
 
             </div>
@@ -379,7 +384,7 @@
             return new Promise(function(resolve, reject) {
 
                 try {
-                    let titles = regions.shift();
+                    //let titles = regions.shift();
 
                     function compareNumericByCode(a, b, i = 0) {
                         if (Number(a[i]) > Number(b[i])) return 1;
@@ -399,9 +404,11 @@
                     dataregions.attr("id", (d) => "region_" + d.code);
                     let dataenter = dataregions.enter()
                     let row = dataenter.append("div")
-                        .attr("class", "row p-1 m-0")
+                        .attr("class", "row p-1")
                         .attr("id", (d) => "region_" + d.code);
                     row.on("click", (m, o) => {
+                        d3.selectAll(".selected-row").classed("selected-row", false);
+                        d3.select("#region_" + o.code).classed("selected-row", true);
                         console.log(m); //mouse
                         console.log(o); //object
                     });
@@ -421,7 +428,7 @@
         }
 
         function displayRegionsList() {
-            let titles = regions.shift();
+            //let titles = regions.shift();
 
             function compareNumericByCode(a, b, i = 0) {
                 if (Number(a[i]) > Number(b[i])) return 1;
