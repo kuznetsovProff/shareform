@@ -61,14 +61,15 @@
             display: none;
         }
         
-        .even-row {
-          
+        .regions-list {
+            max-height: 200px;
+            overflow-y: scroll;
+            overflow-x: hidden!important;
         }
         
-        .odd-row {
-          
-        }
+        .even-row {}
         
+        .odd-row {}
     </style>
 </head>
 
@@ -82,15 +83,8 @@
         <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalregions">
             Москва
         </button>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
-        </div>
-        <div id="regions" class="container-fluid table table-striped small">
-            <div class="row table-dark mb-3">
-                <div class="col">подразделение</div>
-                <div class="col">регион</div>
-            </div>
-        </div>
+
+
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="поиск..." id="tablesearch">
         </div>
@@ -102,78 +96,39 @@
     <!-- The Modals -->
     <!-- 1 -->
     <div class="modal fade" id="modalregions">
-        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog">
             <div class="modal-content">
 
                 <!-- Modal Header -->
                 <div class="modal-header">
-                    <h4 class="modal-title">Выбрать регион</h4>
-                    <button type="button" class="close" data-dismiss="modal">?</button>
+                    <h4 class="modal-title">Выбрать подразделение</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- Modal body -->
-                <div id="link" class="modal-body text-center container">
-                    <div class="form-group">
-                        <!-- вставлять сюда -->
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
                     </div>
-                    <button id="btncopylink" type="button" class="btn btn-primary">Выбрать</button>
+                    <div class="container-fluid pl-0 pr-0">
+                        <div class="row table-dark p-2" style="margin-left: 0px; margin-right: 0px;">
+                            <div class="col">подразделение</div>
+                        </div>
+                        <div id="regions" class="small regions-list" style="margin-left: 0px; margin-right: 0px;">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Выбрать</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                 </div>
 
             </div>
         </div>
     </div>
-    <!-- 2 -->
-    <div class="modal fade" id="modalshare">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
 
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Поделиться ссылкой</h4>
-                    <button type="button" class="close" data-dismiss="modal">?</button>
-                </div>
-
-                <!-- Modal body -->
-                <div id="icons" class="modal-body text-center container">
-                    <div class="ya-share2" data-bare data-curtain data-size="l" data-shape="round" data-services="vkontakte,facebook,odnoklassniki,messenger,telegram,twitter,viber,whatsapp,pinterest,collections,moimir,skype,tumblr,evernote,linkedin,lj,blogger,delicious,digg,reddit,pocket,qzone,renren,sinaWeibo,surfingbird,tencentWeibo"></div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-    <!-- 3 -->
-    <div class="modal fade" id="modalcogs">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">Настройки</h4>
-                    <button type="button" class="close" data-dismiss="modal">?</button>
-                </div>
-
-                <!-- Modal body -->
-                <div id="settingsbody" class="modal-body text-center container">
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
 
     <script>
         let regions = [];
@@ -187,14 +142,14 @@
         // true / false
         const even = n => !(n % 2); // четный
         const odd = n => (n % 2); // не четный
-        
+
         // "even" / "odd"
         const even_odd = n => n % 2 === 0 ? "odd" : "even";
 
         //d3.select('#btn_regions').on('click',(d)=>{
         //  alert('кнопка');
         //});
-        
+
         //шаблон функции с обещанием
         function foo(prop) {
             //объект "обещание"
@@ -443,12 +398,16 @@
                     let dataregions = container.selectAll("div .row").data(regions);
                     dataregions.attr("id", (d) => "region_" + d.code);
                     let dataenter = dataregions.enter()
-                        .append("div")
-                        .attr("class", "row")
+                    let row = dataenter.append("div")
+                        .attr("class", "row p-1 m-0")
                         .attr("id", (d) => "region_" + d.code);
+                    row.on("click", (m, o) => {
+                        console.log(m); //mouse
+                        console.log(o); //object
+                    });
+
                     //dataenter.append("div").attr("class", "col").text(d => d.code);
-                    dataenter.append("div").attr("class", "col").text(d => d.name);
-                    dataenter.append("div").attr("class", "col").text(d => d.region);
+                    row.append("div").attr("class", "col").text(d => d.name);
                     dataregions.exit().remove();
 
 
