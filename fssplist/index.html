@@ -88,9 +88,11 @@
         <div class="square el lamp_ufssp"></div>
         <div class="square el lamp_osp"></div>
         <div class="square el lamp_phones"></div>
-        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#modalregions">
+        <div class="container-fluid m-3 d-flex justify-content-center">
+          <button id= "btn_set_region" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalregions">
             Москва
-        </button>
+          </button>
+        </div>
 
 
         <div class="input-group mb-3">
@@ -126,8 +128,8 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark" data-dismiss="modal">Выбрать</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-dark active" disabled data-dismiss="modal">Выбрать</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отмена</button>
                 </div>
 
             </div>
