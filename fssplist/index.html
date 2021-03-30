@@ -139,6 +139,7 @@
 
     <script>
         let current_region = "77";
+        let region_name = "ГУФССП России по г.Москве";
 
         let regions = [];
 
@@ -147,6 +148,8 @@
         let osp = [];
 
         let phones = [];
+
+        d3.select("#btn_set_region").text(region_name);
 
         // true / false
         const even = n => !(n % 2); // четный
@@ -410,11 +413,19 @@
                     let row = dataenter.append("div")
                         .attr("class", "row p-1")
                         .attr("id", (d) => "region_" + d.code);
+                    d3.select("#btn_region_select").on("click", () => {
+                        d3.select("#btn_set_region").text(region_name);
+                        $("#modalregions").modal("hide");
+                    });
+
                     row.on("click", (m, o) => {
                         d3.selectAll(".selected-row").classed("selected-row", false);
                         d3.select("#region_" + o.code).classed("selected-row", true);
-                        d3.select("#btn_region_select").attr("disabled", null);
-                        //current_region = o.code;
+                        d3.select("#btn_region_select").property("disabled", false);
+
+                        current_region = o.code;
+                        region_name = o.name;
+
                         console.log(m); //mouse
                         console.log(o); //object
                     });
