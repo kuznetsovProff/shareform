@@ -89,7 +89,7 @@
         <div class="square el lamp_osp"></div>
         <div class="square el lamp_phones"></div>
         <div class="container-fluid m-3 d-flex justify-content-center">
-          <button id= "btn_set_region" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalregions">
+            <button id="btn_set_region" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalregions">
             Москва
           </button>
         </div>
@@ -128,7 +128,7 @@
 
                 <!-- Modal footer -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-dark active" disabled data-dismiss="modal">Выбрать</button>
+                    <button id="btn_region_select" type="button" class="btn btn-dark active" disabled data-dismiss="modal">Выбрать</button>
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отмена</button>
                 </div>
 
@@ -138,6 +138,8 @@
 
 
     <script>
+        let current_region = "77";
+
         let regions = [];
 
         let ufssp = [];
@@ -411,6 +413,8 @@
                     row.on("click", (m, o) => {
                         d3.selectAll(".selected-row").classed("selected-row", false);
                         d3.select("#region_" + o.code).classed("selected-row", true);
+                        d3.select("#btn_region_select").attr("disabled", null);
+                        //current_region = o.code;
                         console.log(m); //mouse
                         console.log(o); //object
                     });
@@ -721,5 +725,7 @@
     </script>
 </body>
 
+
+</html>
 
 </html>
