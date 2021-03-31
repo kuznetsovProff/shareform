@@ -75,28 +75,35 @@
             overflow-x: hidden!important;
         }
         
-        .osp-list {
-          
-        }
+        .osp-list {}
         
         .even-row {}
         
         .odd-row {}
         
         .osp-col-1 {}
+        
         .osp-col-2 {}
+        
         .osp-col-3 {}
+        
         .osp-col-4 {}
+        
         .osp-col-5 {}
+        
         .osp-col-6 {}
+        
         .osp-col-7 {}
+        
         .osp-col-8 {}
+        
         .osp-col-9 {}
+        
         .osp-col-10 {}
+        
         .osp-col-11 {}
+        
         .osp-col-12 {}
-        
-        
     </style>
 </head>
 
@@ -117,29 +124,29 @@
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="поиск..." id="tablesearch">
         </div>
-        
+
         <div class="container-fluid pl-0 pr-0 small">
             <div id="osp_titles" class="table table-dark">
-              <div class="row m-1">
-                <div class="col osp-col-1 p-1">Заголовок 1</div>
-                <div class="col osp-col-2 p-1">Заголовок 2</div>
-                <div class="col osp-col-3 p-1">Заголовок 3</div>
-                <div class="col osp-col-4 p-1">Заголовок 4</div>
-                <div class="col osp-col-5 p-1">Заголовок 5</div>
-                <div class="col osp-col-6 p-1">Заголовок 6</div>
-                <div class="col osp-col-7 p-1">Заголовок 7</div>
-                <div class="col osp-col-8 p-1">Заголовок 8</div>
-                <div class="col osp-col-9 p-1">Заголовок 9</div>
-                <div class="col osp-col-10 p-1">Заголовок 10</div>
-                <div class="col osp-col-11 p-1">Заголовок 11</div>
-                <div class="col osp-col-12 p-1">Заголовок 12</div>
-              </div>
+                <!--<div class="row m-1">
+                    <div class="col osp-col-1 p-1">Заголовок 1</div>
+                    <div class="col osp-col-2 p-1">Заголовок 2</div>
+                    <div class="col osp-col-3 p-1">Заголовок 3</div>
+                    <div class="col osp-col-4 p-1">Заголовок 4</div>
+                    <div class="col osp-col-5 p-1">Заголовок 5</div>
+                    <div class="col osp-col-6 p-1">Заголовок 6</div>
+                    <div class="col osp-col-7 p-1">Заголовок 7</div>
+                    <div class="col osp-col-8 p-1">Заголовок 8</div>
+                    <div class="col osp-col-9 p-1">Заголовок 9</div>
+                    <div class="col osp-col-10 p-1">Заголовок 10</div>
+                    <div class="col osp-col-11 p-1">Заголовок 11</div>
+                    <div class="col osp-col-12 p-1">Заголовок 12</div>
+                </div>-->
             </div>
             <div id="osp" class="small osp-list" style="margin-left: 0px; margin-right: 0px;">
             </div>
         </div>
-        
-        
+
+
         <table id="ll">
             <thead></thead>
             <tbody></tbody>
@@ -557,7 +564,7 @@
 
         function makeUfsspAsObjects(arr) {
             let result = [];
-            
+
             arr.forEach((item, i) => {
                 let obj = {};
                 //obj.code = item[0]; //код
@@ -566,16 +573,17 @@
                 //сюда можно добавить функции
                 result.push(obj);
             });
-            
+
             return result;
         }
-        
+
         function makeOspAsObjects(arr) {
             // преобразуем вложенные массивы в объекты
-    
+
             let result = [];
             arr.forEach((item, i) => {
                 let obj = {};
+
                 obj.region = item[0]; //регион
                 obj.code = item[1]; //код
                 obj.name = item[2]; //наименование
@@ -588,13 +596,13 @@
                 obj.worktime = item[9]; //рабочее время
                 obj.territory = item[10]; //территория
                 obj.regioncode = item[11]; //код региона
-                
+
                 //сюда можно добавить функции
                 result.push(obj);
             });
             return result;
         }
-        
+
         //отделы
         let osptitles = [
             "регион",
@@ -613,19 +621,41 @@
 
         loadCsv("osp.csv", OspPrepare);
 
-        let displayOSPTitlesPromise = promisify(displayOSPTitles);
+        //let displayOSPTitlesPromise = promisify(displayOSPTitles);
+        function displayOSPTitlesPromise(titles) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                try {
+                    let container = d3.select("#osp_titles");
+                    let row = container.append("div")
+                        .attr("class", "row m-1");
+                    let datatitles = row.selectAll("div .col").data(titles);
+                    let dataenter = datatitles.enter();
+                    let col = dataenter.append("div")
+                        .attr("class", function(d, i) {
+                            return "col p-1 " + "osp-col-" + i + 1
+                        }).text(d => d);
+                    datatitles.exit().remove();
+
+                    return resolve(titles);
+                } catch (err) {
+                    return reject(err);
+                }
+            });
+        }
+
         let displayOSPEntriesPromise = promisify(displayOSPEntries);
-        
+
         let getOspPromise = promisify(getOsp);
 
         function OspPrepare(data) {
-          
+
             getOspPromise(data)
                 .then(OspLoaded())
                 .catch((err) => console.log("osp list loaded error: " + err))
-                .then(displayOSPTitlesPromise())
+                .then(displayOSPTitlesPromise(osptitles))
                 .then(displayOSPEntriesPromise(data));
-                
+
         }
 
         function OspLoaded() {
@@ -736,6 +766,51 @@
             });
         }
 
+        // добавление строки со значениями из массива в таблицу
+        //
+        // @param {arr - массив, parent - ссылка d3}
+        // @returns {Promise}
+        //
+        function addRow2(arr, parent, delay = 1000) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                setTimeout(() => {
+                    try {
+                        let row = parent.append("div").attr("class", "row m-1");
+                        let datarow = row.selectAll("div .col").data(arr);
+                        datarow.text((d) => d);
+                        datarow.enter().append("div")
+                            .attr("class", function(d, i) {
+                                return "col p-1 " + "osp-col-" + i + 1
+                            }).text(d => d);
+                        datarow.exit().remove();
+
+                        //test filter
+                        row.selectAll("td")
+                            .filter((d, i) => {
+                                //console.log(d);
+                                if (d == "0") return d;
+
+                            }).attr("class", "text-danger");
+
+                        // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
+                        return resolve({
+                            array: arr,
+                            parent: parent,
+                            row: row
+                        });
+                    } catch (err) {
+                        // в случае ошибки возвращает массив ссылку d3 на родителя и ошибку
+                        return reject({
+                            array: arr,
+                            parent: parent,
+                            error: err
+                        });
+                    }
+                }, delay);
+            });
+        }
+
 
         // последовательная рекурсивная подгрузка и показ изображений
         // 
@@ -750,7 +825,7 @@
             }; //если в результате рекурсии прошлись по всему массиву
 
             //если в массиве еще есть изображение, загружаем его
-            return addRow(entry, parent, delay)
+            return addRow2(entry, parent, delay)
                 .then(function(result) {
                     console.log("entry ok!");
                     return addEntries(arr, parent, delay); //рекурсия
@@ -796,9 +871,9 @@
             osp = osp.sort(compareNumericByTerritorialAgency);
             osp = osp.sort(compareNumericByRegionCode);
 
-            let tbody = d3.select("tbody");
+            let parent = d3.select("#osp");
             //отфильтровать массив
-            addEntries(tableFilter(osp, 11, 77), tbody, 0);
+            addEntries(tableFilter(osp, 11, 77), parent, 0);
 
         }
 
@@ -817,6 +892,4 @@
     </script>
 </body>
 
-
 </html>
-
