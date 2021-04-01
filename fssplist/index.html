@@ -3,7 +3,9 @@
 
 <head>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name='msapplication-TileColor' content='#603cba'>
     <meta name='theme-color' content='#ffffff'>
 
@@ -104,12 +106,26 @@
         .osp-col-11 {}
         
         .osp-col-12 {}
+        
+        @media screen and (max-width: 360px) {
+          .osp-col-1, .osp-col-2, .osp-col-5, .osp-col-7, .osp-col-8, .osp-col-9, .osp-col-10, .osp-col-11, .osp-col-12 {
+            display: none;
+          }
+          
+        }
+        
+        @media screen and (max-width: 703px) {
+          .osp-col-1, .osp-col-2, .osp-col-7, .osp-col-10, .osp-col-11, .osp-col-12 {
+            display: none;
+          }
+          
+        }
     </style>
 </head>
 
 <body>
     <div id="container" class="container-fluid">
-
+        <div id="info"></div>
         <div class="square el lamp_regions"></div>
         <div class="square el lamp_ufssp"></div>
         <div class="square el lamp_osp"></div>
@@ -187,6 +203,7 @@
 
 
     <script>
+    d3.select("#info").text("width: "+window.innerWidth+", height: "+window.innerHeight);
         let current_region = "77";
         let region_name = "ГУФССП России по г.Москве";
 
@@ -633,7 +650,7 @@
                     let dataenter = datatitles.enter();
                     let col = dataenter.append("div")
                         .attr("class", function(d, i) {
-                            return "col p-1 " + "osp-col-" + i + 1
+                            return "col p-1 " + "osp-col-" + (i + 1)
                         }).text(d => d);
                     datatitles.exit().remove();
 
@@ -782,7 +799,7 @@
                         datarow.text((d) => d);
                         datarow.enter().append("div")
                             .attr("class", function(d, i) {
-                                return "col p-1 " + "osp-col-" + i + 1
+                                return "col p-1 " + "osp-col-" + (i + 1)
                             }).text(d => d);
                         datarow.exit().remove();
 
