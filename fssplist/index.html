@@ -108,14 +108,14 @@
         .osp-col-12 {}
         
         @media screen and (max-width: 360px) {
-          .osp-col-1, .osp-col-2, .osp-col-5, .osp-col-7, .osp-col-8, .osp-col-9, .osp-col-10, .osp-col-11, .osp-col-12 {
+          .osp-col-1, .osp-col-2, .osp-col-5, .osp-col-6, .osp-col-7, .osp-col-8, .osp-col-9, .osp-col-10, .osp-col-11, .osp-col-12 {
             display: none;
           }
           
         }
         
         @media screen and (max-width: 703px) {
-          .osp-col-1, .osp-col-2, .osp-col-7, .osp-col-10, .osp-col-11, .osp-col-12 {
+          .osp-col-1, .osp-col-7, .osp-col-10, .osp-col-11, .osp-col-12 {
             display: none;
           }
           
@@ -602,7 +602,7 @@
                 let obj = {};
 
                 obj.region = item[0]; //регион
-                obj.code = item[1]; //код
+                obj.code = item[1].toString().padStart(3, "0"); //код
                 obj.name = item[2]; //наименование
                 obj.address = item[3]; //почтовый адрес
                 obj.boss = item[4]; //ФИО начальника
@@ -696,6 +696,7 @@
                             return i[0] === item[0];
                         });
                         item.push(r[0]);
+                        item[1]=item[1].toString().padStart(3, "0");
                         item[0] = r[2];
                         //item.push(r[2]);
                         /*
@@ -880,14 +881,14 @@
                 if (Number(a[i]) < Number(b[i])) return -1;
             }
 
-            function compareNumericByTerritorialAgency(a, b, i = 1) {
+            function compareNumericByCode(a, b, i = 1) {
                 if (Number(a[i]) > Number(b[i])) return 1;
                 if (Number(a[i]) == Number(b[i])) return 0;
                 if (Number(a[i]) < Number(b[i])) return -1;
             }
 
-            osp = osp.sort(compareNumericByTerritorialAgency);
-            osp = osp.sort(compareNumericByRegionCode);
+            osp = osp.sort(compareNumericByCode);
+            //osp = osp.sort(compareNumericByRegionCode);
 
             let parent = d3.select("#osp");
             //отфильтровать массив
