@@ -125,9 +125,9 @@
         @media screen and (max-width: 703px) {
             .osp-col-1,
             .osp-col-7,
-            .osp-col-10,
-            .osp-col-11,
-            .osp-col-12 {
+            .osp-col-8,
+            .osp-col-9,
+            .osp-col-10 {
                 display: none;
             }
         }
@@ -580,12 +580,10 @@
         function makeOspEntryAsObjects(item) {
             // преобразуем вложенные массивы в объекты
 
-            let result = [];
-
             let obj = {};
 
             obj.region = item[0]; //регион
-            obj.code = item[1].toString().padStart(3, "0") + item[11].padStart(2, "0"); //код
+            obj.code = item[1]; //код
             obj.name = item[2]; //наименование
             obj.address = item[3]; //почтовый адрес
             obj.boss = item[4]; //ФИО начальника
@@ -597,10 +595,7 @@
             obj.territory = item[10]; //территория
             obj.regioncode = item[11].padStart(2, "0"); //код региона
 
-            //сюда можно добавить функции
-            result.push(obj);
-
-            return result;
+            return obj;
         }
 
         //отделы
@@ -610,10 +605,10 @@
             "наименование подразделения",
             "почтовый адрес",
             "ФИО начальника",
-            "телефон",
+            "телефоны",
             "факс",
-            "телефон для справок",
-            "телефон для справок 2",
+            //"телефон для справок",
+            //"телефон для справок 2",
             "время работы",
             "территория обслуживания",
             "код региона"
@@ -746,23 +741,9 @@
                         if (phoneinfo1 != phone) phones = phones + "; " + phoneinfo1;
                         if (phoneinfo2 != phoneinfo1 && phoneinfo1 != phone) phones = phones + "; " + phoneinfo2;
 
-                        let newarr = [obj.region, obj.code, obj.name, obj.address, obg.boss, phones, obj.fax, obj.worktime, obj.territory, obj.regioncode];
+                        let newarr = [obj.region, obj.code, obj.name, obj.address, obj.boss, phones, obj.fax, obj.worktime, obj.territory, obj.regioncode];
 
-                        /*
-            obj.region = item[0]; //регион
-            obj.code = item[1].toString().padStart(3, "0") + item[11].padStart(2, "0"); //код
-            obj.name = item[2]; //наименование
-            obj.address = item[3]; //почтовый адрес
-            obj.boss = item[4]; //ФИО начальника
-            obj.phone = item[5]; //телефон
-            obj.fax = item[6]; //факс
-            obj.phoneinfo1 = item[7]; //справочный телефон 1
-            obj.phoneinfo2 = item[8]; //справочный телефон 2
-            obj.worktime = item[9]; //рабочее время
-            obj.territory = item[10]; //территория
-            obj.regioncode = item[11].padStart(2, "0"); //код региона
 
-                        */
 
                         let row = parent.append("div").attr("class", "row m-1");
                         let datarow = row.selectAll("div .col").data(newarr);
