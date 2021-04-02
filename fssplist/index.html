@@ -744,10 +744,28 @@
                         let phones = phone;
 
                         if (phoneinfo1 != phone) phones = phones + "; " + phoneinfo1;
+                        if (phoneinfo2 != phoneinfo1 && phoneinfo1 != phone) phones = phones + "; " + phoneinfo2;
 
+                        let newarr = [obj.region, obj.code, obj.name, obj.address, obg.boss, phones, obj.fax, obj.worktime, obj.territory, obj.regioncode];
+
+                        /*
+            obj.region = item[0]; //регион
+            obj.code = item[1].toString().padStart(3, "0") + item[11].padStart(2, "0"); //код
+            obj.name = item[2]; //наименование
+            obj.address = item[3]; //почтовый адрес
+            obj.boss = item[4]; //ФИО начальника
+            obj.phone = item[5]; //телефон
+            obj.fax = item[6]; //факс
+            obj.phoneinfo1 = item[7]; //справочный телефон 1
+            obj.phoneinfo2 = item[8]; //справочный телефон 2
+            obj.worktime = item[9]; //рабочее время
+            obj.territory = item[10]; //территория
+            obj.regioncode = item[11].padStart(2, "0"); //код региона
+
+                        */
 
                         let row = parent.append("div").attr("class", "row m-1");
-                        let datarow = row.selectAll("div .col").data(arr);
+                        let datarow = row.selectAll("div .col").data(newarr);
 
                         datarow.text((d) => d);
                         datarow.enter().append("div")
@@ -757,12 +775,14 @@
                         datarow.exit().remove();
 
                         //test filter
+                        /*
                         row.selectAll("td")
                             .filter((d, i) => {
                                 //console.log(d);
                                 if (d == "0") return d;
 
                             }).attr("class", "text-danger");
+*/
 
                         // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
                         return resolve({
