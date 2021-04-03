@@ -615,7 +615,7 @@
         ];
 
         loadCsv("osp.csv", OspPrepare);
-
+/*
         function displayOSPTitlesPromise(titles) {
             //объект "обещание"
             return new Promise(function(resolve, reject) {
@@ -636,9 +636,9 @@
                     return reject(err);
                 }
             });
-        }
+        }*/
 
-        let displayOSPEntriesPromise = promisify(displayOSPEntries);
+        //let displayOSPEntriesPromise = promisify(displayOSPEntries);
 
         let getOspPromise = promisify(getOsp);
 
@@ -646,9 +646,9 @@
 
             getOspPromise(data)
                 .then(OspLoaded())
-                .catch((err) => console.log("osp list loaded error: " + err))
-                .then(displayOSPTitlesPromise(osptitles))
-                .then(displayOSPEntriesPromise(data));
+                .catch((err) => console.log("osp list loaded error: " + err));
+                //.then(displayOSPTitlesPromise(osptitles))
+                //.then(displayOSPEntriesPromise(data));
 
         }
 
@@ -676,13 +676,6 @@
                         item[1] = item[11] + item[1].toString().padStart(3, "0");
                         item[0] = r[2];
 
-                        //item.push(r[2]);
-                        /*
-                        let f = _.find(ufssp, function(i) {
-
-                            return i[17] === item[0].toString();
-                        });
-                        item.push(f[1]);*/
                     } catch (err) {
 
                     }
@@ -719,7 +712,7 @@
                 }
             });
         }
-
+/*
         // добавление строки со значениями из массива в таблицу
         //
         // @param {arr - массив, parent - ссылка d3}
@@ -755,15 +748,6 @@
                             }).text(d => d);
                         datarow.exit().remove();
 
-                        //test filter
-                        /*
-                        row.selectAll("td")
-                            .filter((d, i) => {
-                                //console.log(d);
-                                if (d == "0") return d;
-
-                            }).attr("class", "text-danger");
-*/
 
                         // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
                         return resolve({
@@ -844,7 +828,7 @@
                 if (i[col] == val) res.push(i);
             });
             return res;
-        };
+        };*/
     </script>
 </body>
 
