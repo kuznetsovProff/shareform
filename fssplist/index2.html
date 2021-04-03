@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name='msapplication-TileColor' content='#603cba'>
+    <meta name='theme-color' content='#ffffff'>
+
+    <title>Перечень подразделений ФССП</title>
+
+    <link rel='apple-touch-icon' sizes='180x180' href='/apple-touch-icon.png'>
+    <link rel='icon' type='image/png' sizes='32x32' href='/favicon-32x32.png'>
+    <link rel='icon' type='image/png' sizes='16x16' href='/favicon-16x16.png'>
+    <!--<link rel='manifest' href='/site.webmanifest'>-->
+    <link rel='mask-icon' href='/safari-pinned-tab.svg' color='#5bbad5'>
+
+    <script src='/js/jquery.min.js'></script>
+    <script src='/js/popper.min.js'></script>
+    <script src='/js/bootstrap.min.js'></script>
+
+    <script src="/js/jquery.inputmask.min.js"></script>
+
+    <!--<script src='/js/f4afbaa213.js' crossorigin='anonymous'></script>-->
+    <script src='/js/copytoclipboard.js'></script>
+    <script src='/js/share.js'></script>
+    <script src='/js/bootstrap4-toggle.min.js'></script>
+    <script src='/js/jquery.history.js'></script>
+
+
+    <script src='/js/math.min.js'></script>
+    <script src="/js/plotly-latest.min.js"></script>
+
+    <link rel='stylesheet' href='/css/bootstrap4-toggle.min.css' />
+    <link rel='stylesheet' href='/css/bootstrap.min.css' />
+    <link rel='stylesheet' href='/css/style.css' />
+    <link rel='stylesheet' href='/css/yashare2.css' />
+    <link rel='stylesheet' href='/css/gutenberg.min.css' media='print' />
+    <link rel='stylesheet' href='/css/print.css' media='print' />
+
+    <script src="/js/lodash.min.js"></script>
+    <script src="/js/d3.v6.min.js"></script>
+    <script src="/js/papaparse.min.js"></script>
+    <script src="/js/anime.min.js"></script>
+
+    <script type='module'>
+
+    </script>
+    <style>
+        .square {
+            pointer-events: none;
+            position: relative;
+            width: 14px;
+            height: 2px;
+            margin: 1px;
+            background-color: #ff0000;
+            font-size: 14px;
+        }
+        
+        .unselected {
+            display: none;
+        }
+        
+        .row {
+            cursor: pointer;
+        }
+        
+        .selected-row {
+            background-color: lightgray;
+        }
+        
+        .regions-list {
+            max-height: 200px;
+            overflow-y: scroll;
+            overflow-x: hidden!important;
+        }
+        
+        .osp-list {}
+        
+        .even-row {}
+        
+        .odd-row {}
+        
+        .osp-col-1 {}
+        
+        .osp-col-2 {}
+        
+        .osp-col-3 {}
+        
+        .osp-col-4 {}
+        
+        .osp-col-5 {}
+        
+        .osp-col-6 {}
+        
+        .osp-col-7 {}
+        
+        .osp-col-8 {}
+        
+        .osp-col-9 {}
+        
+        .osp-col-10 {}
+        
+        .osp-col-11 {}
+        
+        .osp-col-12 {}
+        
+        @media screen and (max-width: 360px) {
+            .osp-col-1,
+            .osp-col-2,
+            .osp-col-5,
+            .osp-col-6,
+            .osp-col-7,
+            .osp-col-8,
+            .osp-col-9,
+            .osp-col-10,
+            .osp-col-11,
+            .osp-col-12 {
+                display: none;
+            }
+        }
+        
+        @media screen and (max-width: 703px) {
+            .osp-col-1,
+            .osp-col-7,
+            .osp-col-8,
+            .osp-col-9,
+            .osp-col-10 {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="container-fluid">
+        <div id="info"></div>
+        <div class="square el lamp_regions"></div>
+        <div class="square el lamp_ufssp"></div>
+        <div class="square el lamp_osp"></div>
+        <div class="square el lamp_phones"></div>
+        <div class="container-fluid m-2 d-flex justify-content-center">
+            <button id="btn_set_region" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalregions">
+            ГУФССП России по г.Москве
+          </button>
+        </div>
+
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="поиск..." id="tablesearch">
+        </div>
+
+        <div class="container-fluid pl-0 pr-0 small">
+            <div id="osp_titles" class="table table-dark">
+
+            </div>
+            <div id="osp" class="small osp-list" style="margin-left: 0px; margin-right: 0px;">
+            </div>
+        </div>
+
+
+        <table id="ll">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <!-- The Modals -->
+    <!-- 1 -->
+    <div class="modal fade" id="modalregions">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Выбрать подразделение</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="поиск..." id="regionsearch">
+                    </div>
+                    <div class="container-fluid pl-0 pr-0">
+                        <div id="regions" class="small regions-list" style="margin-left: 0px; margin-right: 0px;">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id="btn_region_select" type="button" class="btn btn-dark active" disabled data-dismiss="modal">Выбрать</button>
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        d3.select("#info").text("width: " + window.innerWidth + ", height: " + window.innerHeight);
+
+        let current_region = "77";
+
+        let region_name = "ГУФССП России по г.Москве";
+
+        let regions = [];
+
+        let ufssp = [];
+
+        let osp = [];
+
+        let phones = [];
+
+        d3.select("#btn_set_region").text(region_name);
+
+        // true / false
+        const even = n => !(n % 2); // четный
+        const odd = n => (n % 2); // не четный
+
+        // "even" / "odd"
+        const even_odd = n => n % 2 === 0 ? "odd" : "even";
+
+        //шаблон функции с обещанием
+        function foo(prop) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+
+                try {
+                    let result = prop;
+
+                    // сюда вставить основной код
+
+                    return resolve(result);
+                } catch (err) {
+
+                    return reject(err);
+                }
+
+            });
+        }
+
+        // version 1
+        // promisify(f, true), чтобы получить массив результатов
+        /*function promisify(f, manyArgs = false) {
+            return function(...args) {
+                return new Promise((resolve, reject) => {
+                    function callback(err, ...results) { // наш специальный колбэк для f
+                        if (err) {
+                            return reject(err);
+                        } else {
+                            // делаем resolve для всех results колбэка, если задано manyArgs
+                            resolve(manyArgs ? results : results[0]);
+                        }
+                    }
+
+                    args.push(callback);
+
+                    f.call(this, ...args);
+                });
+            };
+        };*/
+
+        // version 2
+        /**/
+        const promisify = function(callbackBasedApi) {
+            return function promisified() {
+                const args = [].slice.call(arguments);
+                console.log('args: ', args);
+
+                return new Promise((resolve, reject) => {
+                    args.push((err, result) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        if (arguments.length <= 2) {
+                            resolve(result);
+                        } else {
+                            resolve([].slice.call(arguments, 1));
+                        }
+                    });
+                    callbackBasedApi.apply(null, args);
+                });
+
+            }
+        };
+
+        /**/
+
+        //Исполнительные производства в отношении юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-iplegallist
+        //Оконченные
+        //https://opendata.fssp.gov.ru/7709576929-iplegallistcomplete
+
+        //Справочник видов документов (постановлений)
+        //https://opendata.fssp.gov.ru/7709576929-doctypelist
+        //Перечень международных договоров (конвенций, соглашений)
+        //https://opendata.fssp.gov.ru/7709576929-treaties
+        //План-график размещения заказов ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-purchases
+        //Сведения об обращениях граждан
+        //https://opendata.fssp.gov.ru/7709576929-appeals
+        //Приказы по основной деятельности, изданные ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-regulations
+        //Перечень информационных систем
+        //https://opendata.fssp.gov.ru/7709576929-infosys
+        //Сведения об имущественном положении и доходах руководства ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-dohodrukfssp
+        //Сведения об имущественном положении и доходах руководителя организации, подведомственной ФССП России
+        //https://opendata.fssp.gov.ru/7709576929-dohodruksanatorij
+        //Ежегодный план проведения плановых проверок юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-planproverokul
+        //Информация об организованных конференциях, творческих конкурсах
+        //https://opendata.fssp.gov.ru/7709576929-contests
+        //График личного приема граждан
+        //https://opendata.fssp.gov.ru/7709576929-grafiklpg
+        //Государственный реестр юридических лиц
+        //https://opendata.fssp.gov.ru/7709576929-gosreestrul
+        //Справочник видов документов (запросов)
+        //https://opendata.fssp.gov.ru/7709576929-doctypelistzapross
+
+
+        //Перечень управлений
+        //https://opendata.fssp.gov.ru/7709576929-tolist
+        //Перечень отделов
+        //https://opendata.fssp.gov.ru/7709576929-osp
+        //https://opendata.fssp.gov.ru/7709576929-osp/data-20210226-structure-20160226.csv
+        //Телефоны
+        //https://opendata.fssp.gov.ru/7709576929-phonelist
+
+        /*
+        var tween = anime({
+            targets: '.el',
+            translateX: window.innerWidth - 28 * 2,
+            delay: function(el, i) {
+                return i * 200;
+            },
+            direction: 'alternate',
+            loop: true,
+            easing: 'easeInOutSine'
+        });*/
+
+
+        //управления
+        let fssptitles = [
+            "Полное наименование",
+            "Сокращенное наименование",
+            "ФИО Руководителя",
+            "Должность",
+            "Описание задача и функций",
+            "Почтовый адрес",
+            "Часы работы",
+            "ОКТМО",
+            "ОКАТО",
+            "ОКПО",
+            "ОГРН",
+            "ИНН",
+            "Телефоны для справок",
+            "Другие телефоны",
+            "Факс",
+            "Ссылка",
+            "Электронная почта"
+        ];
+
+        let loadCsv = (url, callback) => {
+            (async() => {
+
+                let f = url;
+
+                try {
+                    let response = await fetch(f);
+                    let text = await response.text();
+
+                    Papa.parse(text, {
+                        complete: callback
+                    });
+                } catch (err) {}
+            })()
+        };
+
+        loadCsv("regions.csv", RegionsPrepare);
+
+        //let getRegionsPromise = promisify(getRegions);
+        //в функции с промисом надо проследить всю цепочку
+        //загрузку fssp начинать после загрузки регионов
+        //загрузку osp начинать после загрузки fssp
+        //загрузку телефонов начинать после загрузки osp
+        function getRegionsPromise(prop) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                try {
+                    // главная логика
+                    let data = prop.data;
+                    let arr = [];
+                    data.forEach((item, i) => {
+                        if (i != 0 && item[0] != "") {
+                            arr.push(item);
+                        }
+                    });
+                    return resolve(arr); // в случае успеха
+                    //
+                } catch (err) {
+                    return reject(err); // в случае ошибки
+                }
+            });
+        }
+
+        function RegionsPrepare(data) {
+            getRegionsPromise(data)
+                .then((results) => {
+
+                    regions = results; //передаем результ загрузки в глобальную переменную
+
+                    return regions;
+                })
+                .then((results) => {
+                    console.log(results);
+                    RegionsLoaded();
+                })
+                .catch((err) => console.log("regions list loaded error: " + err));
+        }
+
+        function RegionsLoaded() {
+
+            anime({
+                targets: '.lamp_regions',
+                backgroundColor: '#008000'
+            });
+            console.log("regions list loaded! ");
+            displayRegionsListPromise(regions);
+        };
+
+        function displayRegionsListPromise(regions) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+
+                try {
+                    //let titles = regions.shift();
+
+                    function compareNumericByCode(a, b, i = 0) {
+                        if (Number(a[i]) > Number(b[i])) return 1;
+                        if (Number(a[i]) == Number(b[i])) return 0;
+                        if (Number(a[i]) < Number(b[i])) return -1;
+                    }
+
+                    regions = regions.sort(compareNumericByCode);
+
+                    regions = makeRegionsAsObjects(regions);
+
+                    let container = d3.select("#regions");
+                    //отфильтровать массив
+
+                    let dataregions = container.selectAll("div .row").data(regions);
+                    dataregions.attr("id", (d) => "region_" + d.code);
+                    let dataenter = dataregions.enter()
+                    let row = dataenter.append("div")
+                        .attr("class", "row p-1")
+                        .attr("id", (d) => "region_" + d.code);
+                    d3.select("#btn_region_select").on("click", () => {
+                        d3.select("#btn_set_region").text(region_name);
+                        $("#modalregions").modal("hide");
+                    });
+
+                    row.on("click", (m, o) => {
+                        d3.selectAll(".selected-row").classed("selected-row", false);
+                        d3.select("#region_" + o.code).classed("selected-row", true);
+                        d3.select("#btn_region_select").property("disabled", false);
+
+                        current_region = o.code;
+                        region_name = o.name;
+
+                        console.log(m); //mouse
+                        console.log(o); //object
+                    });
+
+                    row.append("div").attr("class", "col").text(d => d.name);
+                    dataregions.exit().remove();
+
+                    return resolve(regions);
+                } catch (err) {
+
+                    return reject(err);
+                }
+
+            });
+        }
+
+        function makeRegionsAsObjects(arr) {
+            // преобразуем вложенные массивы в объекты
+            // для большей гибкости при выводе информации
+            let result = [];
+            arr.forEach((item, i) => {
+                let obj = {};
+                obj.code = item[0]; //код
+                obj.name = item[1]; //наименование подразделения
+                obj.region = item[2]; //регион
+                //сюда можно добавить функции
+                result.push(obj);
+            });
+            return result;
+        }
+
+        loadCsv("ufssp.csv", UfsspPrepare);
+
+        let getUfsspPromise = promisify(getUfssp);
+
+        function UfsspPrepare(data) {
+            getUfsspPromise(data)
+                .then(UfsspLoaded())
+                .catch((err) => console.log("ufssp list loaded error: " + err));
+        }
+
+        function UfsspLoaded() {
+
+            anime({
+                targets: '.lamp_ufssp',
+                backgroundColor: '#008000'
+            });
+            console.log("ufssp list loaded!")
+
+        };
+
+        function getUfssp(results) {
+            let data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    //https://r87.fssp.gov.ru
+                    let code = item[15];
+                    code = Number(code.slice(9, 11)).toString();
+
+                    item.push(code);
+                    ufssp.push(item);
+
+                }
+            });
+        }
+
+        function makeUfsspAsObjects(arr) {
+            let result = [];
+
+            arr.forEach((item, i) => {
+                let obj = {};
+                //obj.code = item[0]; //код
+                //obj.name = item[1]; //наименование подразделения
+                //obj.region = item[2]; //регион
+                //сюда можно добавить функции
+                result.push(obj);
+            });
+
+            return result;
+        }
+
+        function makeOspArrAsObjects(arr) {
+            // преобразуем вложенные массивы в объекты
+
+            let result = [];
+            arr.forEach((item, i) => {
+                let obj = {};
+
+                obj.region = item[0]; //регион
+                obj.code = item[1].toString().padStart(3, "0") + item[11].padStart(2, "0"); //код
+                obj.name = item[2]; //наименование
+                obj.address = item[3]; //почтовый адрес
+                obj.boss = item[4]; //ФИО начальника
+                obj.phone = item[5]; //телефон
+                obj.fax = item[6]; //факс
+                obj.phoneinfo1 = item[7]; //справочный телефон 1
+                obj.phoneinfo2 = item[8]; //справочный телефон 2
+                obj.worktime = item[9]; //рабочее время
+                obj.territory = item[10]; //территория
+                obj.regioncode = item[11].padStart(2, "0"); //код региона
+
+                //сюда можно добавить функции
+                result.push(obj);
+            });
+            return result;
+        }
+
+        function makeOspEntryAsObjects(item) {
+            // преобразуем вложенные массивы в объекты
+
+            let obj = {};
+
+            obj.region = item[0]; //регион
+            obj.code = item[1]; //код
+            obj.name = item[2]; //наименование
+            obj.address = item[3]; //почтовый адрес
+            obj.boss = item[4]; //ФИО начальника
+            obj.phone = item[5]; //телефон
+            obj.fax = item[6]; //факс
+            obj.phoneinfo1 = item[7]; //справочный телефон 1
+            obj.phoneinfo2 = item[8]; //справочный телефон 2
+            obj.worktime = item[9]; //рабочее время
+            obj.territory = item[10]; //территория
+            obj.regioncode = item[11].padStart(2, "0"); //код региона
+
+            return obj;
+        }
+
+        //отделы
+        let osptitles = [
+            "регион",
+            "код",
+            "наименование подразделения",
+            "почтовый адрес",
+            "ФИО начальника",
+            "телефоны",
+            "факс",
+            //"телефон для справок",
+            //"телефон для справок 2",
+            "время работы",
+            "территория обслуживания",
+            "код региона"
+        ];
+
+        loadCsv("osp.csv", OspPrepare);
+
+        function displayOSPTitlesPromise(titles) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                try {
+                    let container = d3.select("#osp_titles");
+                    let row = container.append("div")
+                        .attr("class", "row m-1");
+                    let datatitles = row.selectAll("div .col").data(titles);
+                    let dataenter = datatitles.enter();
+                    let col = dataenter.append("div")
+                        .attr("class", function(d, i) {
+                            return "col p-1 " + "osp-col-" + (i + 1)
+                        }).text(d => d);
+                    datatitles.exit().remove();
+
+                    return resolve(titles);
+                } catch (err) {
+                    return reject(err);
+                }
+            });
+        }
+
+        let displayOSPEntriesPromise = promisify(displayOSPEntries);
+
+        let getOspPromise = promisify(getOsp);
+
+        function OspPrepare(data) {
+
+            getOspPromise(data)
+                .then(OspLoaded())
+                .catch((err) => console.log("osp list loaded error: " + err))
+                .then(displayOSPTitlesPromise(osptitles))
+                .then(displayOSPEntriesPromise(data));
+
+        }
+
+        function OspLoaded() {
+
+            anime({
+                targets: '.lamp_osp',
+                backgroundColor: '#008000'
+            });
+            console.log("osp list loaded!")
+
+        };
+
+        function getOsp(results) {
+            let data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    try {
+                        let r = _.find(regions, function(i) {
+
+                            return i[0] === item[0];
+                        });
+                        item.push(r[0]);
+                        item[1] = item[11] + item[1].toString().padStart(3, "0");
+                        item[0] = r[2];
+
+                        //item.push(r[2]);
+                        /*
+                        let f = _.find(ufssp, function(i) {
+
+                            return i[17] === item[0].toString();
+                        });
+                        item.push(f[1]);*/
+                    } catch (err) {
+
+                    }
+                    //console.log(f[1]);
+                    osp.push(item);
+                }
+            });
+        }
+
+        loadCsv("phones.csv", PhonesPrepare);
+
+        let getPhonesPromise = promisify(getPhones);
+
+        function PhonesPrepare(data) {
+            getPhonesPromise(data)
+                .then(PhonesLoaded())
+                .catch((err) => console.log("phones list loaded error: " + err));
+        }
+
+        function PhonesLoaded() {
+            anime({
+                targets: '.lamp_phones',
+                backgroundColor: '#008000'
+            });
+            console.log("phones list loaded!")
+        };
+
+        function getPhones(results) {
+            let data = results.data;
+
+            data.forEach((item, i) => {
+                if (i != 0 && item[0] != "") {
+                    phones.push(item);
+                }
+            });
+        }
+
+        // добавление строки со значениями из массива в таблицу
+        //
+        // @param {arr - массив, parent - ссылка d3}
+        // @returns {Promise}
+        //
+        function addRow(arr, parent, delay = 1000) {
+            //объект "обещание"
+            return new Promise(function(resolve, reject) {
+                setTimeout(() => {
+                    try {
+                        //arr.pop(); //убрать код региона
+
+                        let obj = makeOspEntryAsObjects(arr);
+                        let phone = obj.phone;
+                        let phoneinfo1 = obj.phoneinfo1;
+                        let phoneinfo2 = obj.phoneinfo2;
+                        let phones = phone;
+
+                        if (phoneinfo1 != phone) phones = phones + "; " + phoneinfo1;
+                        if (phoneinfo2 != phoneinfo1 && phoneinfo1 != phone) phones = phones + "; " + phoneinfo2;
+
+                        let newarr = [obj.region, obj.code, obj.name, obj.address, obj.boss, phones, obj.fax, obj.worktime, obj.territory, obj.regioncode];
+
+
+
+                        let row = parent.append("div").attr("class", "row m-1");
+                        let datarow = row.selectAll("div .col").data(newarr);
+
+                        datarow.text((d) => d);
+                        datarow.enter().append("div")
+                            .attr("class", function(d, i) {
+                                return "col p-1 " + "osp-col-" + (i + 1);
+                            }).text(d => d);
+                        datarow.exit().remove();
+
+                        //test filter
+                        /*
+                        row.selectAll("td")
+                            .filter((d, i) => {
+                                //console.log(d);
+                                if (d == "0") return d;
+
+                            }).attr("class", "text-danger");
+*/
+
+                        // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
+                        return resolve({
+                            array: arr,
+                            parent: parent,
+                            row: row
+                        });
+                    } catch (err) {
+                        // в случае ошибки возвращает массив ссылку d3 на родителя и ошибку
+                        return reject({
+                            array: arr,
+                            parent: parent,
+                            error: err
+                        });
+                    }
+                }, delay);
+            });
+        }
+
+        // последовательная рекурсивная подгрузка и показ изображений
+        // 
+        // @param arr - массив строк
+        // @param parent - d3 ссылка на родителя
+        //
+        function addEntries(arr, parent, delay = 100) {
+            let entry = arr.shift(); // проходим по массиву с изображениями
+
+            if (!entry) {
+                console.log("entries ok!");
+                return;
+            }; //если в результате рекурсии прошлись по всему массиву
+
+            //если в массиве еще есть изображение, загружаем его
+            return addRow(entry, parent, delay)
+                .then(function(result) {
+                    console.log("entry ok!");
+                    return addEntries(arr, parent, delay); //рекурсия
+                })
+                .catch(function(result) {
+                    //если какая-то строка не добавлена переходим к следующему
+                    console.log('ошибка: ', result.error);
+                    return addEntries(arr, parent, delay); //рекурсия
+                });
+        }
+
+        //переписать под решетки
+        function displayOSPEntries(results) {
+
+            function compareNumericByRegionCode(a, b, i = 11) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+            function compareNumericByCode(a, b, i = 1) {
+                if (Number(a[i]) > Number(b[i])) return 1;
+                if (Number(a[i]) == Number(b[i])) return 0;
+                if (Number(a[i]) < Number(b[i])) return -1;
+            }
+
+            osp = osp.sort(compareNumericByCode);
+            //osp = osp.sort(compareNumericByRegionCode);
+
+            let parent = d3.select("#osp");
+            //отфильтровать массив
+            addEntries(tableFilter(osp, 11, 77), parent, 0);
+
+        }
+
+        // фильтрация таблицы
+        function tableFilter(arr, col, val) {
+            // arr - массив из массивов
+            // col - столбец
+            // val - значение
+            // подумать над поиском части строки, если строковая переменная
+            let res = [];
+            arr.forEach((i) => {
+                if (i[col] == val) res.push(i);
+            });
+            return res;
+        };
+    </script>
+</body>
+
+</html>
