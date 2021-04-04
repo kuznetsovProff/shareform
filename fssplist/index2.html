@@ -559,7 +559,10 @@
                 osparr = addFullcodeInArr(osparr);
                 console.log(osparr);
             }
-            if (filename == "phones.csv") phonesarr = data;
+            if (filename == "phones.csv") {
+                phonesarr = formatRegionCodeInArr(data);
+                console.log(phonesarr);
+            }
 
             return {
                 "filename": filename,
