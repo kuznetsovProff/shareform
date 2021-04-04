@@ -554,58 +554,69 @@
         }
 
         function DataLoaded(filename, results) {
-            console.log("loadeddata: " + filename);
-            console.log(results);
-            if (filename == "regions.csv") regions = results;
-            let scheme = {};
-            data_schemes.forEach((item, i) => {
-                if (item.filename == filename) {
-                    scheme = item;
-                }
-            });
-            let data = [];
-            results.forEach((item, i) => {
-                let obj = {
-
-                };
-                let row = item;
-                row.forEach((col, i) => {
-                    let find = _.find(scheme.cols, {
-                        'id': i.toString()
+            return new Promise(function(resolve, reject) {
+                try {
+                    console.log("loadeddata: " + filename);
+                    console.log(results);
+                    if (filename == "regions.csv") regions = results;
+                    let scheme = {};
+                    data_schemes.forEach((item, i) => {
+                        if (item.filename == filename) {
+                            scheme = item;
+                        }
                     });
-                    obj[find.property] = col;
-                });
-                //добавляем функцию для получения кода региона
-                if (filename == "regions.csv") {
-                    obj["getRegionCode"] = function() {
-                        return this.regioncode.padStart(2, "0");
-                    };
-                }
-                data.push(obj);
-            });
-            if (filename == "regions.csv") regionsarr = data;
-            if (filename == "ufssp.csv") {
-                ufssparr = addRegionCodeToUfsspArr(data);
-            };
-            if (filename == "osp.csv") {
-                osparr = formatRegionCodeInArr(data);
-                osparr = formatCodeInArr(osparr);
-                osparr = addFullcodeInArr(osparr);
-                //исправить ошибки в названиях
-                osparr = replaceWithCorrectOspNames(osparr);
-            }
-            if (filename == "phones.csv") {
-                phonesarr = formatRegionCodeInArr(data);
-                phonesarr = addCodesToPhonesArrByAgencyName(phonesarr);
-            }
+                    let data = [];
+                    results.forEach((item, i) => {
+                        let obj = {
 
-            return {
-                "filename": filename,
-                "data": data
-            };
+                        };
+                        let row = item;
+                        row.forEach((col, i) => {
+                            let find = _.find(scheme.cols, {
+                                'id': i.toString()
+                            });
+                            obj[find.property] = col;
+                        });
+                        //добавляем функцию для получения кода региона
+                        if (filename == "regions.csv") {
+                            obj["getRegionCode"] = function() {
+                                return this.regioncode.padStart(2, "0");
+                            };
+                        }
+                        data.push(obj);
+                    });
+                    //перенести в then
+                    if (filename == "regions.csv") regionsarr = data;
+                    if (filename == "ufssp.csv") {
+                        ufssparr = addRegionCodeToUfsspArr(data);
+                    };
+                    if (filename == "osp.csv") {
+                        osparr = formatRegionCodeInArr(data);
+                        osparr = formatCodeInArr(osparr);
+                        osparr = addFullcodeInArr(osparr);
+                        //исправить ошибки в названиях
+                        osparr = replaceWithCorrectOspNames(osparr);
+                    }
+                    if (filename == "phones.csv") {
+                        phonesarr = formatRegionCodeInArr(data);
+                        phonesarr = addCodesToPhonesArrByAgencyName(phonesarr);
+                    }
+                    /////////////////////
+
+                    let result = {
+                        "filename": filename,
+                        "data": data
+                    };
+                    return resolve(result); // в случае успеха
+                    //
+                } catch (err) {
+                    return reject(err); // в случае ошибки
+                }
+            });
         }
 
         function replaceWithCorrectOspNames(arr) {
+
             let result = [];
             arr.forEach((item, i) => {
                 let find = _.find(ospmistakes, {
