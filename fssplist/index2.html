@@ -385,19 +385,19 @@
             }]
         };
         let ospmistakes = [{
-            "regioncode": "00",
+            "regioncode": "25",
             "original": "Отдел судебных приставов по Тернейскому району",
             "correct": "Отделение судебных приставов по Тернейскому району"
         }, {
-            "regioncode": "00",
+            "regioncode": "57",
             "original": "Болховский РОСП",
             "correct": "Болховское РОСП"
         }, {
-            "regioncode": "00",
+            "regioncode": "66",
             "original": "Гаринское ОСП",
             "correct": "Гаринское РОСП"
         }, {
-            "regioncode": "00",
+            "regioncode": "70",
             "original": "ОСП по г. Северску УФССП России по Томской области",
             "correct": "ОСП по г. Северску"
         }, {
@@ -412,6 +412,14 @@
             "regioncode": "63",
             "original": "",
             "correct": "Отдельные должности (по мобилизационной подготовке и гражданской обороне)"
+        }, {
+            "regioncode": "69",
+            "original": "Отделение информатизации и обеспечения информационной безопасности",
+            "correct": "Отдел информатизации и обеспечения информационной безопасности"
+        }, {
+            "regioncode": "78",
+            "original": "Отдел противодействия коррупции",
+            "correct": "Отдел собственной безопасности"
         }];
 
         data_schemes.push(osp_data_scheme);
@@ -608,6 +616,7 @@
             let result = [];
             arr.forEach((item, i) => {
                 let find = _.find(ospmistakes, {
+                    'regioncode': item.regioncode,
                     'original': item.name
                 });
 
@@ -1270,4 +1279,4 @@
     </script>
 </body>
 
-</html>      
+</html>
