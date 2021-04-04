@@ -430,12 +430,16 @@
         let region_name = "ГУФССП России по г.Москве";
 
         let regions = [];
+        let regionsarr = [];
 
         let ufssp = [];
+        let ufssparr = [];
 
         let osp = [];
+        let osparr = [];
 
         let phones = [];
+        let phonesarr = [];
 
         d3.select("#btn_set_region").text(region_name);
 
@@ -464,22 +468,26 @@
         };
 
         let filename = "regions.csv";
-
         loadCsv(filename, DataPrepare);
+
+        filename = "ufssp.csv";
+        loadCsv(filename, DataPrepare);
+
+        filename = "osp.csv";
+        loadCsv(filename, DataPrepare);
+
+        filename = "phones.csv";
+        loadCsv(filename, DataPrepare);
+
 
         function DataPrepare(data, filename = "") {
             getDataPromise(data)
                 .then((results) => {
-                    //console.log(filename);
-
-                    //if (filename == "regions.csv") regions = results;
-
                     let loadeddata = results;
 
                     return loadeddata;
                 })
                 .then((results) => {
-
                     DataLoaded(filename, results);
                 })
                 .catch((err) => console.log("data loaded error: " + err));
@@ -531,161 +539,233 @@
                     //console.log(find.property + ":::" + col);
                 });
                 //добавляем функцию для получения кода региона
-                obj["getCode"] = function() {
-                    return this.regioncode.padStart(2, "0");
-                };
+                if (filename == "regions.csv") {
+                    obj["getRegionCode"] = function() {
+                        return this.regioncode.padStart(2, "0");
+                    };
+                }
                 //console.log(obj.getCode());
                 data.push(obj);
                 //console.log(obj);
             });
-            console.log("data")
-            console.log(data);
-            //console.log(scheme);
+            if (filename == "regions.csv") regionsarr = data;
+            if (filename == "ufssp.csv") {
+                ufssparr = addRegionCodeToUfsspArr(data);
+                //console.log(ufssparr);
+            };
+            if (filename == "osp.csv") {
+                osparr = formatRegionCodeInArr(data);
+                osparr = formatCodeInArr(osparr);
+                osparr = addFullcodeInArr(osparr);
+                console.log(osparr);
+            }
+            if (filename == "phones.csv") phonesarr = data;
+
+            return {
+                "filename": filename,
+                "data": data
+            };
         }
 
-        //управления
-        let fssptitles = [
-            "Полное наименование",
-            "Сокращенное наименование",
-            "ФИО Руководителя",
-            "Должность",
-            "Описание задача и функций",
-            "Почтовый адрес",
-            "Часы работы",
-            "ОКТМО",
-            "ОКАТО",
-            "ОКПО",
-            "ОГРН",
-            "ИНН",
-            "Телефоны для справок",
-            "Другие телефоны",
-            "Факс",
-            "Ссылка",
-            "Электронная почта"
-        ];
-
-
-
-        //let getRegionsPromise = promisify(getRegions);
-        //в функции с промисом надо проследить всю цепочку
-        //загрузку fssp начинать после загрузки регионов
-        //загрузку osp начинать после загрузки fssp
-        //загрузку телефонов начинать после загрузки osp
-        function getRegionsPromise(prop) {
-            //объект "обещание"
-            return new Promise(function(resolve, reject) {
-                try {
-                    // главная логика
-                    let data = prop.data;
-                    let arr = [];
-                    data.forEach((item, i) => {
-                        if (i != 0 && item[0] != "") {
-                            arr.push(item);
-                        }
-                    });
-                    return resolve(arr); // в случае успеха
-                    //
-                } catch (err) {
-                    return reject(err); // в случае ошибки
-                }
-            });
-        }
-
-        function RegionsPrepare(data) {
-            getRegionsPromise(data)
-                .then((results) => {
-
-                    regions = results; //передаем результ загрузки в глобальную переменную
-
-                    return regions;
-                })
-                .then((results) => {
-                    console.log(results);
-                    RegionsLoaded();
-                })
-                .catch((err) => console.log("regions list loaded error: " + err));
-        }
-
-        function RegionsLoaded() {
-
-            anime({
-                targets: '.lamp_regions',
-                backgroundColor: '#008000'
-            });
-            console.log("regions list loaded! ");
-            displayRegionsListPromise(regions);
+        function formatCode(code, cnt = 2) {
+            // возвращает код в текстовом формате, например 02 или 077
+            // cnt количество цифр в коде
+            return code.toString().padStart(cnt, "0");
         };
 
-        function displayRegionsListPromise(regions) {
-            //объект "обещание"
-            return new Promise(function(resolve, reject) {
-
-                try {
-                    //let titles = regions.shift();
-
-                    function compareNumericByCode(a, b, i = 0) {
-                        if (Number(a[i]) > Number(b[i])) return 1;
-                        if (Number(a[i]) == Number(b[i])) return 0;
-                        if (Number(a[i]) < Number(b[i])) return -1;
-                    }
-
-                    regions = regions.sort(compareNumericByCode);
-
-                    regions = makeRegionsAsObjects(regions);
-
-                    let container = d3.select("#regions");
-                    //отфильтровать массив
-
-                    let dataregions = container.selectAll("div .row").data(regions);
-                    dataregions.attr("id", (d) => "region_" + d.code);
-                    let dataenter = dataregions.enter()
-                    let row = dataenter.append("div")
-                        .attr("class", "row p-1")
-                        .attr("id", (d) => "region_" + d.code);
-                    d3.select("#btn_region_select").on("click", () => {
-                        d3.select("#btn_set_region").text(region_name);
-                        $("#modalregions").modal("hide");
-                    });
-
-                    row.on("click", (m, o) => {
-                        d3.selectAll(".selected-row").classed("selected-row", false);
-                        d3.select("#region_" + o.code).classed("selected-row", true);
-                        d3.select("#btn_region_select").property("disabled", false);
-
-                        current_region = o.code;
-                        region_name = o.name;
-
-                        console.log(m); //mouse
-                        console.log(o); //object
-                    });
-
-                    row.append("div").attr("class", "col").text(d => d.name);
-                    dataregions.exit().remove();
-
-                    return resolve(regions);
-                } catch (err) {
-
-                    return reject(err);
-                }
-
-            });
-        }
-
-        function makeRegionsAsObjects(arr) {
-            // преобразуем вложенные массивы в объекты
-            // для большей гибкости при выводе информации
+        function formatRegionCodeInArr(arr) {
             let result = [];
             arr.forEach((item, i) => {
-                let obj = {};
-                obj.code = item[0]; //код
-                obj.name = item[1]; //наименование подразделения
-                obj.region = item[2]; //регион
-                //сюда можно добавить функции
-                result.push(obj);
+                item.regioncode = formatCode(item.regioncode, 2);
+                result.push(item);
             });
             return result;
         }
 
+        function formatCodeInArr(arr) {
+            let result = [];
+            arr.forEach((item, i) => {
+                item.code = formatCode(item.code, 3);
+                result.push(item);
+            });
+            return result;
+        }
+
+        function addFullcodeInArr(arr) {
+            let result = [];
+            arr.forEach((item, i) => {
+                item["fullcode"] = item.regioncode + item.code;
+                result.push(item);
+            });
+            return result;
+        }
+
+        function getRegionCodeByAbbreviatedName(name) {
+            // возвращает код региона по сокращенному наименованию
+            let find = _.find(regionsarr, {
+                'abbreviatedname': name
+            });
+            return find.getRegionCode();
+        }
+
+        function addRegionCodeToUfsspArr(arr) {
+            let result = [];
+            arr.forEach((item, i) => {
+                let find = _.find(arr, {
+                    'abbreviatedname': item.abbreviatedname
+                });
+
+                let regioncode = getRegionCodeByAbbreviatedName(find.abbreviatedname);
+
+                item["regioncode"] = regioncode;
+                result.push(item);
+            });
+            return result;
+        }
+        /*
+                //управления
+                let fssptitles = [
+                    "Полное наименование",
+                    "Сокращенное наименование",
+                    "ФИО Руководителя",
+                    "Должность",
+                    "Описание задача и функций",
+                    "Почтовый адрес",
+                    "Часы работы",
+                    "ОКТМО",
+                    "ОКАТО",
+                    "ОКПО",
+                    "ОГРН",
+                    "ИНН",
+                    "Телефоны для справок",
+                    "Другие телефоны",
+                    "Факс",
+                    "Ссылка",
+                    "Электронная почта"
+                ];
+
+
+
+                //let getRegionsPromise = promisify(getRegions);
+                //в функции с промисом надо проследить всю цепочку
+                //загрузку fssp начинать после загрузки регионов
+                //загрузку osp начинать после загрузки fssp
+                //загрузку телефонов начинать после загрузки osp
+                function getRegionsPromise(prop) {
+                    //объект "обещание"
+                    return new Promise(function(resolve, reject) {
+                        try {
+                            // главная логика
+                            let data = prop.data;
+                            let arr = [];
+                            data.forEach((item, i) => {
+                                if (i != 0 && item[0] != "") {
+                                    arr.push(item);
+                                }
+                            });
+                            return resolve(arr); // в случае успеха
+                            //
+                        } catch (err) {
+                            return reject(err); // в случае ошибки
+                        }
+                    });
+                }
+
+                function RegionsPrepare(data) {
+                    getRegionsPromise(data)
+                        .then((results) => {
+
+                            regions = results; //передаем результ загрузки в глобальную переменную
+
+                            return regions;
+                        })
+                        .then((results) => {
+                            console.log(results);
+                            RegionsLoaded();
+                        })
+                        .catch((err) => console.log("regions list loaded error: " + err));
+                }
+
+                function RegionsLoaded() {
+
+                    anime({
+                        targets: '.lamp_regions',
+                        backgroundColor: '#008000'
+                    });
+                    console.log("regions list loaded! ");
+                    displayRegionsListPromise(regions);
+                };
+
+                function displayRegionsListPromise(regions) {
+                    //объект "обещание"
+                    return new Promise(function(resolve, reject) {
+
+                        try {
+                            //let titles = regions.shift();
+
+                            function compareNumericByCode(a, b, i = 0) {
+                                if (Number(a[i]) > Number(b[i])) return 1;
+                                if (Number(a[i]) == Number(b[i])) return 0;
+                                if (Number(a[i]) < Number(b[i])) return -1;
+                            }
+
+                            regions = regions.sort(compareNumericByCode);
+
+                            regions = makeRegionsAsObjects(regions);
+
+                            let container = d3.select("#regions");
+                            //отфильтровать массив
+
+                            let dataregions = container.selectAll("div .row").data(regions);
+                            dataregions.attr("id", (d) => "region_" + d.code);
+                            let dataenter = dataregions.enter()
+                            let row = dataenter.append("div")
+                                .attr("class", "row p-1")
+                                .attr("id", (d) => "region_" + d.code);
+                            d3.select("#btn_region_select").on("click", () => {
+                                d3.select("#btn_set_region").text(region_name);
+                                $("#modalregions").modal("hide");
+                            });
+
+                            row.on("click", (m, o) => {
+                                d3.selectAll(".selected-row").classed("selected-row", false);
+                                d3.select("#region_" + o.code).classed("selected-row", true);
+                                d3.select("#btn_region_select").property("disabled", false);
+
+                                current_region = o.code;
+                                region_name = o.name;
+
+                                console.log(m); //mouse
+                                console.log(o); //object
+                            });
+
+                            row.append("div").attr("class", "col").text(d => d.name);
+                            dataregions.exit().remove();
+
+                            return resolve(regions);
+                        } catch (err) {
+
+                            return reject(err);
+                        }
+
+                    });
+                }
+
+                function makeRegionsAsObjects(arr) {
+                    // преобразуем вложенные массивы в объекты
+                    // для большей гибкости при выводе информации
+                    let result = [];
+                    arr.forEach((item, i) => {
+                        let obj = {};
+                        obj.code = item[0]; //код
+                        obj.name = item[1]; //наименование подразделения
+                        obj.region = item[2]; //регион
+                        //сюда можно добавить функции
+                        result.push(obj);
+                    });
+                    return result;
+                }
+        
         loadCsv("ufssp.csv", UfsspPrepare);
 
         let getUfsspPromise = promisify(getUfssp);
@@ -801,6 +881,7 @@
         ];
 
         loadCsv("osp.csv", OspPrepare);
+        */
         /*
                 function displayOSPTitlesPromise(titles) {
                     //объект "обещание"
@@ -825,79 +906,79 @@
                 }*/
 
         //let displayOSPEntriesPromise = promisify(displayOSPEntries);
+        /*
+                let getOspPromise = promisify(getOsp);
 
-        let getOspPromise = promisify(getOsp);
+                function OspPrepare(data) {
 
-        function OspPrepare(data) {
+                    getOspPromise(data)
+                        .then(OspLoaded())
+                        .catch((err) => console.log("osp list loaded error: " + err));
+                    //.then(displayOSPTitlesPromise(osptitles))
+                    //.then(displayOSPEntriesPromise(data));
 
-            getOspPromise(data)
-                .then(OspLoaded())
-                .catch((err) => console.log("osp list loaded error: " + err));
-            //.then(displayOSPTitlesPromise(osptitles))
-            //.then(displayOSPEntriesPromise(data));
-
-        }
-
-        function OspLoaded() {
-
-            anime({
-                targets: '.lamp_osp',
-                backgroundColor: '#008000'
-            });
-            console.log("osp list loaded!")
-
-        };
-
-        function getOsp(results) {
-            let data = results.data;
-
-            data.forEach((item, i) => {
-                if (i != 0 && item[0] != "") {
-                    try {
-                        let r = _.find(regions, function(i) {
-
-                            return i[0] === item[0];
-                        });
-                        item.push(r[0]);
-                        item[1] = item[11] + item[1].toString().padStart(3, "0");
-                        item[0] = r[2];
-
-                    } catch (err) {
-
-                    }
-                    //console.log(f[1]);
-                    osp.push(item);
                 }
-            });
-        }
 
-        loadCsv("phones.csv", PhonesPrepare);
+                function OspLoaded() {
 
-        let getPhonesPromise = promisify(getPhones);
+                    anime({
+                        targets: '.lamp_osp',
+                        backgroundColor: '#008000'
+                    });
+                    console.log("osp list loaded!")
 
-        function PhonesPrepare(data) {
-            getPhonesPromise(data)
-                .then(PhonesLoaded())
-                .catch((err) => console.log("phones list loaded error: " + err));
-        }
+                };
 
-        function PhonesLoaded() {
-            anime({
-                targets: '.lamp_phones',
-                backgroundColor: '#008000'
-            });
-            console.log("phones list loaded!")
-        };
+                function getOsp(results) {
+                    let data = results.data;
 
-        function getPhones(results) {
-            let data = results.data;
+                    data.forEach((item, i) => {
+                        if (i != 0 && item[0] != "") {
+                            try {
+                                let r = _.find(regions, function(i) {
 
-            data.forEach((item, i) => {
-                if (i != 0 && item[0] != "") {
-                    phones.push(item);
+                                    return i[0] === item[0];
+                                });
+                                item.push(r[0]);
+                                item[1] = item[11] + item[1].toString().padStart(3, "0");
+                                item[0] = r[2];
+
+                            } catch (err) {
+
+                            }
+                            //console.log(f[1]);
+                            osp.push(item);
+                        }
+                    });
                 }
-            });
-        }
+
+                loadCsv("phones.csv", PhonesPrepare);
+
+                let getPhonesPromise = promisify(getPhones);
+
+                function PhonesPrepare(data) {
+                    getPhonesPromise(data)
+                        .then(PhonesLoaded())
+                        .catch((err) => console.log("phones list loaded error: " + err));
+                }
+
+                function PhonesLoaded() {
+                    anime({
+                        targets: '.lamp_phones',
+                        backgroundColor: '#008000'
+                    });
+                    console.log("phones list loaded!")
+                };
+
+                function getPhones(results) {
+                    let data = results.data;
+
+                    data.forEach((item, i) => {
+                        if (i != 0 && item[0] != "") {
+                            phones.push(item);
+                        }
+                    });
+                }*/
         /*
                 // добавление строки со значениями из массива в таблицу
                 //
