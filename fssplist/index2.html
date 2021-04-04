@@ -573,9 +573,7 @@
                     let find = _.find(scheme.cols, {
                         'id': i.toString()
                     });
-                    //find.id = find.id.padStart(2, "0");
                     obj[find.property] = col;
-                    //console.log(find.property + ":::" + col);
                 });
                 //добавляем функцию для получения кода региона
                 if (filename == "regions.csv") {
@@ -583,14 +581,11 @@
                         return this.regioncode.padStart(2, "0");
                     };
                 }
-                //console.log(obj.getCode());
                 data.push(obj);
-                //console.log(obj);
             });
             if (filename == "regions.csv") regionsarr = data;
             if (filename == "ufssp.csv") {
                 ufssparr = addRegionCodeToUfsspArr(data);
-                //console.log(ufssparr);
             };
             if (filename == "osp.csv") {
                 osparr = formatRegionCodeInArr(data);
@@ -598,12 +593,10 @@
                 osparr = addFullcodeInArr(osparr);
                 //исправить ошибки в названиях
                 osparr = replaceWithCorrectOspNames(osparr);
-                console.log(osparr);
             }
             if (filename == "phones.csv") {
                 phonesarr = formatRegionCodeInArr(data);
                 phonesarr = addCodesToPhonesArrByAgencyName(phonesarr);
-                console.log(phonesarr);
             }
 
             return {
