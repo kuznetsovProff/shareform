@@ -77,6 +77,10 @@
             overflow-x: hidden!important;
         }
         
+        .hodden {
+          display: none;
+        }
+        
         .osp-list {}
         
         .even-row {}
@@ -137,6 +141,19 @@
 <body>
     <div id="container" class="container-fluid">
         <div id="info"></div>
+      <div id="spinners">
+        <div><div id="spinner-regions" class="spinner-border spinner-border-sm align-middle hidden"></div><div class="d-inline small align-middle"><span> </span>Загрузка списка регионов...</div>
+      
+      
+        <div><div id="spinner-ufssp" class="spinner-border spinner-border-sm align-middle hidden"></div><div class="d-inline small align-middle"><span> </span>Загрузка списка управлений...</div>
+      
+      
+        <div><div id="spinner-osp" class="spinner-border spinner-border-sm align-middle hidden"></div><div class="d-inline small align-middle"><span> </span>Загрузка списка отделов...</div>
+        
+        
+        <div><div id="spinner-phones" class="spinner-border spinner-border-sm align-middle hidden"></div><div class="d-inline small align-middle"><span> </span>Загрузка телефонного справочника...</div>
+      
+      </div>
         <div class="square el lamp_regions"></div>
         <div class="square el lamp_ufssp"></div>
         <div class="square el lamp_osp"></div>
@@ -490,36 +507,40 @@
         const even_odd = n => n % 2 === 0 ? "odd" : "even";
 
 
-        let loadCsv = (url, callback) => {
+        let loadCsv = (url, callback, spinnerid) => {
             (async() => {
-
+                
+                d3.select('#'+spinnerid).class('hidden',false);
+                
                 let f = url;
+                
+                let s = spinnerid;
 
                 try {
                     let response = await fetch(f);
                     let text = await response.text();
 
                     Papa.parse(text, {
-                        complete: (prop) => callback(prop, f)
+                        complete: (prop) => callback(prop, f, s)
                     });
                 } catch (err) {}
             })()
         };
 
         let filename = "regions.csv";
-        loadCsv(filename, DataPrepare);
+        loadCsv(filename, DataPrepare, "spinner-regions");
 
         filename = "ufssp.csv";
-        loadCsv(filename, DataPrepare);
+        loadCsv(filename, DataPrepare, "spinner-ufssp");
 
         filename = "osp.csv";
-        loadCsv(filename, DataPrepare);
+        loadCsv(filename, DataPrepare, "spinner-osp");
 
         filename = "phones.csv";
-        loadCsv(filename, DataPrepare);
+        loadCsv(filename, DataPrepare, "spinner-phones");
 
 
-        function DataPrepare(data, filename = "") {
+        function DataPrepare(data, filename, spinnerid = "") {
             getDataPromise(data)
                 .then((results) => {
                     let loadeddata = results;
@@ -527,19 +548,20 @@
                     return loadeddata;
                 })
                 .then((results) => {
-                    DataLoaded(filename, results)
+                    DataLoaded(filename, results, spinnerid)
                         .then((result) => {
 
                             //перенести в then
                             if (result.filename == "regions.csv") {
                                 regionsarr = result.data;
                                 result = regionsarr;
+                                d3.select('#'+spinnerid).classed('hidden',true);
                             }
                             if (result.filename == "ufssp.csv") {
                                 ufssparr = addRegionCodeToUfsspArr(result.data).then((data) => {
                                     console.log("УФССП:");
                                     console.log(data);
-
+d3.select('#'+result.spinnerid).classed('hidden',true);
                                 });
                             };
                             if (result.filename == "osp.csv") {
@@ -557,10 +579,14 @@
                                     }).then((data) => {
                                         console.log("ОСП:");
                                         console.log(data);
+d3.select('#'+result.spinnerid).classed('hidden',true);
                                     });
                             }
                             if (result.filename == "phones.csv") {
-                                preparePhones(result.data, phonesarr, 10);
+                                preparePhones(result.data, phonesarr, 10)
+                                .then(()=>{
+d3.select('#'+result.spinnerid).classed('hidden',true);
+                                });
                                 /*
                                 phonesarr = formatRegionCodeInArr(result.data)
                                     .then((data) => {
@@ -602,7 +628,7 @@
             });
         }
 
-        function DataLoaded(filename, results) {
+        function DataLoaded(filename, results, spinnerid) {
             return new Promise(function(resolve, reject) {
                 try {
                     console.log("loadeddata: " + filename);
@@ -655,7 +681,8 @@
 */
                     let result = {
                         "filename": filename,
-                        "data": data
+                        "data": data,
+                        "spinnerid": spinnerid
                     };
                     return resolve(result); // в случае успеха
                     //
