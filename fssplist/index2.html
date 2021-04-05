@@ -813,8 +813,26 @@
                     try {
                         //arr.pop(); //убрать код региона
 
+
+
+                        // сюда надо вставить форматирование кода региона
+                        entry.regioncode = formatCode(entry.regioncode, cnt = 2);
+                        // сюда надо вставить добавление остальных кодов по наименованию
+
+                        let find = _.find(osparr, {
+                            'regioncode': entry.regioncode,
+                            'name': entry.agencyname
+                        });
+
+                        let code = find.code;
+                        let fullcode = find.fullcode;
+
+                        entry["code"] = code;
+                        entry["fullcode"] = fullcode;
+
                         console.log(entry);
 
+                        phones.push(entry); //добавляем обработанную запись во внешний массив
 
                         // в случае удачи возвращает массив, ссылку d3 на родителя и ссылку d3 на строку
                         return resolve({
