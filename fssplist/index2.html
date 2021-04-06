@@ -147,35 +147,8 @@
 <body>
     <div id="container" class="container-fluid">
         <div id="info"></div>
-        <div id="spinners">
-            <div>
-                <div id="spinner-regions" class="spinner-border spinner-border-sm align-middle hidden"></div>
-                <div id="spinner-regions-text" class="small align-middle hidden"> Загрузка списка регионов...</div>
-                <div id="spinner-regions-complete" class="small align-middle hidden"> Список регионов загружен.</div>
-            </div>
-            <div>
+        <div>
 
-                <div id="spinner-ufssp" class="spinner-border spinner-border-sm align-middle hidden"></div>
-                <div id="spinner-ufssp-text" class="small align-middle hidden"> Загрузка списка управлений...</div>
-                <div id="spinner-ufssp-complete" class="small align-middle hidden"> Список управлений загружен.</div>
-            </div>
-            <div>
-
-                <div id="spinner-osp" class="spinner-border spinner-border-sm align-middle hidden"></div>
-                <div id="spinner-osp-text" class="small align-middle hidden"> Загрузка списка отделов...</div>
-                <div id="spinner-osp-complete" class="small align-middle hidden"> Список отделов загружен.</div>
-            </div>
-            <div>
-
-                <div id="spinner-phones" class="spinner-border spinner-border-sm align-middle hidden"></div>
-                <div id="spinner-phones-text" class="small align-middle hidden"> Загрузка телефонного справочника...</div>
-                <div id="spinner-phones-complete" class="small align-middle hidden"> Телефонный справочник загружен.</div>
-
-            </div>
-            <div class="square el lamp_regions"></div>
-            <div class="square el lamp_ufssp"></div>
-            <div class="square el lamp_osp"></div>
-            <div class="square el lamp_phones"></div>
             <div class="container-fluid m-2 d-flex justify-content-center">
                 <button id="btn_set_region" type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalregions">
             ГУФССП России по г.Москве
@@ -588,12 +561,6 @@
             let loadCsv = (url, callback, spinnerid) => {
                 (async() => {
 
-                    d3.select('#' + spinnerid).classed('hidden', false);
-                    d3.select('#' + spinnerid + "-text").classed('hidden', false);
-                    d3.select('#' + spinnerid + "-text").classed('d-inline', true);
-                    d3.select('#' + spinnerid + "-complete").classed('hidden', true);
-                    d3.select('#' + spinnerid + "-complete").classed('d-inline', false);
-
                     let f = url;
 
                     let s = spinnerid;
@@ -640,22 +607,14 @@
                                 if (result.filename == "regions.csv") {
                                     regionsarr = result.data;
                                     result = regionsarr;
-                                    d3.select('#' + spinnerid).classed('hidden', true);
-                                    d3.select('#' + spinnerid + "-text").classed('hidden', true);
-                                    d3.select('#' + spinnerid + "-text").classed('d-inline', false);
-                                    d3.select('#' + spinnerid + "-complete").classed('hidden', false);
-                                    d3.select('#' + spinnerid + "-complete").classed('d-inline', true);
+
                                 }
                                 if (result.filename == "ufssp.csv") {
 
                                     ufssparr = addRegionCodeToUfsspArr(result.data).then((data) => {
                                         console.log("УФССП:");
                                         console.log(data);
-                                        d3.select('#' + spinnerid).classed('hidden', true);
-                                        d3.select('#' + spinnerid + "-text").classed('hidden', true);
-                                        d3.select('#' + spinnerid + "-text").classed('d-inline', false);
-                                        d3.select('#' + spinnerid + "-complete").classed('hidden', false);
-                                        d3.select('#' + spinnerid + "-complete").classed('d-inline', true);
+
                                     });
                                 };
                                 if (result.filename == "osp.csv") {
@@ -674,22 +633,14 @@
                                         }).then((data) => {
                                             console.log("ОСП:");
                                             console.log(data);
-                                            d3.select('#' + spinnerid).classed('hidden', true);
-                                            d3.select('#' + spinnerid + "-text").classed('hidden', true);
-                                            d3.select('#' + spinnerid + "-text").classed('d-inline', false);
-                                            d3.select('#' + spinnerid + "-complete").classed('hidden', false);
-                                            d3.select('#' + spinnerid + "-complete").classed('d-inline', true);
+
                                         });
                                 }
                                 if (result.filename == "phones.csv") {
                                     //здесь надо ограничить массив регионом и отделом
                                     preparePhones(result.data, phonesarr, 0)
                                         .then(() => {
-                                            d3.select('#' + spinnerid).classed('hidden', true);
-                                            d3.select('#' + spinnerid + "-text").classed('hidden', true);
-                                            d3.select('#' + spinnerid + "-text").classed('d-inline', false);
-                                            d3.select('#' + spinnerid + "-complete").classed('hidden', false);
-                                            d3.select('#' + spinnerid + "-complete").classed('d-inline', true);
+
                                         });
                                     /*
                                     phonesarr = formatRegionCodeInArr(result.data)
