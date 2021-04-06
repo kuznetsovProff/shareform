@@ -190,7 +190,7 @@
             <div class="container-fluid m-2 d-flex justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button id="btn-ufssp-select" class="btn btn-outline-dark" type="button">Выбрать</button>
+                        <button id="btn-ufssp-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
                     </div>
                     <input id="input-ufssp-select" type="text" class="form-control" placeholder="Управление" disabled>
                 </div>
@@ -198,7 +198,7 @@
             <div class="container-fluid m-2 d-flex justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button id="btn-osp-select" class="btn btn-outline-dark" type="button">Выбрать</button>
+                        <button id="btn-osp-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
                     </div>
                     <input id="input-osp-select" type="text" class="form-control" placeholder="Отдел" disabled>
                 </div>
@@ -206,7 +206,7 @@
             <div class="container-fluid m-2 d-flex justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
-                        <button id="btn-phone-select" class="btn btn-outline-dark" type="button">Выбрать</button>
+                        <button id="btn-phone-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
                     </div>
                     <input id="input-phone-select" type="text" class="form-control" placeholder="Сотрудник" disabled>
                 </div>
@@ -764,25 +764,7 @@
                             }
                             data.push(obj);
                         });
-                        /*
-                    //перенести в then
-                    if (filename == "regions.csv") regionsarr = data;
-                    if (filename == "ufssp.csv") {
-                        ufssparr = addRegionCodeToUfsspArr(data);
-                    };
-                    if (filename == "osp.csv") {
-                        osparr = formatRegionCodeInArr(data);
-                        osparr = formatCodeInArr(osparr);
-                        osparr = addFullcodeInArr(osparr);
-                        //исправить ошибки в названиях
-                        osparr = replaceWithCorrectOspNames(osparr);
-                    }
-                    if (filename == "phones.csv") {
-                        phonesarr = formatRegionCodeInArr(data);
-                        phonesarr = addCodesToPhonesArrByAgencyName(phonesarr);
-                    }
-                    /////////////////////
-*/
+
                         let result = {
                             "filename": filename,
                             "data": data,
@@ -794,6 +776,34 @@
                         return reject(err); // в случае ошибки
                     }
                 });
+            }
+            let btnid, textid;
+
+            btnid = "btn-ufssp-select";
+            textid = "input-ufssp-select";
+
+            d3.select("#" + btnid).on("click", () => {
+                selectListItem(btnid, textid);
+            });
+
+            // выключить до выбора управления
+            btnid = "btn-osp-select";
+            textid = "input-osp-select";
+
+            d3.select("#" + btnid).on("click", () => {
+                selectListItem(btnid, textid);
+            });
+
+            // выключить до выбора управления и отдела
+            btnid = "btn-phone-select";
+            textid = "input-phone-select";
+
+            d3.select("#" + btnid).on("click", () => {
+                selectListItem(btnid, textid);
+            });
+
+            function selectListItem(btnid, textid) {
+                $("#modalcustom").modal("show");
             }
 
             function replaceWithCorrectOspNames(arr) {
