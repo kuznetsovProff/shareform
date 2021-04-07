@@ -429,6 +429,7 @@
                     "property": "territory"
                 }]
             };
+            
             let ospmistakes = [{
                 "regioncode": "25",
                 "original": "Отдел судебных приставов по Тернейскому району",
@@ -508,9 +509,9 @@
                 }]
             };
             data_schemes.push(phones_data_scheme);
-            let current_region = "77";
+            //let current_region = "77";
 
-            let region_name = "ГУФССП России по г.Москве";
+            //let region_name = "ГУФССП России по г.Москве";
 
             let regions = [];
             let regionsarr = [];
@@ -525,7 +526,17 @@
             let phonesarr = [];
             let phonesarrerrors = [];
 
-            d3.select("#btn_set_region").text(region_name);
+            let flags = {
+                regionsloaded: false,
+                ufssploaded: false,
+                ufsspselected: false,
+                osploaded: false,
+                ospselected: false,
+                phonesloaded: false,
+                phoneselected: false
+            };
+
+            //d3.select("#btn_set_region").text(region_name);
 
             // true / false
             const even = n => !(n % 2); // четный
@@ -583,15 +594,24 @@
                                 //перенести в then
                                 if (result.filename == "regions.csv") {
                                     regionsarr = result.data;
-                                    result = regionsarr;
-
+                                    result = regionsarr; // а ниже???
+                                    
+                                    flags.regionsloaded = true;
                                 }
                                 if (result.filename == "ufssp.csv") {
 
-                                    ufssparr = addRegionCodeToUfsspArr(result.data).then((data) => {
+                                    ufssparr = addRegionCodeToUfsspArr(result.data)
+                                    .then((data) => {
+                                        flags.ufssploaded = true;
                                         console.log("УФССП:");
                                         console.log(data);
+                                        btnid = "btn-ufssp-select";
+                                        textid = "input-ufssp-select";
 
+                                        d3.select("#" + btnid).property('disabled',false).on("click", () => {
+                
+                                            selectListItem(btnid, textid, data);
+                                        });
                                     });
                                 };
                                 if (result.filename == "osp.csv") {
@@ -608,15 +628,34 @@
                                             osparr = replaceWithCorrectOspNames(data);
                                             return osparr;
                                         }).then((data) => {
+                                            flags.ospmistakes = true;
                                             console.log("ОСП:");
                                             console.log(data);
+                                            /*
+                                            // подгружать список отделов после выбора управления
+                                            // в DataPrepare добавить возможность создания выборки отделов и телефонов по коду региона
+                                            // выключить до выбора управления
+                                            btnid = "btn-osp-select";
+                                            textid = "input-osp-select";
 
+                                            d3.select("#" + btnid).property("disabled",false).on("click", () => {
+                                                selectListItem(btnid, textid);
+                                            });
+                                            */
                                         });
                                 }
                                 if (result.filename == "phones.csv") {
                                     //здесь надо ограничить массив регионом и отделом
                                     preparePhones(result.data, phonesarr, 0)
                                         .then(() => {
+                                            flags.phonesloaded = true;
+                                            // выключить до выбора управления и отдела
+                                            btnid = "btn-phone-select";
+                                            textid = "input-phone-select";
+
+                                            d3.select("#" + btnid).property("disabled",false).on("click", () => {
+                                                selectListItem(btnid, textid);
+                                            });
 
                                         });
                                     /*
@@ -707,30 +746,16 @@
             }
             let btnid, textid;
 
-            btnid = "btn-ufssp-select";
-            textid = "input-ufssp-select";
-
-            d3.select("#" + btnid).on("click", () => {
-                selectListItem(btnid, textid);
-            });
-
-            // выключить до выбора управления
-            btnid = "btn-osp-select";
-            textid = "input-osp-select";
-
-            d3.select("#" + btnid).on("click", () => {
-                selectListItem(btnid, textid);
-            });
-
-            // выключить до выбора управления и отдела
-            btnid = "btn-phone-select";
-            textid = "input-phone-select";
-
-            d3.select("#" + btnid).on("click", () => {
-                selectListItem(btnid, textid);
-            });
-
-            function selectListItem(btnid, textid) {
+            
+            function selectListItem(btnid, textid, list, cols = ["regioncode"]) {
+                //list.forEach((item,i)=>{
+                  
+                //});
+                d3.select("#btn_list_select")
+                .property("disabled",false) // тест!!! использовать при выборе элемента
+                .on("click",()=>{
+                  alert(btnid);
+                });
                 $("#modalcustom").modal("show");
             }
 
