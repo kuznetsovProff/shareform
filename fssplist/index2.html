@@ -149,12 +149,12 @@
         <div id="info"></div>
         <div>
 
-            <div class="container-fluid m-2 d-flex justify-content-center">
+            <div class="container-fluid d-flex justify-content-center">
 
                 Справочник ФССП России
 
             </div>
-            <div class="container-fluid m-2 d-flex justify-content-center">
+            <div class="container-fluid d-flex pl-2 justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <button id="btn-ufssp-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
@@ -162,7 +162,7 @@
                     <input id="input-ufssp-select" type="text" class="form-control" placeholder="Управление" disabled>
                 </div>
             </div>
-            <div class="container-fluid m-2 d-flex justify-content-center">
+            <div class="container-fluid d-flex pl-2 justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <button id="btn-osp-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
@@ -170,7 +170,7 @@
                     <input id="input-osp-select" type="text" class="form-control" placeholder="Отдел" disabled>
                 </div>
             </div>
-            <div class="container-fluid m-2 d-flex justify-content-center">
+            <div class="container-fluid d-flex pl-2 justify-content-center">
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <button id="btn-phone-select" class="btn btn-outline-dark" type="button" disabled>Выбрать</button>
@@ -251,7 +251,7 @@
                 regions.csv
                 ----------
                 0 - "Код региона" - regioncode
-                1 - "Сокращенное наименование" - abbreviatedname
+                1 - "Сокращенное наименование" - name
                 2 - "Наименование региона" - region
             */
             let regions_data_scheme = {
@@ -263,7 +263,7 @@
                 }, {
                     "id": "1",
                     "title": "Сокращенное наименование",
-                    "property": "abbreviatedname"
+                    "property": "name"
                 }, {
                     "id": "2",
                     "title": "Наименование региона",
@@ -276,7 +276,7 @@
                 ufssp.csv
                 ---------
                 +0 - "Полное наименование" - fullname
-                +1 - "Сокращенное наименование" - abbreviatedname
+                +1 - "Сокращенное наименование" - name
                 +2 - "ФИО Руководителя" - boss
                 +3 - "Должность" - post
                 +4 - "Описание задач и функций" - description
@@ -302,7 +302,7 @@
                 }, {
                     "id": "1",
                     "title": "Сокращенное наименование",
-                    "property": "abbreviatedname"
+                    "property": "name"
                 }, {
                     "id": "2",
                     "title": "ФИО руководителя",
@@ -429,7 +429,7 @@
                     "property": "territory"
                 }]
             };
-            
+
             let ospmistakes = [{
                 "regioncode": "25",
                 "original": "Отдел судебных приставов по Тернейскому району",
@@ -536,8 +536,6 @@
                 phoneselected: false
             };
 
-            //d3.select("#btn_set_region").text(region_name);
-
             // true / false
             const even = n => !(n % 2); // четный
             const odd = n => (n % 2); // не четный
@@ -576,7 +574,7 @@
 
             //загрузку телефонов сделать после выбора отдела
             filename = "phones.csv";
-            loadCsv(filename, DataPrepare, "spinner-phones");
+            //loadCsv(filename, DataPrepare, "spinner-phones");
 
             let selectedufssp, selectedosp, selectedphone;
 
@@ -595,24 +593,26 @@
                                 if (result.filename == "regions.csv") {
                                     regionsarr = result.data;
                                     result = regionsarr; // а ниже???
-                                    
+
                                     flags.regionsloaded = true;
                                 }
                                 if (result.filename == "ufssp.csv") {
 
                                     ufssparr = addRegionCodeToUfsspArr(result.data)
-                                    .then((data) => {
-                                        flags.ufssploaded = true;
-                                        console.log("УФССП:");
-                                        console.log(data);
-                                        btnid = "btn-ufssp-select";
-                                        textid = "input-ufssp-select";
+                                        .then((data) => {
+                                            flags.ufssploaded = true;
+                                            console.log("УФССП:");
+                                            console.log(data);
 
-                                        d3.select("#" + btnid).property('disabled',false).on("click", () => {
-                
-                                            selectListItem(btnid, textid, data);
+                                            btnid = "btn-ufssp-select";
+                                            textid = "input-ufssp-select";
+
+                                            d3.select("#" + btnid)
+                                                .property('disabled', false)
+                                                .on("click", () => {
+                                                    selectListItem(result.filename, btnid, textid, data);
+                                                });
                                         });
-                                    });
                                 };
                                 if (result.filename == "osp.csv") {
                                     // здесь надо ограничить список управлением
@@ -653,7 +653,7 @@
                                             btnid = "btn-phone-select";
                                             textid = "input-phone-select";
 
-                                            d3.select("#" + btnid).property("disabled",false).on("click", () => {
+                                            d3.select("#" + btnid).property("disabled", false).on("click", () => {
                                                 selectListItem(btnid, textid);
                                             });
 
@@ -746,17 +746,75 @@
             }
             let btnid, textid;
 
-            
-            function selectListItem(btnid, textid, list, cols = ["regioncode"]) {
+
+            function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
+                let codeproperty;
+                if (filename == "ufssp.csv") {
+                    codeproperty = "regioncode";
+                } else {
+                    codeproperty = "code";
+                };
+
                 //list.forEach((item,i)=>{
-                  
+
                 //});
                 d3.select("#btn_list_select")
-                .property("disabled",false) // тест!!! использовать при выборе элемента
-                .on("click",()=>{
-                  alert(btnid);
+                    .on("click", () => {
+                        alert(btnid);
+                    });
+
+
+                console.log(":::::::::");
+
+                console.log(list);
+
+                let container = d3.select("#list");
+                //отфильтровать массив
+
+                let datalist = container.selectAll("div .row")
+                    .data(list);
+                datalist.attr("id", (d) => {
+                    return "list_" + d[codeproperty];
                 });
+
+                let dataenter = datalist.enter();
+
+                let row = dataenter.append("div")
+                    .attr("class", "row p-1")
+                    .attr("id", (d) => {
+                        return "list_" + d[codeproperty];
+                    });
+
+                d3.select("#btn_list_select").on("click", () => {
+                    d3.select("#" + textid).text(list_name);
+                    $("#modalcustom").modal("hide");
+                });
+
+                row.on("click", (m, d) => {
+                    d3.selectAll(".selected-row")
+                        .classed("selected-row", false);
+                    d3.select("#list_" + d[codeproperty])
+                        .classed("selected-row", true);
+                    d3.select("#btn_list_select")
+                        .property("disabled", false);
+
+                    let current_item = d[codeproperty];
+                    let item_name = d["name"];
+                    alert(current_item);
+
+                    console.log(m); //mouse
+                    console.log(d); //object
+                });
+
+                row.append("div")
+                    .attr("class", "col")
+                    .text(d => d.name);
+
+                datalist.exit().remove();
+
+                //показать модальное окно
                 $("#modalcustom").modal("show");
+
             }
 
             function replaceWithCorrectOspNames(arr) {
@@ -816,10 +874,10 @@
                 return result;
             }
 
-            function getRegionCodeByAbbreviatedName(name) {
+            function getRegionCodeByName(name) {
                 // возвращает код региона по сокращенному наименованию
                 let find = _.find(regionsarr, {
-                    'abbreviatedname': name
+                    'name': name
                 });
                 return find.getRegionCode();
             }
@@ -862,10 +920,10 @@
                         arr.forEach((item, i) => {
                             //проверить логику
                             let find = _.find(arr, {
-                                'abbreviatedname': item.abbreviatedname
+                                'name': item.name
                             });
 
-                            let regioncode = getRegionCodeByAbbreviatedName(find.abbreviatedname);
+                            let regioncode = getRegionCodeByName(find.name);
 
                             item["regioncode"] = regioncode;
                             result.push(item);
