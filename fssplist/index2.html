@@ -562,7 +562,15 @@
                 })()
             };
 
-            let filename = "regions.csv";
+            let filename;
+
+            let current_item;
+            let item_name
+
+            let current_ufssp_code;
+            let current_osp_code;
+
+            filename = "regions.csv";
             loadCsv(filename, DataPrepare, "spinner-regions");
 
             filename = "ufssp.csv";
@@ -755,18 +763,10 @@
                     codeproperty = "code";
                 };
 
-                //list.forEach((item,i)=>{
-
-                //});
                 d3.select("#btn_list_select")
                     .on("click", () => {
                         alert(btnid);
                     });
-
-
-                console.log(":::::::::");
-
-                console.log(list);
 
                 let container = d3.select("#list");
                 //отфильтровать массив
@@ -785,10 +785,16 @@
                         return "list_" + d[codeproperty];
                     });
 
-                d3.select("#btn_list_select").on("click", () => {
-                    d3.select("#" + textid).text(list_name);
-                    $("#modalcustom").modal("hide");
-                });
+                d3.select("#btn_list_select")
+                    .on("click", () => {
+                        d3.select("#" + textid)
+                            .property("value", item_name);
+                        d3.select("#" + textid)
+                            .attr("data-code", current_item);
+                        $("#modalcustom").modal("hide");
+                        // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
+                        // лучше это будет универсальная функция
+                    });
 
                 row.on("click", (m, d) => {
                     d3.selectAll(".selected-row")
@@ -798,12 +804,20 @@
                     d3.select("#btn_list_select")
                         .property("disabled", false);
 
-                    let current_item = d[codeproperty];
-                    let item_name = d["name"];
-                    alert(current_item);
+                    current_item = d[codeproperty];
+                    item_name = d["name"];
 
-                    console.log(m); //mouse
-                    console.log(d); //object
+                    if (filename == "ufssp.csv") {
+                        current_ufssp_code = current_item;
+                    } else if (filename == "osp.csv") {
+                        current_osp_code = current_item;
+                    } else if (filename == "phones.csv") {
+
+                    }
+                    //alert(current_item);
+
+                    //console.log(m); //mouse
+                    //console.log(d); //object
                 });
 
                 row.append("div")
