@@ -792,8 +792,10 @@
                         d3.select("#" + textid)
                             .attr("data-code", current_item);
                         $("#modalcustom").modal("hide");
+
                         // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
                         // лучше это будет универсальная функция
+                        activateSelectButtons();
                     });
 
                 row.on("click", (m, d) => {
@@ -828,6 +830,17 @@
 
                 //показать модальное окно
                 $("#modalcustom").modal("show");
+
+            }
+
+            function activateSelectButtons() {
+                if (current_ufssp_code) {
+                    d3.select("#btn-osp-select").property("disabled", false);
+                }
+
+                if (current_ufssp_code && current_osp_code) {
+                    d3.select("#btn-phone-select").property("disabled", false);
+                }
 
             }
 
