@@ -304,7 +304,7 @@
                                             osparr = replaceWithCorrectOspNames(data);
                                             return osparr;
                                         }).then((data) => {
-                                            flags.ospmistakes = true;
+                                            flags.osploaded = true;
                                             console.log("ОСП:");
                                             console.log(data);
                                             
@@ -315,6 +315,8 @@
                                             let textid = "input-osp-select";
 
                                             d3.select("#" + btnid).property("disabled",true).on("click", () => {
+                                              //отфильтровать по выбранноиу УФССП
+                                              //current_ufssp_code
                                                 selectListItem(result.filename, btnid, textid, data);
                                             });
                                             
@@ -424,6 +426,7 @@
 
 
             function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
+              alert("file:"+filename+";btnid:"+btnid+";textid:"+textid+";length:"+list.length);
                 let codeproperty;
                 if (filename == "ufssp.csv") {
                     codeproperty = "regioncode";
@@ -438,6 +441,9 @@
 
                 let container = d3.select("#list");
                 //отфильтровать массив
+
+                //удалить предыдущий список
+                container.selectAll("div").remove();
 
                 let datalist = container.selectAll("div .row")
                     .data(list);
