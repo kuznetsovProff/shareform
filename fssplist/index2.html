@@ -46,7 +46,7 @@
     <script src="/js/anime.min.js"></script>
 
     <script src="fssp.js"></script>
-    
+
     <script type='module'>
 
     </script>
@@ -95,14 +95,9 @@
         
         .odd-row {}
         
+        @media screen and (max-width: 360px) {}
         
-        @media screen and (max-width: 360px) {
-            
-        }
-        
-        @media screen and (max-width: 703px) {
-            
-        }
+        @media screen and (max-width: 703px) {}
     </style>
 </head>
 
@@ -143,7 +138,7 @@
 
         </div>
         <!-- The Modals -->
-        
+
         <!-- 2 -->
         <div class="modal fade" id="modalcustom">
             <div class="modal-dialog">
@@ -179,7 +174,7 @@
             //d3.select("#info").text("width: " + window.innerWidth + ", height: " + window.innerHeight);
 
 
-        
+
             let regions = [];
             let regionsarr = [];
 
@@ -225,7 +220,9 @@
                         Papa.parse(text, {
                             complete: (prop) => callback(prop, f, s)
                         });
-                    } catch (err) {}
+                    } catch (err) {
+                        alert(err);
+                    }
                 })()
             };
 
@@ -249,7 +246,7 @@
 
             //загрузку телефонов сделать после выбора отдела
             filename = "phones.csv";
-            //loadCsv(filename, DataPrepare, "spinner-phones");
+            loadCsv(filename, DataPrepare, "spinner-phones");
 
             //???
             let selectedufssp, selectedosp, selectedphone;
@@ -307,19 +304,19 @@
                                             flags.osploaded = true;
                                             console.log("ОСП:");
                                             console.log(data);
-                                            
+
                                             // подгружать список отделов после выбора управления
                                             // в DataPrepare добавить возможность создания выборки отделов и телефонов по коду региона
                                             // выключить до выбора управления
                                             let btnid = "btn-osp-select";
                                             let textid = "input-osp-select";
 
-                                            d3.select("#" + btnid).property("disabled",true).on("click", () => {
-                                              //отфильтровать по выбранноиу УФССП
-                                              //current_ufssp_code
+                                            d3.select("#" + btnid).property("disabled", true).on("click", () => {
+                                                //отфильтровать по выбранноиу УФССП
+                                                //current_ufssp_code
                                                 selectListItem(result.filename, btnid, textid, data);
                                             });
-                                            
+
                                         });
                                 }
                                 if (result.filename == "phones.csv") {
@@ -327,12 +324,15 @@
                                     preparePhones(result.data, phonesarr, 0)
                                         .then(() => {
                                             flags.phonesloaded = true;
+                                            console.log("phonesloaded");
                                             // выключить до выбора управления и отдела
                                             let btnid = "btn-phone-select";
                                             let textid = "input-phone-select";
 
                                             d3.select("#" + btnid).property("disabled", false).on("click", () => {
+
                                                 selectListItem(btnid, textid);
+
                                             });
 
                                         });
@@ -426,7 +426,7 @@
 
 
             function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
-              alert("file:"+filename+";btnid:"+btnid+";textid:"+textid+";length:"+list.length);
+                alert("file:" + filename + ";btnid:" + btnid + ";textid:" + textid + ";length:" + list.length);
                 let codeproperty;
                 if (filename == "ufssp.csv") {
                     codeproperty = "regioncode";
@@ -459,7 +459,7 @@
                         return "list_" + d[codeproperty];
                     });
 
-              row.on("click", (m, d) => {
+                row.on("click", (m, d) => {
                     d3.selectAll(".selected-row")
                         .classed("selected-row", false);
                     d3.select("#list_" + d[codeproperty])
@@ -491,15 +491,15 @@
                             .attr("data-code", current_item);
                         $("#modalcustom").modal("hide");
 
-                        if (filename=="ufssp.csv") flags.ufsspselected = true;
-                        if (filename=="osp.csv") flags.ospselected = true;
+                        if (filename == "ufssp.csv") flags.ufsspselected = true;
+                        if (filename == "osp.csv") flags.ospselected = true;
 
                         // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
                         // лучше это будет универсальная функция
                         activateSelectButtons(btnid, textid);
                     });
 
-  
+
 
                 row.append("div")
                     .attr("class", "col")
@@ -514,12 +514,12 @@
 
 
 
-            function activateSelectButtons(btnid,textid) {
-                alert(current_ufssp_code+":"+flags.ufsspselected+":"+flags.osploaded);
-                
+            function activateSelectButtons(btnid, textid) {
+                alert(current_ufssp_code + ":" + flags.ufsspselected + ":" + flags.osploaded);
+
                 if (current_ufssp_code && flags.ufsspselected && flags.osploaded) {
                     //alert (btnid);
-                    
+
                     d3.select("#btn-osp-select").property("disabled", false);
                 }
 
@@ -715,7 +715,7 @@
                 });
 
             }
-            
+
 
             //шаблон функции с обещанием
             function foo(prop) {
