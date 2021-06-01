@@ -135,6 +135,23 @@
                     <input id="input-phone-select" type="text" class="form-control" placeholder="Сотрудник" disabled>
                 </div>
             </div>
+            <div class="container-fluid d-flex pl-2 justify-content-center">
+                <div id="ufssp-info">
+                    <div id="ufssp-info-wrapper">
+
+                    </div>
+                    <div id="osp-info">
+                        <div id="osp-info-wrapper">
+
+                        </div>
+                        <div id="phone-info-wrapper">
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
         <!-- The Modals -->
@@ -479,7 +496,6 @@
             }
             //let btnid, textid;
 
-
             function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
                 alert("file:" + filename + ";btnid:" + btnid + ";textid:" + textid + ";length:" + list.length);
                 let codeproperty;
@@ -537,7 +553,6 @@
                     } else if (filename == "phones.csv") {
                         current_phone_obj = d;
                     }
-
                 });
 
                 d3.select("#btn_list_select")
@@ -550,9 +565,11 @@
 
                         if (filename == "ufssp.csv") flags.ufsspselected = true;
                         if (filename == "osp.csv") flags.ospselected = true;
+                        if (filename == "phones.csv") flags.phoneselected = true;
 
                         // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
                         // лучше это будет универсальная функция
+
                         activateSelectButtons(btnid, textid);
                     });
 
