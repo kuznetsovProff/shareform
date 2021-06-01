@@ -251,8 +251,11 @@
             let item_name
 
             let current_ufssp_code;
+            let current_ufssp_obj;
+
             let current_osp_code;
             let current_osp_name;
+            let current_osp_obj;
 
             let current_phone_obj;
 
@@ -497,9 +500,11 @@
 
                     if (filename == "ufssp.csv") {
                         current_ufssp_code = current_item;
+                        current_ufssp_obj = d;
                     } else if (filename == "osp.csv") {
                         current_osp_code = current_item;
                         current_osp_name = d["name"];
+                        current_osp_obj = d;
                     } else if (filename == "phones.csv") {
                         current_phone_obj = d;
                     }
@@ -517,9 +522,8 @@
                         if (filename == "osp.csv") flags.ospselected = true;
                         if (filename == "phones.csv") flags.phoneselected = true;
 
-                        // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
-                        // лучше это будет универсальная функция
-                        console.log(btnid + " " + textid);
+                        displayInfo(btnid);
+
                         activateSelectButtons(btnid, textid);
                     });
 
@@ -534,12 +538,33 @@
 
             }
 
+            function displayInfo(btnid) {
+                // при выборе управления очистить врапперы для osp и phone
 
+                // !!!!!!!!!!!!!!!!!!!!!!
+                // надо создать выбранные объекты для ufssp и osp
+                console.log("Управление:");
+                console.log(current_ufssp_obj);
+
+                console.log("Отдел:");
+                console.log(current_osp_obj);
+
+                console.log("Сотрудник:");
+                console.log(current_phone_obj);
+            }
 
             function activateSelectButtons(btnid, textid) {
 
                 if (btnid == "btn-ufssp-select") {
-
+                    d3.select("#btn-osp-select").property("disabled", true);
+                    d3.select("#input-osp-select").property("value", "");
+                    flags.ospselected = false;
+                    d3.select("#btn-phone-select").property("disabled", true);
+                    d3.select("#input-phone-select").property("value", "");
+                    flags.phoneselected = false;
+                } else if (btnid == "btn-osp-select") {
+                    d3.select("#btn-phone-select").property("disabled", true);
+                    d3.select("#input-phone-select").property("value", "");
                 }
 
                 if (current_ufssp_code && flags.ufsspselected && flags.osploaded) {
