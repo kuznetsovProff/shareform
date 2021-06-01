@@ -173,7 +173,9 @@
         <script>
             //d3.select("#info").text("width: " + window.innerWidth + ", height: " + window.innerHeight);
 
-
+            let log = (spec) => {
+                console.log(spec);
+            };
 
             let regions = [];
             let regionsarr = [];
@@ -221,7 +223,7 @@
                             complete: (prop) => callback(prop, f, s)
                         });
                     } catch (err) {
-                        alert(err);
+                        console.log("ошибка: " + err);
                     }
                 })()
             };
@@ -233,6 +235,7 @@
 
             let current_ufssp_code;
             let current_osp_code;
+            let current_osp_name;
 
             filename = "regions.csv";
             loadCsv(filename, DataPrepare, "spinner-regions");
@@ -252,6 +255,7 @@
             let selectedufssp, selectedosp, selectedphone;
 
             function DataPrepare(data, filename, spinnerid = "") {
+                console.log("starting data prepare " + filename);
                 getDataPromise(data)
                     .then((results) => {
                         let loadeddata = results;
@@ -308,34 +312,83 @@
                                             // подгружать список отделов после выбора управления
                                             // в DataPrepare добавить возможность создания выборки отделов и телефонов по коду региона
                                             // выключить до выбора управления
+
                                             let btnid = "btn-osp-select";
                                             let textid = "input-osp-select";
 
                                             d3.select("#" + btnid).property("disabled", true).on("click", () => {
                                                 //отфильтровать по выбранноиу УФССП
                                                 //current_ufssp_code
-                                                selectListItem(result.filename, btnid, textid, data);
+                                                let r = Number(current_ufssp_code).toString();
+                                                d = _.filter(data, {
+                                                    "regioncode": current_ufssp_code
+                                                });
+                                                selectListItem(result.filename, btnid, textid, d);
                                             });
 
                                         });
                                 }
                                 if (result.filename == "phones.csv") {
                                     //здесь надо ограничить массив регионом и отделом
-                                    preparePhones(result.data, phonesarr, 0)
+
+                                    //console.log("phonesloaded");
+                                    //console.log(result.data);
+                                    //надо обрезать result.data
+                                    //по коду региона и
+                                    //agencyname
+                                    //в названии могут быть ошибки
+                                    //{
+                                    //    "regioncode": "1",
+                                    //    "agencyname": "Гиагинское районное отделение судебных приставов",
+                                    //    "post": "Младший судебный пристав по обеспечению установленного порядка деятельности судов",
+                                    //    "name": "Тлевцежев Борис Асланович",
+                                    //    "type": "рабочий",
+                                    //    "phone": "78777991996"
+                                    //}
+                                    //console.log(phonesarr);
+
+                                    //вот здесь надо вставить обработчик для кнопки с телефонами
+                                    //но сделать ее активной только после выбора уфссп и отдела
+                                    //и только потом вызывать обработку телефонов
+                                    let btnid = "btn-phone-select";
+                                    let textid = "input-phone-select";
+
+
+                                    d3.select("#" + btnid).on("click", () => {
+
+                                        console.log(current_osp_code);
+                                        console.log(current_osp_name);
+                                        console.log("btn-phone-select click");
+                                        console.log(result.data);
+                                        let r = Number(current_ufssp_code).toString();
+                                        let d = _.filter(result.data, {
+                                            "regioncode": r,
+                                            "agencyname": current_osp_name
+                                        });
+                                        console.log(d);
+                                        selectListItem(result.filename, btnid, textid, d);
+
+                                    });
+
+                                    /*preparePhones(result.data, phonesarr, 0)
                                         .then(() => {
                                             flags.phonesloaded = true;
-                                            console.log("phonesloaded");
+
                                             // выключить до выбора управления и отдела
                                             let btnid = "btn-phone-select";
                                             let textid = "input-phone-select";
 
                                             d3.select("#" + btnid).property("disabled", false).on("click", () => {
-
+                                                console.log("btn-phone-select click");
                                                 selectListItem(btnid, textid);
 
                                             });
 
                                         });
+                                        */
+
+
+
                                     /*
                                     phonesarr = formatRegionCodeInArr(result.data)
                                         .then((data) => {
@@ -474,8 +527,11 @@
                         current_ufssp_code = current_item;
                     } else if (filename == "osp.csv") {
                         current_osp_code = current_item;
+                        current_osp_name = d["name"];
+                        //console.log(d);
+                        //alert(current_osp_code);
                     } else if (filename == "phones.csv") {
-
+                        //???
                     }
                     //alert(current_item);
 
@@ -649,8 +705,8 @@
                 });
             }
 
-            function preparePhones(arr, phones, delay = 10) {
-                let entry = arr.shift(); // проходим по массиву с изображениями
+            function preparePhones(arr, phones, delay = 0) {
+                let entry = arr.shift(); // проходим по массиву
 
                 if (!entry) {
                     console.log("phones ok!");
@@ -660,7 +716,7 @@
                 //если в массиве еще есть изображение, загружаем его
                 return addPhone(entry, phones, delay)
                     .then(function(result) {
-                        console.log("phone ok!");
+                        //console.log("phone ok!");
                         return preparePhones(arr, phones, delay); //рекурсия
                     })
                     .catch(function(result) {
@@ -670,15 +726,13 @@
                     });
             }
 
-            function addPhone(entry, phones, delay = 1000) {
+            function addPhone(entry, phones, delay = 0) {
 
                 //объект "обещание"
                 return new Promise(function(resolve, reject) {
                     setTimeout(() => {
                         try {
                             //arr.pop(); //убрать код региона
-
-
 
                             // сюда надо вставить форматирование кода региона
                             entry.regioncode = formatCode(entry.regioncode, cnt = 2);
