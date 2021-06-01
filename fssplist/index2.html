@@ -544,6 +544,31 @@
                 // надо создать выбранные объекты для ufssp и osp
                 console.log("Управление:");
                 console.log(current_ufssp_obj);
+                let arr = _.values(current_ufssp_obj);
+
+                let container = d3.select("#ufssp-info-wrapper");
+                //отфильтровать массив
+
+                //удалить предыдущий список
+                container.selectAll("div").remove();
+
+                let datalist = container.selectAll("div")
+                    .data(arr);
+                datalist.attr("id", (d, i) => {
+                    return "id_" + i;
+                });
+
+                let dataenter = datalist.enter();
+
+                let row = dataenter.append("div")
+                    .attr("class", "")
+                    .attr("id", (d, i) => {
+                        return "id_" + i;
+                    })
+                    .text((d, i) => {
+                        return d;
+                    });
+
 
                 console.log("Отдел:");
                 console.log(current_osp_obj);
@@ -559,10 +584,10 @@
                 if (btnid == "btn-ufssp-select") {
                     d3.select("#btn-osp-select").property("disabled", true);
                     d3.select("#input-osp-select").property("value", "");
-                    flags.ospselected = false;
+                    //flags.ospselected = false;
                     d3.select("#btn-phone-select").property("disabled", true);
                     d3.select("#input-phone-select").property("value", "");
-                    flags.phoneselected = false;
+                    //flags.phoneselected = false;
                 } else if (btnid == "btn-osp-select") {
                     d3.select("#btn-phone-select").property("disabled", true);
                     d3.select("#input-phone-select").property("value", "");
