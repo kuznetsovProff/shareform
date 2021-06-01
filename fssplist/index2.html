@@ -348,13 +348,6 @@
                                         });
                                 }
                                 if (result.filename == "phones.csv") {
-                                    //здесь надо ограничить массив регионом и отделом
-
-                                    //console.log("phonesloaded");
-                                    //console.log(result.data);
-                                    //надо обрезать result.data
-                                    //по коду региона и
-                                    //agencyname
                                     //в названии могут быть ошибки
                                     //{
                                     //    "regioncode": "1",
@@ -364,61 +357,18 @@
                                     //    "type": "рабочий",
                                     //    "phone": "78777991996"
                                     //}
-                                    //console.log(phonesarr);
-
-                                    //вот здесь надо вставить обработчик для кнопки с телефонами
-                                    //но сделать ее активной только после выбора уфссп и отдела
-                                    //и только потом вызывать обработку телефонов
                                     let btnid = "btn-phone-select";
                                     let textid = "input-phone-select";
 
-
                                     d3.select("#" + btnid).on("click", () => {
-
-                                        console.log(current_osp_code);
-                                        console.log(current_osp_name);
-                                        console.log("btn-phone-select click");
-                                        console.log(result.data);
                                         let r = Number(current_ufssp_code).toString();
                                         let d = _.filter(result.data, {
                                             "regioncode": r,
                                             "agencyname": current_osp_name
                                         });
-                                        console.log(d);
                                         selectListItem(result.filename, btnid, textid, d);
 
                                     });
-
-                                    /*preparePhones(result.data, phonesarr, 0)
-                                        .then(() => {
-                                            flags.phonesloaded = true;
-
-                                            // выключить до выбора управления и отдела
-                                            let btnid = "btn-phone-select";
-                                            let textid = "input-phone-select";
-
-                                            d3.select("#" + btnid).property("disabled", false).on("click", () => {
-                                                console.log("btn-phone-select click");
-                                                selectListItem(btnid, textid);
-
-                                            });
-
-                                        });
-                                        */
-
-
-
-                                    /*
-                                    phonesarr = formatRegionCodeInArr(result.data)
-                                        .then((data) => {
-                                            phonesarr = addCodesToPhonesArrByAgencyName(data);
-                                            return phonesarr;
-                                        }).then((data) => {
-                                            console.log("Сотрудники:");
-                                            console.log(data);
-                                        });*/
-
-
 
                                 }
                                 //console.log(result);
@@ -569,7 +519,7 @@
 
                         // здесь надо вызвать функцию, которая будет включать следуюшие кнопки выбора
                         // лучше это будет универсальная функция
-
+                        console.log(btnid + " " + textid);
                         activateSelectButtons(btnid, textid);
                     });
 
@@ -587,17 +537,18 @@
 
 
             function activateSelectButtons(btnid, textid) {
-                alert(current_ufssp_code + ":" + flags.ufsspselected + ":" + flags.osploaded);
+
+                if (btnid == "btn-ufssp-select") {
+
+                }
 
                 if (current_ufssp_code && flags.ufsspselected && flags.osploaded) {
-                    //alert (btnid);
-
                     d3.select("#btn-osp-select").property("disabled", false);
                 }
 
                 if (current_ufssp_code && current_osp_code) {
                     d3.select("#btn-phone-select").property("disabled", false);
-                    console.log('???phonesloaded');
+
                 }
             }
 
