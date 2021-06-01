@@ -237,6 +237,8 @@
             let current_osp_code;
             let current_osp_name;
 
+            let current_phone_obj;
+
             filename = "regions.csv";
             loadCsv(filename, DataPrepare, "spinner-regions");
 
@@ -488,7 +490,6 @@
                     list = addCodeToPhonesArr(list);
                 } else {
                     codeproperty = "code";
-                    //??? Phones ???
                 };
 
                 d3.select("#btn_list_select")
@@ -505,9 +506,7 @@
                 let datalist = container.selectAll("div .row")
                     .data(list);
                 datalist.attr("id", (d, i) => {
-
                     return "list_" + d[codeproperty];
-
                 });
 
                 let dataenter = datalist.enter();
@@ -535,15 +534,10 @@
                     } else if (filename == "osp.csv") {
                         current_osp_code = current_item;
                         current_osp_name = d["name"];
-                        //console.log(d);
-                        //alert(current_osp_code);
                     } else if (filename == "phones.csv") {
-                        console.log(d[codeproperty]);
+                        current_phone_obj = d;
                     }
-                    //alert(current_item);
 
-                    //console.log(m); //mouse
-                    //console.log(d); //object
                 });
 
                 d3.select("#btn_list_select")
