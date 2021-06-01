@@ -483,8 +483,12 @@
                 let codeproperty;
                 if (filename == "ufssp.csv") {
                     codeproperty = "regioncode";
+                } else if (filename == "phones.csv") {
+                    codeproperty = "code";
+                    list = addCodeToPhonesArr(list);
                 } else {
                     codeproperty = "code";
+                    //??? Phones ???
                 };
 
                 d3.select("#btn_list_select")
@@ -500,19 +504,22 @@
 
                 let datalist = container.selectAll("div .row")
                     .data(list);
-                datalist.attr("id", (d) => {
+                datalist.attr("id", (d, i) => {
+
                     return "list_" + d[codeproperty];
+
                 });
 
                 let dataenter = datalist.enter();
 
                 let row = dataenter.append("div")
                     .attr("class", "row p-1")
-                    .attr("id", (d) => {
+                    .attr("id", (d, i) => {
                         return "list_" + d[codeproperty];
                     });
 
                 row.on("click", (m, d) => {
+
                     d3.selectAll(".selected-row")
                         .classed("selected-row", false);
                     d3.select("#list_" + d[codeproperty])
@@ -531,7 +538,7 @@
                         //console.log(d);
                         //alert(current_osp_code);
                     } else if (filename == "phones.csv") {
-                        //???
+                        console.log(d[codeproperty]);
                     }
                     //alert(current_item);
 
@@ -554,8 +561,6 @@
                         // лучше это будет универсальная функция
                         activateSelectButtons(btnid, textid);
                     });
-
-
 
                 row.append("div")
                     .attr("class", "col")
@@ -583,7 +588,18 @@
                     d3.select("#btn-phone-select").property("disabled", false);
                     console.log('???phonesloaded');
                 }
+            }
 
+            function addCodeToPhonesArr(arr) {
+                let result = [];
+                arr.forEach((item, i) => {
+                    let n = i + 1;
+
+                    item.code = n.toString();
+
+                    result.push(item);
+                });
+                return result;
             }
 
             function replaceWithCorrectOspNames(arr) {
