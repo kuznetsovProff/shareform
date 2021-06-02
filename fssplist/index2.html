@@ -547,7 +547,7 @@
                 
                 console.log("Управление:");
                 console.log(current_ufssp_obj);
-                let arr = _.values(current_ufssp_obj);
+                //let arr = _.values(current_ufssp_obj);
 
                 let ufsspcontainer = d3.select("#ufssp-info-wrapper");
 
@@ -555,7 +555,7 @@
                 ufsspcontainer.selectAll("div").remove();
 
                 let ufsspdatalist = ufsspcontainer.selectAll("div")
-                    .data(arr);
+                    .data(_.values(current_ufssp_obj));
                 ufsspdatalist.attr("id", (d, i) => {
                     return "id_" + i;
                 });
@@ -582,7 +582,7 @@
                 ospcontainer.selectAll("*").remove();
 
                 let ospdatalist = ospcontainer.selectAll("div")
-                    .data(arr);
+                    .data(_.values(current_osp_obj));
                 ospdatalist.attr("id", (d, i) => {
                     return "id_" + i;
                 });
@@ -609,7 +609,7 @@
                 phonecontainer.selectAll("*").remove();
 
                 let phonedatalist = phonecontainer.selectAll("div")
-                    .data(arr);
+                    .data(_.values(current_phone_obj));
                 phonedatalist.attr("id", (d, i) => {
                     return "id_" + i;
                 });
