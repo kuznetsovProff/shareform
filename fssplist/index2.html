@@ -573,15 +573,8 @@
                         return "ufssp_" + d;
                     })
                     .html((d, i) => {
-                        /*
-<div class="input-group mb-3 input-group-sm">
-      <div class="input-group-prepend">
-        <span class="input-group-text">Small</span>
-      </div>
-      <input type="text" class="form-control">
-    </div>
-                        */
-                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_ufssp_obj[d] + "'></div>";
+
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><textarea class='form-control' rows='1' name='ufssp_" + d + "'>" + current_ufssp_obj[d] + "</textarea></div>";
                         return h;
                     });
 
@@ -609,7 +602,7 @@
                         return "osp_" + d;
                     })
                     .html((d, i) => {
-                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_osp_obj[d] + "'></div>";
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><textarea class='form-control' rows='1' name='osp_" + d + "'>" + current_osp_obj[d] + "</textarea></div>";
                         return h;
                     });
 
@@ -637,7 +630,7 @@
                         return "phone_" + d;
                     })
                     .html((d, i) => {
-                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_phone_obj[d] + "'></div>";
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><textarea class='form-control' rows='1' name='phone_" + d + "'>" + current_phone_obj[d] + "</textarea></div>";
                         return h;
                     });
                 //.text((d, i) => {
