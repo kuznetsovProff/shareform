@@ -450,7 +450,8 @@
             //let btnid, textid;
 
             function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
-                alert("file:" + filename + ";btnid:" + btnid + ";textid:" + textid + ";length:" + list.length);
+                //alert("file:" + filename + ";btnid:" + btnid + ";textid:" + textid + ";length:" + list.length);
+                
                 let codeproperty;
                 if (filename == "ufssp.csv") {
                     codeproperty = "regioncode";
@@ -547,7 +548,7 @@
                 
                 console.log("Управление:");
                 console.log(current_ufssp_obj);
-                //let arr = _.values(current_ufssp_obj);
+                let keys = _.keys(current_ufssp_obj);
 
                 let ufsspcontainer = d3.select("#ufssp-info-wrapper");
 
@@ -555,9 +556,9 @@
                 ufsspcontainer.selectAll("div").remove();
 
                 let ufsspdatalist = ufsspcontainer.selectAll("div")
-                    .data(_.values(current_ufssp_obj));
+                    .data(keys);
                 ufsspdatalist.attr("id", (d, i) => {
-                    return "id_" + i;
+                    return "ufssp_" + current_ufssp_obj[d];
                 });
 
                 let ufsspdataenter = ufsspdatalist.enter();
@@ -565,26 +566,26 @@
                 let row = ufsspdataenter.append("div")
                     .attr("class", "")
                     .attr("id", (d, i) => {
-                        return "id_" + i;
+                        return "ufssp_" + current_ufssp_obj[d];
                     })
                     .text((d, i) => {
-                        return d;
+                        return current_ufssp_obj[d];
                     });
 
 
                 console.log("Отдел:");
                 //console.log(current_osp_obj);
                 
-                arr = _.values(current_osp_obj);
+                keys = _.keys(current_osp_obj);
 
                 let ospcontainer = d3.select("#osp-info-wrapper");
                 //удалить предыдущий список
                 ospcontainer.selectAll("*").remove();
 
                 let ospdatalist = ospcontainer.selectAll("div")
-                    .data(_.values(current_osp_obj));
+                    .data(keys);
                 ospdatalist.attr("id", (d, i) => {
-                    return "id_" + i;
+                    return "osp_" + current_osp_obj[d];
                 });
 
                 let ospdataenter = ospdatalist.enter();
@@ -592,26 +593,26 @@
                 row = ospdataenter.append("div")
                     .attr("class", "osp-info")
                     .attr("id", (d, i) => {
-                        return "id_" + i;
+                        return "osp_" + current_osp_obj[d];
                     })
                     .text((d, i) => {
-                        return d;
+                        return current_osp_obj[d];
                     });
 
 
                 console.log("Сотрудник:");
                 console.log(current_phone_obj);
                 
-                arr = _.values(current_phone_obj);
+                keys = _.keys(current_phone_obj);
 
                 let phonecontainer = d3.select("#phone-info-wrapper");
                 //удалить предыдущий список
                 phonecontainer.selectAll("*").remove();
 
                 let phonedatalist = phonecontainer.selectAll("div")
-                    .data(_.values(current_phone_obj));
+                    .data(keys);
                 phonedatalist.attr("id", (d, i) => {
-                    return "id_" + i;
+                    return "phone_" + current_phone_obj[d];
                 });
 
                 let phonedataenter = phonedatalist.enter();
@@ -619,10 +620,10 @@
                 row = phonedataenter.append("div")
                     .attr("class", "phone-info")
                     .attr("id", (d, i) => {
-                        return "id_" + i;
+                        return "phone_" + current_phone_obj[d];
                     })
                     .text((d, i) => {
-                        return d;
+                        return current_phone_obj[d];
                     });
 
             }
