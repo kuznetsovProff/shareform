@@ -451,7 +451,7 @@
 
             function selectListItem(filename, btnid, textid, list, cols = ["regioncode"]) {
                 //alert("file:" + filename + ";btnid:" + btnid + ";textid:" + textid + ";length:" + list.length);
-                
+
                 let codeproperty;
                 if (filename == "ufssp.csv") {
                     codeproperty = "regioncode";
@@ -520,12 +520,12 @@
                         $("#modalcustom").modal("hide");
 
                         if (filename == "ufssp.csv") {
-                          flags.ufsspselected = true;
-                          current_osp_obj = {};
+                            flags.ufsspselected = true;
+                            current_osp_obj = {};
                         }
                         if (filename == "osp.csv") {
-                          flags.ospselected = true;
-                          current_phone_obj = {};
+                            flags.ospselected = true;
+                            current_phone_obj = {};
                         }
                         if (filename == "phones.csv") flags.phoneselected = true;
 
@@ -545,7 +545,7 @@
             }
 
             function displayInfo(btnid) {
-                
+
                 console.log("Управление:");
                 console.log(current_ufssp_obj);
                 let keys = _.keys(current_ufssp_obj);
@@ -558,7 +558,7 @@
                 let ufsspdatalist = ufsspcontainer.selectAll("div")
                     .data(keys);
                 ufsspdatalist.attr("id", (d, i) => {
-                    return "ufssp_" + current_ufssp_obj[d];
+                    return "ufssp_" + d;
                 });
 
                 let ufsspdataenter = ufsspdatalist.enter();
@@ -566,7 +566,7 @@
                 let row = ufsspdataenter.append("div")
                     .attr("class", "")
                     .attr("id", (d, i) => {
-                        return "ufssp_" + current_ufssp_obj[d];
+                        return "ufssp_" + d;
                     })
                     .text((d, i) => {
                         return current_ufssp_obj[d];
@@ -575,7 +575,7 @@
 
                 console.log("Отдел:");
                 //console.log(current_osp_obj);
-                
+
                 keys = _.keys(current_osp_obj);
 
                 let ospcontainer = d3.select("#osp-info-wrapper");
@@ -585,7 +585,7 @@
                 let ospdatalist = ospcontainer.selectAll("div")
                     .data(keys);
                 ospdatalist.attr("id", (d, i) => {
-                    return "osp_" + current_osp_obj[d];
+                    return "osp_" + d;
                 });
 
                 let ospdataenter = ospdatalist.enter();
@@ -593,7 +593,7 @@
                 row = ospdataenter.append("div")
                     .attr("class", "osp-info")
                     .attr("id", (d, i) => {
-                        return "osp_" + current_osp_obj[d];
+                        return "osp_" + d;
                     })
                     .text((d, i) => {
                         return current_osp_obj[d];
@@ -602,7 +602,7 @@
 
                 console.log("Сотрудник:");
                 console.log(current_phone_obj);
-                
+
                 keys = _.keys(current_phone_obj);
 
                 let phonecontainer = d3.select("#phone-info-wrapper");
@@ -612,7 +612,7 @@
                 let phonedatalist = phonecontainer.selectAll("div")
                     .data(keys);
                 phonedatalist.attr("id", (d, i) => {
-                    return "phone_" + current_phone_obj[d];
+                    return "phone_" + d;
                 });
 
                 let phonedataenter = phonedatalist.enter();
@@ -620,7 +620,7 @@
                 row = phonedataenter.append("div")
                     .attr("class", "phone-info")
                     .attr("id", (d, i) => {
-                        return "phone_" + current_phone_obj[d];
+                        return "phone_" + d;
                     })
                     .text((d, i) => {
                         return current_phone_obj[d];
