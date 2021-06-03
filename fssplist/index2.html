@@ -136,21 +136,25 @@
                 </div>
             </div>
             <div class="container-fluid d-flex pl-2 justify-content-center">
-                <div id="ufssp-info" class="small">
-                    <div id="ufssp-info-wrapper">
-
-                    </div>
-                    <div id="osp-info">
-                        <div id="osp-info-wrapper">
+                <div class="container-fluid">
+                    <div id="ufssp-info" class="small container-fluid ">
+                        <div id="ufssp-info-wrapper" class="container-fluid">
 
                         </div>
-                        <div id="phone-info-wrapper">
+
+                    </div>
+                    <div id="osp-info" class="small container-fluid ">
+                        <div id="osp-info-wrapper" class="container-fluid">
+
+                        </div>
+
+                    </div>
+                    <div id="phone-info" class="small container-fluid ">
+                        <div id="phone-info-wrapper" class="container-fluid">
 
                         </div>
                     </div>
-
                 </div>
-
             </div>
 
         </div>
@@ -568,8 +572,17 @@
                     .attr("id", (d, i) => {
                         return "ufssp_" + d;
                     })
-                    .text((d, i) => {
-                        return current_ufssp_obj[d];
+                    .html((d, i) => {
+                        /*
+<div class="input-group mb-3 input-group-sm">
+      <div class="input-group-prepend">
+        <span class="input-group-text">Small</span>
+      </div>
+      <input type="text" class="form-control">
+    </div>
+                        */
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_ufssp_obj[d] + "'></div>";
+                        return h;
                     });
 
 
@@ -595,8 +608,9 @@
                     .attr("id", (d, i) => {
                         return "osp_" + d;
                     })
-                    .text((d, i) => {
-                        return current_osp_obj[d];
+                    .html((d, i) => {
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_osp_obj[d] + "'></div>";
+                        return h;
                     });
 
 
@@ -622,9 +636,13 @@
                     .attr("id", (d, i) => {
                         return "phone_" + d;
                     })
-                    .text((d, i) => {
-                        return current_phone_obj[d];
+                    .html((d, i) => {
+                        let h = "<div class='input-group mb-3 input-group-sm'><div class='input-group-prepend'><span class='input-group-text'>" + d + "</span></div><input type='text' class='form-control' placeholder='" + d + "' value='" + current_phone_obj[d] + "'></div>";
+                        return h;
                     });
+                //.text((d, i) => {
+                //    return current_phone_obj[d];
+                //});
 
             }
 
@@ -894,5 +912,7 @@
             };
         </script>
 </body>
+
+</html>
 
 </html>
